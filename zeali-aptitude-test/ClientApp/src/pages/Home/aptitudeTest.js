@@ -28,7 +28,7 @@ export default function AptitudeTest() {
         .then((data) => {
           setAptitudeQuestions(data);
           setApiCalled(true);
-        })[(headers, setAptitudeQuestions)]
+        })[(headers, setAptitudeQuestions, setApiCalled)]
     );
   });
 
@@ -128,7 +128,7 @@ export default function AptitudeTest() {
           <FormLabel component="legend">
             {aptitudeQuestions[currentIndex - 1]?.question ?? []}
           </FormLabel>
-          <br /> <br />
+          <br />
           <RadioGroup
             aria-label="questions"
             name="questions_"

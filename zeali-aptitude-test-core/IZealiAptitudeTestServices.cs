@@ -9,5 +9,7 @@ namespace zeali_aptitude_test_core
    public interface IZealiAptitudeTestServices
     {
         List<AptitudeQuestions> GetAptitudeQuestions();
+
+        int EvaluateAnswers(List<AptitudeQuestions> answerList);
     }
 }

@@ -32,5 +32,12 @@ namespace zeali_aptitude_test.Controllers
         }
 
 
+        [HttpPost]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult EvaluateScore(List<AptitudeQuestions> aptitudeQuestionsAnswers)
+        {
+            return Ok(_zealiAptitudeTestServices.EvaluateAnswers(aptitudeQuestionsAnswers));
+        }
+
     }
 }
