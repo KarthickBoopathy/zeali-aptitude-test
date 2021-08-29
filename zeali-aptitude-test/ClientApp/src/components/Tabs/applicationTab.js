@@ -75,9 +75,8 @@ export default function ApplicationTab() {
           variant="fullWidth"
           aria-label="full width tabs example"
         >
-          <Tab label="Home" icon={<Home />} {...a11yProps(0)} />
-          <Tab label="Exam Room" icon={<Assignment />} {...a11yProps(1)} />
-          <Tab label="Account" icon={<PersonPinIcon />} {...a11yProps(2)} />
+          <Tab label="Aptitude Test" icon={<Assignment />} {...a11yProps(0)} />
+          <Tab label="Account" icon={<PersonPinIcon />} {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -88,8 +87,7 @@ export default function ApplicationTab() {
         <TabPanel value={value} index={0} dir={theme.direction}>
           <ApplicationHome />
         </TabPanel>
-        <TabPanel value={value} index={1} dir={theme.direction}></TabPanel>
-        <TabPanel value={value} index={2} dir={theme.direction}>
+        <TabPanel value={value} index={1} dir={theme.direction}>
           Account
         </TabPanel>
       </SwipeableViews>
