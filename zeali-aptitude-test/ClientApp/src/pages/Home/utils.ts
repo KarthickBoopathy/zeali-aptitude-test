@@ -1,14 +1,24 @@
+import { useState } from "react";
 import { get } from "./api";
 
 
 export function getAptitudeQuestions()
 {
-  get("https://localhost:44349/api/zealiAptitudeTest/ZealiAptitude").then((data) =>
-  {
- 
-  
-    return data;
-  });
+
+  var questiondata;
+
+  const headers = { 'Content-Type': 'application/json' }
+ return  fetch('https://localhost:44349/api/zealiAptitudeTest/ZealiAptitude', { headers })
+    .then(response => response.json())
+    .then(data =>
+    {
+      return data;
+      
+    }
+     
+  );
+
+
 
   // const data = [
   //   {
@@ -35,7 +45,7 @@ export function getAptitudeQuestions()
 
   // ]
 
-  // return data;
+  //  return data;
 
 
  

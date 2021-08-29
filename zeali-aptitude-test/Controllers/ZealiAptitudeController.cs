@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace zeali_aptitude_test.Controllers
      
 
         [HttpGet]
+        [EnableCors("ZealiAptitudePolicy")]
         public IActionResult getAptitudeQuestions()
         {
             return Ok(_zealiAptitudeTestServices.GetAptitudeQuestions());

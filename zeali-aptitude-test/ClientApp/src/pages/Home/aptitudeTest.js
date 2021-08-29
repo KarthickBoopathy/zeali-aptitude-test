@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -14,23 +14,24 @@ export default function AptitudeTest() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [first, setFirst] = useState(1);
   const [last, setLast] = useState(20);
-  const [aptitudeQuestions, setAptitudeQuestions] = useState([
-    {
-      questionID: "",
-      question: "",
-      optionA: "",
-      optionB: "",
-      optionC: "",
-      optionD: "",
-      answer: "",
-      userAnswer: "",
-    },
-  ]);
+  const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
+  const [apiCalled, setApiCalled] = useState(false);
 
-  useState(() => {
-    aptitudeQuestions && setAptitudeQuestions(getAptitudeQuestions);
+  useEffect(() => {
+    const headers = { "Content-Type": "application/json" };
+    return (
+      !apiCalled &&
+      fetch("https://localhost:44349/api/zealiAptitudeTest/ZealiAptitude", {
+        headers,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setAptitudeQuestions(data);
+          setApiCalled(true);
+        })[(headers, setAptitudeQuestions)]
+    );
   });
-  console.log(aptitudeQuestions);
+
   const renderHeader = () => {
     const styles = { padding: 10, textAlign: "center" };
 
@@ -76,6 +77,7 @@ export default function AptitudeTest() {
     return (
       <div>
         <br />
+        <br />
         <Grid container spacing={3}>
           <Grid item xs={3}>
             <Button variant="contained" color="primary" onClick={handleFirst}>
@@ -97,6 +99,8 @@ export default function AptitudeTest() {
               Last
             </Button>
           </Grid>
+          <br />
+          <br />
           <Grid item xs={6}>
             <Button variant="contained" color="secondary">
               Submit Quiz
@@ -124,7 +128,7 @@ export default function AptitudeTest() {
           <FormLabel component="legend">
             {aptitudeQuestions[currentIndex - 1]?.question ?? []}
           </FormLabel>
-
+          <br /> <br />
           <RadioGroup
             aria-label="questions"
             name="questions_"
