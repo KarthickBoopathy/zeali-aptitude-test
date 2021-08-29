@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using zeali_aptitude_test_core;
 
 namespace zeali_aptitude_test
 {
@@ -20,7 +21,10 @@ namespace zeali_aptitude_test
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddSingleton<IDBClient, DBClient>();
+            services.Configure<ZealiAptitudeTestDBConfig>(Configuration);
+            services.AddTransient<IZealiAptitudeTestServices, ZealiAptitudeTestServices>();
+          
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory

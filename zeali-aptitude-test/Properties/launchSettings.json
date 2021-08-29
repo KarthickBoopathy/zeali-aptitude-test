@@ -12,7 +12,10 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DATABASE_NAME": "zeali-aptitude-test-db",
+        "APTITUDE_QUESTIONS_COLLECTION_NAME": "AptitudeQuestions",
+        "CONNECTION_STRING": "mongodb://localhost:27017"
       }
     },
     "zeali_aptitude_test": {
@@ -20,7 +23,10 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DATABASE_NAME": "zeali-aptitude-test-db",
+        "APTITUDE_QUESTIONS_COLLECTION_NAME": "AptitudeQuestions",
+        "CONNECTION_STRING": "mongodb://localhost:27017"
       }
     }
   }

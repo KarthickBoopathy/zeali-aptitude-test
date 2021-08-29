@@ -8,7 +8,7 @@ import { Typography } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { getAptitudeQuestion } from "./utils";
+import { getAptitudeQuestions } from "./utils";
 
 export default function AptitudeTest() {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -28,7 +28,7 @@ export default function AptitudeTest() {
   ]);
 
   useState(() => {
-    aptitudeQuestions && setAptitudeQuestions(getAptitudeQuestion);
+    aptitudeQuestions && setAptitudeQuestions(getAptitudeQuestions);
   });
   console.log(aptitudeQuestions);
   const renderHeader = () => {
