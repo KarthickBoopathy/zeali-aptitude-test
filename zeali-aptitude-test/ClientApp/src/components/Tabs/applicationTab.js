@@ -5,9 +5,8 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import { Home, Assignment } from "@material-ui/icons";
+import { Assignment } from "@material-ui/icons";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
 import { auto } from "async";
 import ApplicationHome from "../../pages/Home/ApplicationHome";
@@ -23,11 +22,7 @@ function TabPanel(props) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box p={3}>{children}</Box>}
     </div>
   );
 }

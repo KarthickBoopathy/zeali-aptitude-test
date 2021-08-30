@@ -1,7 +1,7 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import { Component } from "react";
 import AptitudeTest from "./AptitudeTest";
-import ListDividers from "./Landing";
+import TopicList from "./Landing";
 
 export default class ApplicationHome extends Component {
   renderTakeTestButton() {
@@ -43,12 +43,15 @@ export default class ApplicationHome extends Component {
     return <AptitudeTest />;
   }
 
+  renderTopicsDivider() {
+    return <TopicList />;
+  }
+
   render() {
     return (
       <>
-        {/* {this.renderAptitudeTest()} */}
-        {this.renderTakeTestButton()}
-        <ListDividers />
+        {this.renderAptitudeTest()}
+        {/* {this.renderTakeTestButton()} */}
       </>
     );
   }

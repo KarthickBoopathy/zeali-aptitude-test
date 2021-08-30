@@ -7,13 +7,13 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       width: "100%",
-      maxWidth: 360,
+      maxWidth: 500,
       backgroundColor: "white",
     },
   })
 );
 
-export default function ListDividers() {
+export default function TopicList() {
   const classes = useStyles();
 
   const data = [

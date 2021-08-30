@@ -4,33 +4,22 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
-import { Typography } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { getAptitudeQuestions } from "./utils";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import { Divider, Typography } from "@material-ui/core";
 
 export default function AptitudeTest() {
   const [currentIndex, setCurrentIndex] = useState(1);
-  const [first, setFirst] = useState(1);
-  const [last, setLast] = useState(20);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
-  const [apiCalled, setApiCalled] = useState(false);
 
   useEffect(() => {
-    const headers = { "Content-Type": "application/json" };
-    return (
-      !apiCalled &&
-      fetch("https://localhost:44349/api/zealiAptitudeTest/ZealiAptitude", {
-        headers,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setAptitudeQuestions(data);
-          setApiCalled(true);
-        })[(headers, setAptitudeQuestions, setApiCalled)]
-    );
-  });
+    getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
+  }, [setAptitudeQuestions]);
 
   const renderHeader = () => {
     const styles = { padding: 10, textAlign: "center" };
@@ -40,15 +29,11 @@ export default function AptitudeTest() {
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <Paper style={styles}>
-              <Typography>
-                Question : {currentIndex}/{last}
-              </Typography>
+              Question : {currentIndex}/{20}
             </Paper>
           </Grid>
           <Grid item xs={6}>
-            <Paper style={styles}>
-              <Typography>Time : </Typography>
-            </Paper>
+            <Paper style={styles}>Time :</Paper>
           </Grid>
           <Grid item xs={12}></Grid>
         </Grid>
@@ -59,19 +44,19 @@ export default function AptitudeTest() {
 
   const renderButtons = () => {
     const handleNext = () => {
-      setCurrentIndex(currentIndex == last ? last : currentIndex + 1);
+      setCurrentIndex(currentIndex === 20 ? 20 : currentIndex + 1);
     };
 
     const handlePrev = () => {
-      setCurrentIndex(currentIndex == first ? first : currentIndex - 1);
+      setCurrentIndex(currentIndex === 1 ? 1 : currentIndex - 1);
     };
 
     const handleFirst = () => {
-      setCurrentIndex(first);
+      setCurrentIndex(1);
     };
 
     const handleLast = () => {
-      setCurrentIndex(last);
+      setCurrentIndex(20);
     };
 
     return (
@@ -161,13 +146,64 @@ export default function AptitudeTest() {
     );
   };
 
+  const renderWrongAnswers = () => {
+    return (
+      <>
+        <Grid container>
+          <Grid item xs>
+            <Typography gutterBottom>Score :</Typography>
+            <Divider variant="fullWidth" />
+          </Grid>
+        </Grid>
+        <br />
+        <Grid container>
+          {aptitudeQuestions.map((item) => (
+            <Grid item xs={12}>
+              <Typography gutterBottom>{item.question}</Typography>
+              <Typography color="textSecondary" variant="body2">
+                A: {item.optionA}
+              </Typography>
+              <Typography color="textSecondary" variant="body2">
+                B: {item.optionB}
+              </Typography>
+              <Typography color="textSecondary" variant="body2">
+                C: {item.optionC}
+              </Typography>
+              <Typography color="textSecondary" variant="body2">
+                D: {item.optionD}
+              </Typography>
+              <br />
+              <Typography variant="body2">
+                Correct Answer: {item.answer}
+              </Typography>
+              <Typography variant="body2">
+                Your Answer: {item.userAnswer}
+              </Typography>
+              <br />
+              <Divider variant="fullWidth" />
+              <br />
+            </Grid>
+          ))}
+        </Grid>
+        <Grid container>
+          <Grid item xs>
+            <Button variant="contained" color="secondary">
+              Exit Quiz
+            </Button>
+          </Grid>
+        </Grid>
+      </>
+    );
+  };
+
   const style = { flexGrow: "1" };
 
   return (
     <div style={style}>
-      {renderHeader()}
+      {renderWrongAnswers()}
+      {/* {renderHeader()}
       {renderOnlineQuiz()}
-      {renderButtons()}
+      {renderButtons()} */}
     </div>
   );
 }
