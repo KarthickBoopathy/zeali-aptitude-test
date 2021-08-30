@@ -10,7 +10,7 @@ import Box from "@material-ui/core/Box";
 import { Home, Assignment } from "@material-ui/icons";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
 import { auto } from "async";
-import ApplicationHome from "../../pages/Home/applicationHome";
+import ApplicationHome from "../../pages/Home/ApplicationHome";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
