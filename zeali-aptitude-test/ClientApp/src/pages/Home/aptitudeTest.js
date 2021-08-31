@@ -234,7 +234,7 @@ export default function AptitudeTest({ parentCallback }) {
                 setAptitudeQuestions([]);
                 SetDisablePage(true);
                 SetDisableExitButton(true);
-                parentCallback(true);
+                parentCallback(false);
               }}
             >
               Exit Quiz

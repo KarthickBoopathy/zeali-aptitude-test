@@ -12,7 +12,7 @@ export default class ApplicationHome extends Component {
   }
 
   callback = (value) => {
-    this.setState({ disableHome: false });
+    this.setState({ disableHome: value });
   };
   renderTakeTestButton() {
     const { disableHome } = this.state;
