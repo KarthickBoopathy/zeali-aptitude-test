@@ -2,6 +2,7 @@ import { Button, Grid, Typography } from "@material-ui/core";
 import { Component } from "react";
 import AptitudeTest from "./AptitudeTest";
 import TopicList from "./Landing";
+import Paper from "@material-ui/core/Paper";
 
 export default class ApplicationHome extends Component {
   constructor(props) {
@@ -16,28 +17,35 @@ export default class ApplicationHome extends Component {
   };
   renderTakeTestButton() {
     const { disableHome } = this.state;
+
     if (disableHome) {
       return;
     }
+
+    const style = {
+      padding: 15,
+      textAlign: "center",
+      "font-size": 16,
+    };
 
     return (
       <div>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Typography>
+            <Paper style={style} variant="elevation">
               Practice Makes a Man Perfect. Happy Cracking !!
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                this.setState({ disableHome: true });
-              }}
-            >
-              Take Test
-            </Button>
+              <br />
+              <br />
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => {
+                  this.setState({ disableHome: true });
+                }}
+              >
+                Take Test
+              </Button>
+            </Paper>
           </Grid>
         </Grid>
         <br />
