@@ -10,17 +10,18 @@ import Button from "@material-ui/core/Button";
 import { getAptitudeQuestions } from "./utils";
 import { Divider, Typography } from "@material-ui/core";
 
-export default function AptitudeTest() {
+export default function AptitudeTest({ parentCallback }) {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
-  const [enableQuiz, SetEnableQuiz] = useState(true);
-
+  const [disableQuiz, SetDisablleQuiz] = useState(false);
+  const [disablePage, SetDisablePage] = useState(false);
+  const [disableExitButton, SetDisableExitButton] = useState(false);
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
   }, [setAptitudeQuestions]);
 
   const renderHeader = () => {
-    if (!enableQuiz) {
+    if (disableQuiz || disablePage) {
       return;
     }
 
@@ -45,7 +46,7 @@ export default function AptitudeTest() {
   };
 
   const renderButtons = () => {
-    if (!enableQuiz) {
+    if (disableQuiz || disablePage) {
       return;
     }
 
@@ -67,7 +68,7 @@ export default function AptitudeTest() {
 
     const handleSubmit = () => {
       setAptitudeQuestions(Object.values(aptitudeQuestions));
-      SetEnableQuiz(false);
+      SetDisablleQuiz(true);
     };
 
     return (
@@ -112,7 +113,7 @@ export default function AptitudeTest() {
   };
 
   const renderOnlineQuiz = () => {
-    if (!enableQuiz) {
+    if (disableQuiz || disablePage) {
       return;
     }
 
@@ -166,11 +167,9 @@ export default function AptitudeTest() {
   };
 
   const renderWrongAnswers = () => {
-    if (enableQuiz) {
+    if (!disableQuiz || disablePage) {
       return;
     }
-
-    console.log(aptitudeQuestions);
 
     return (
       <>
@@ -212,13 +211,6 @@ export default function AptitudeTest() {
             </Grid>
           ))}
         </Grid>
-        <Grid container>
-          <Grid item xs>
-            <Button variant="contained" color="secondary">
-              Exit Quiz
-            </Button>
-          </Grid>
-        </Grid>
       </>
     );
   };
@@ -231,6 +223,25 @@ export default function AptitudeTest() {
       {renderHeader()}
       {renderOnlineQuiz()}
       {renderButtons()}
+
+      {(disableQuiz || disablePage) && !disableExitButton ? (
+        <Grid container>
+          <Grid item xs>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                setAptitudeQuestions([]);
+                SetDisablePage(true);
+                SetDisableExitButton(true);
+                parentCallback(true);
+              }}
+            >
+              Exit Quiz
+            </Button>
+          </Grid>
+        </Grid>
+      ) : null}
     </div>
   );
 }

@@ -4,7 +4,22 @@ import AptitudeTest from "./AptitudeTest";
 import TopicList from "./Landing";
 
 export default class ApplicationHome extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      disableHome: false,
+    };
+  }
+
+  callback = (value) => {
+    this.setState({ disableHome: false });
+  };
   renderTakeTestButton() {
+    const { disableHome } = this.state;
+    if (disableHome) {
+      return;
+    }
+
     return (
       <div>
         <Grid container spacing={3}>
@@ -14,7 +29,13 @@ export default class ApplicationHome extends Component {
             </Typography>
           </Grid>
           <Grid item xs={6}>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                this.setState({ disableHome: true });
+              }}
+            >
               Take Test
             </Button>
           </Grid>
@@ -40,10 +61,18 @@ export default class ApplicationHome extends Component {
   }
 
   renderAptitudeTest() {
-    return <AptitudeTest />;
+    const { disableHome } = this.state;
+    if (!disableHome) {
+      return;
+    }
+    return <AptitudeTest parentCallback={this.callback} />;
   }
 
   renderTopicsDivider() {
+    const { disableHome } = this.state;
+    if (disableHome) {
+      return;
+    }
     return <TopicList />;
   }
 
@@ -51,8 +80,8 @@ export default class ApplicationHome extends Component {
     return (
       <>
         {this.renderAptitudeTest()}
-        {/* {this.renderTakeTestButton()}
-        {this.renderTopicsDivider()} */}
+        {this.renderTakeTestButton()}
+        {this.renderTopicsDivider()}
       </>
     );
   }

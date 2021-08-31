@@ -37,8 +37,8 @@ export default function TopicList() {
 
   return (
     <List component="nav" className={classes.root} aria-label="mailbox folders">
-      {data.map((item) => (
-        <ListItem button divider>
+      {data.map((item, i) => (
+        <ListItem button divider key={i}>
           <ListItemText primary={item} />
         </ListItem>
       ))}
