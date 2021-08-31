@@ -20,19 +20,6 @@ namespace zeali_aptitude_test_core
         {
             return _aptitudeQuestions.Find(questions => true).ToList();
         }
-        public int EvaluateAnswers(List<AptitudeQuestions> answerList)
-        {
-            int score = 0;
-            
-            foreach(AptitudeQuestions answer in answerList)
-            {
-                if(answer.userAnswer!=null && answer.userAnswer == answer.answer)
-                {
-                    score++;
-                }
-            }
 
-            return score;
-        }
     }
 }

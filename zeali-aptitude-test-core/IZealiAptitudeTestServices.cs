@@ -10,6 +10,6 @@ namespace zeali_aptitude_test_core
     {
         List<AptitudeQuestions> GetAptitudeQuestions();
 
-        int EvaluateAnswers(List<AptitudeQuestions> answerList);
+       
     }
 }
