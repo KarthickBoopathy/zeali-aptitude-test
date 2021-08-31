@@ -51,7 +51,8 @@ export default class ApplicationHome extends Component {
     return (
       <>
         {this.renderAptitudeTest()}
-        {/* {this.renderTakeTestButton()} */}
+        {/* {this.renderTakeTestButton()}
+        {this.renderTopicsDivider()} */}
       </>
     );
   }

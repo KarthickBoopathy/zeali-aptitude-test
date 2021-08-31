@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -7,13 +7,13 @@ import FormLabel from "@material-ui/core/FormLabel";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { evaluateAnswers, getAptitudeQuestions, getScore } from "./utils";
+import { getAptitudeQuestions } from "./utils";
 import { Divider, Typography } from "@material-ui/core";
 
 export default function AptitudeTest() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
-  const [score, SetScore] = useState(0);
+
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
   }, [setAptitudeQuestions]);
@@ -212,7 +212,7 @@ export default function AptitudeTest() {
       {renderWrongAnswers()}
       {/* {renderHeader()}
       {renderOnlineQuiz()}
-      {renderButtons()} */}
+      {renderButtons()}  */}
     </div>
   );
 }
