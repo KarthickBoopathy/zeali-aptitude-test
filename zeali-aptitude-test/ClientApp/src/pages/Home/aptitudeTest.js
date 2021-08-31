@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -7,16 +7,13 @@ import FormLabel from "@material-ui/core/FormLabel";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { getAptitudeQuestions } from "./utils";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import { evaluateAnswers, getAptitudeQuestions, getScore } from "./utils";
 import { Divider, Typography } from "@material-ui/core";
 
 export default function AptitudeTest() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
-
+  const [score, SetScore] = useState(0);
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
   }, [setAptitudeQuestions]);
@@ -42,6 +39,10 @@ export default function AptitudeTest() {
     );
   };
 
+  // const handleSubmit = useCallback(() => {
+  //   evaluateAnswers(aptitudeQuestions).then((data) => {});
+  // }, [aptitudeQuestions]);
+
   const renderButtons = () => {
     const handleNext = () => {
       setCurrentIndex(currentIndex === 20 ? 20 : currentIndex + 1);
@@ -58,6 +59,8 @@ export default function AptitudeTest() {
     const handleLast = () => {
       setCurrentIndex(20);
     };
+
+    const handleSubmit = () => {};
 
     return (
       <div>
@@ -87,7 +90,11 @@ export default function AptitudeTest() {
           <br />
           <br />
           <Grid item xs={6}>
-            <Button variant="contained" color="secondary">
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleSubmit}
+            >
               Submit Quiz
             </Button>
           </Grid>
@@ -151,14 +158,16 @@ export default function AptitudeTest() {
       <>
         <Grid container>
           <Grid item xs>
-            <Typography gutterBottom>Score :</Typography>
+            <Typography gutterBottom>
+              Score : {aptitudeQuestions.length} / {aptitudeQuestions.length}
+            </Typography>
             <Divider variant="fullWidth" />
           </Grid>
         </Grid>
         <br />
         <Grid container>
-          {aptitudeQuestions.map((item) => (
-            <Grid item xs={12}>
+          {aptitudeQuestions.map((item, i) => (
+            <Grid item xs={12} key={i}>
               <Typography gutterBottom>{item.question}</Typography>
               <Typography color="textSecondary" variant="body2">
                 A: {item.optionA}
@@ -173,10 +182,10 @@ export default function AptitudeTest() {
                 D: {item.optionD}
               </Typography>
               <br />
-              <Typography variant="body2">
+              <Typography variant="body2" color="secondary">
                 Correct Answer: {item.answer}
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" color="primary">
                 Your Answer: {item.userAnswer}
               </Typography>
               <br />

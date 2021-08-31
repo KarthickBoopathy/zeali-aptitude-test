@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using zeali_aptitude_test_core;
 
@@ -33,10 +34,11 @@ namespace zeali_aptitude_test.Controllers
 
 
         [HttpPost]
-        [EnableCors("ZealiAptitudePolicy")]
-        public IActionResult EvaluateScore(List<AptitudeQuestions> aptitudeQuestionsAnswers)
+        public IActionResult EvaluateScore(JsonElement aptitudeQuestions)
         {
-            return Ok(_zealiAptitudeTestServices.EvaluateAnswers(aptitudeQuestionsAnswers));
+            Console.WriteLine("Hi", aptitudeQuestions);
+            return Ok();
+            //return Ok(_zealiAptitudeTestServices.GetAptitudeQuestions());
         }
 
     }
