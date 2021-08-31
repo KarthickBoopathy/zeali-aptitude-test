@@ -13,12 +13,17 @@ import { Divider, Typography } from "@material-ui/core";
 export default function AptitudeTest() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
+  const [enableQuiz, SetEnableQuiz] = useState(true);
 
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
   }, [setAptitudeQuestions]);
 
   const renderHeader = () => {
+    if (!enableQuiz) {
+      return;
+    }
+
     const styles = { padding: 10, textAlign: "center" };
 
     return (
@@ -39,11 +44,11 @@ export default function AptitudeTest() {
     );
   };
 
-  // const handleSubmit = useCallback(() => {
-  //   evaluateAnswers(aptitudeQuestions).then((data) => {});
-  // }, [aptitudeQuestions]);
-
   const renderButtons = () => {
+    if (!enableQuiz) {
+      return;
+    }
+
     const handleNext = () => {
       setCurrentIndex(currentIndex === 20 ? 20 : currentIndex + 1);
     };
@@ -60,7 +65,10 @@ export default function AptitudeTest() {
       setCurrentIndex(20);
     };
 
-    const handleSubmit = () => {};
+    const handleSubmit = () => {
+      setAptitudeQuestions(Object.values(aptitudeQuestions));
+      SetEnableQuiz(false);
+    };
 
     return (
       <div>
@@ -104,6 +112,10 @@ export default function AptitudeTest() {
   };
 
   const renderOnlineQuiz = () => {
+    if (!enableQuiz) {
+      return;
+    }
+
     const handleChange = (event) => {
       setAptitudeQuestions({
         ...aptitudeQuestions,
@@ -154,6 +166,12 @@ export default function AptitudeTest() {
   };
 
   const renderWrongAnswers = () => {
+    if (enableQuiz) {
+      return;
+    }
+
+    console.log(aptitudeQuestions);
+
     return (
       <>
         <Grid container>
@@ -166,7 +184,7 @@ export default function AptitudeTest() {
         </Grid>
         <br />
         <Grid container>
-          {aptitudeQuestions.map((item, i) => (
+          {aptitudeQuestions?.map((item, i) => (
             <Grid item xs={12} key={i}>
               <Typography gutterBottom>{item.question}</Typography>
               <Typography color="textSecondary" variant="body2">
@@ -210,9 +228,9 @@ export default function AptitudeTest() {
   return (
     <div style={style}>
       {renderWrongAnswers()}
-      {/* {renderHeader()}
+      {renderHeader()}
       {renderOnlineQuiz()}
-      {renderButtons()}  */}
+      {renderButtons()}
     </div>
   );
 }

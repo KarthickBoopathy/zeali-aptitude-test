@@ -37,7 +37,7 @@ namespace zeali_aptitude_test.Controllers
         public IActionResult EvaluateScore(JsonElement aptitudeQuestions)
         {
             Console.WriteLine("Hi", aptitudeQuestions);
-            return Ok();
+            return Ok(aptitudeQuestions);
             //return Ok(_zealiAptitudeTestServices.GetAptitudeQuestions());
         }
 
