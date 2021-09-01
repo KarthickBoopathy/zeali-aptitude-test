@@ -25,3 +25,13 @@ export const evaluateAnswers = (aptitudeQuestions: any): Promise<any> => {
     }
   });
 };
+
+export const evaluateUserScore = (aptitudeQuestions: any[]) => {
+  let score = 0;
+  aptitudeQuestions.forEach((item) => {
+    if (item.userAnswer === item.answer) {
+      score = score + 1;
+    }
+  });
+  return score;
+};

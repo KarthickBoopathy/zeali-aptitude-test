@@ -8,16 +8,19 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { getAptitudeQuestions } from "./utils";
-import { Divider, Typography } from "@material-ui/core";
+import WrongAnswers from "./WrongAnswers";
 
 export default function AptitudeTest({ parentCallback }) {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
   const [disableQuiz, SetDisablleQuiz] = useState(false);
   const [disablePage, SetDisablePage] = useState(false);
-  let count;
+
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
+    return () => {
+      setAptitudeQuestions([]);
+    };
   }, [setAptitudeQuestions]);
 
   const renderHeader = () => {
@@ -36,12 +39,10 @@ export default function AptitudeTest({ parentCallback }) {
       <div>
         <Grid container spacing={3}>
           <Grid item xs={6}>
-            <Paper style={styles}>
-              Question : {currentIndex}/{20}
-            </Paper>
+            <Paper style={styles}>Question : {currentIndex}</Paper>
           </Grid>
           <Grid item xs={6}>
-            <Paper style={styles}>Time :</Paper>
+            <Paper style={styles}>Total Questions : 20</Paper>
           </Grid>
           <Grid item xs={12}></Grid>
         </Grid>
@@ -72,13 +73,8 @@ export default function AptitudeTest({ parentCallback }) {
     };
 
     const handleSubmit = () => {
-      count = 0;
       setAptitudeQuestions(Object.values(aptitudeQuestions));
-      Object.values(aptitudeQuestions).forEach((e, i) => {
-        if (e.userAnswer === e.answer) {
-          count = count + 1;
-        }
-      });
+
       SetDisablleQuiz(true);
     };
 
@@ -148,28 +144,28 @@ export default function AptitudeTest({ parentCallback }) {
           <RadioGroup
             aria-label="questions"
             name="questions_"
-            value={aptitudeQuestions[currentIndex - 1].userAnswer ?? []}
+            value={aptitudeQuestions[currentIndex - 1]?.userAnswer ?? []}
             onChange={handleChange}
           >
             <FormControlLabel
               value="A"
               control={<Radio />}
-              label={aptitudeQuestions[currentIndex - 1].optionA ?? []}
+              label={aptitudeQuestions[currentIndex - 1]?.optionA ?? []}
             />
             <FormControlLabel
               value="B"
               control={<Radio />}
-              label={aptitudeQuestions[currentIndex - 1].optionB ?? []}
+              label={aptitudeQuestions[currentIndex - 1]?.optionB ?? []}
             />
             <FormControlLabel
               value="C"
               control={<Radio />}
-              label={aptitudeQuestions[currentIndex - 1].optionC ?? []}
+              label={aptitudeQuestions[currentIndex - 1]?.optionC ?? []}
             />
             <FormControlLabel
               value="D"
               control={<Radio />}
-              label={aptitudeQuestions[currentIndex - 1].optionD ?? []}
+              label={aptitudeQuestions[currentIndex - 1]?.optionD ?? []}
             />
           </RadioGroup>
         </FormControl>
@@ -184,46 +180,11 @@ export default function AptitudeTest({ parentCallback }) {
 
     return (
       <>
-        <Typography gutterBottom>
-          Score : {aptitudeQuestions.length} / {aptitudeQuestions.length}
-        </Typography>
-        <Divider variant="fullWidth" />
-
-        <br />
-
-        {aptitudeQuestions?.map((item, i) => (
-          <div key={i}>
-            <Typography gutterBottom>{item.question}</Typography>
-            <Typography color="textSecondary" variant="body2">
-              A: {item.optionA}
-            </Typography>
-            <Typography color="textSecondary" variant="body2">
-              B: {item.optionB}
-            </Typography>
-            <Typography color="textSecondary" variant="body2">
-              C: {item.optionC}
-            </Typography>
-            <Typography color="textSecondary" variant="body2">
-              D: {item.optionD}
-            </Typography>
-            <br />
-            <Typography variant="body2" color="secondary">
-              Correct Answer: {item.answer}
-            </Typography>
-            <Typography variant="body2" color="primary">
-              Your Answer: {item.userAnswer}
-            </Typography>
-            <br />
-            <Divider variant="fullWidth" />
-            <br />
-          </div>
-        ))}
-
+        <WrongAnswers aptitudeQuestions={aptitudeQuestions} />
         <Button
           variant="contained"
           color="secondary"
           onClick={() => {
-            setAptitudeQuestions([]);
             SetDisablePage(true);
             parentCallback(false);
           }}
@@ -233,8 +194,6 @@ export default function AptitudeTest({ parentCallback }) {
       </>
     );
   };
-
-  const renderSnackBar = () => {};
 
   const style = { flexGrow: "1" };
 
