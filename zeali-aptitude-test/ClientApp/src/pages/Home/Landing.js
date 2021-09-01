@@ -17,6 +17,7 @@ const useStyles = makeStyles(() =>
 
 export default function TopicList() {
   const classes = useStyles();
+
   const style = {
     padding: 15,
     textAlign: "center",

@@ -15,7 +15,7 @@ export default function AptitudeTest({ parentCallback }) {
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
   const [disableQuiz, SetDisablleQuiz] = useState(false);
   const [disablePage, SetDisablePage] = useState(false);
-  const [disableExitButton, SetDisableExitButton] = useState(false);
+
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
   }, [setAptitudeQuestions]);
@@ -211,6 +211,21 @@ export default function AptitudeTest({ parentCallback }) {
             </Grid>
           ))}
         </Grid>
+        <Grid container>
+          <Grid item xs>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                setAptitudeQuestions([]);
+                SetDisablePage(true);
+                parentCallback(false);
+              }}
+            >
+              Exit Quiz
+            </Button>
+          </Grid>
+        </Grid>
       </>
     );
   };
@@ -223,25 +238,6 @@ export default function AptitudeTest({ parentCallback }) {
       {renderHeader()}
       {renderOnlineQuiz()}
       {renderButtons()}
-
-      {(disableQuiz || disablePage) && !disableExitButton ? (
-        <Grid container>
-          <Grid item xs>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => {
-                setAptitudeQuestions([]);
-                SetDisablePage(true);
-                SetDisableExitButton(true);
-                parentCallback(false);
-              }}
-            >
-              Exit Quiz
-            </Button>
-          </Grid>
-        </Grid>
-      ) : null}
     </div>
   );
 }

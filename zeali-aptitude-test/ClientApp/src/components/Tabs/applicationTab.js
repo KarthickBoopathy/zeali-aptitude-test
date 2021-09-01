@@ -1,13 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
-import PersonPinIcon from "@material-ui/icons/PersonPin";
 import { auto } from "async";
 import ApplicationHome from "../../pages/Home/ApplicationHome";
 
@@ -44,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
     width: auto,
+    height: "90vh",
   },
 }));
 
@@ -54,10 +53,6 @@ export default function ApplicationTab() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const handleChangeIndex = (index) => {
-    setValue(index);
   };
 
   return (
@@ -71,21 +66,11 @@ export default function ApplicationTab() {
           aria-label="full width tabs example"
         >
           <Tab label="Aptitude Test" icon={<Assignment />} {...a11yProps(0)} />
-          <Tab label="Account" icon={<PersonPinIcon />} {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-      <SwipeableViews
-        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-        index={value}
-        onChangeIndex={handleChangeIndex}
-      >
-        <TabPanel value={value} index={0} dir={theme.direction}>
-          <ApplicationHome />
-        </TabPanel>
-        <TabPanel value={value} index={1} dir={theme.direction}>
-          Account
-        </TabPanel>
-      </SwipeableViews>
+      <TabPanel value={value} index={0} dir={theme.direction}>
+        <ApplicationHome />
+      </TabPanel>
     </div>
   );
 }

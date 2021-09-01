@@ -3,6 +3,8 @@ import { Component } from "react";
 import AptitudeTest from "./AptitudeTest";
 import TopicList from "./Landing";
 import Paper from "@material-ui/core/Paper";
+import Fab from "@material-ui/core/Fab";
+import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
 
 export default class ApplicationHome extends Component {
   constructor(props) {
@@ -25,7 +27,7 @@ export default class ApplicationHome extends Component {
     const style = {
       padding: 15,
       textAlign: "center",
-      "font-size": 16,
+      fontSize: 16,
     };
 
     return (
@@ -84,12 +86,30 @@ export default class ApplicationHome extends Component {
     return <TopicList />;
   }
 
+  renderFabButton() {
+    const { disableHome } = this.state;
+    if (disableHome) {
+      return;
+    }
+    const style = {
+      position: "fixed",
+      bottom: "5%",
+      right: "5%",
+    };
+    return (
+      <Fab color="secondary" aria-label="add" style={style}>
+        <EmojiObjectsIcon />
+      </Fab>
+    );
+  }
+
   render() {
     return (
       <>
         {this.renderAptitudeTest()}
         {this.renderTakeTestButton()}
         {this.renderTopicsDivider()}
+        {this.renderFabButton()}
       </>
     );
   }
