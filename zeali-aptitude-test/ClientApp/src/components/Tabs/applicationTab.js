@@ -44,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     width: auto,
     height: "90vh",
   },
+  tab: {
+    fontSize: "large",
+  },
 }));
 
 export default function ApplicationTab() {
@@ -65,7 +68,12 @@ export default function ApplicationTab() {
           variant="fullWidth"
           aria-label="full width tabs example"
         >
-          <Tab label="Aptitude Test" icon={<Assignment />} {...a11yProps(0)} />
+          <Tab
+            className={classes.tab}
+            label="Zeali - Aptitude Test"
+            icon={<Assignment />}
+            {...a11yProps(0)}
+          />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>

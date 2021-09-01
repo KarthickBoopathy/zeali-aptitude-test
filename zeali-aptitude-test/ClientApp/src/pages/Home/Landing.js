@@ -29,7 +29,7 @@ export default function TopicList() {
     "Number Series",
     "Arithmetic Aptitude",
     "Profit and Loss",
-    "Simple Interest and Compound Interest",
+    "Simple and Compound Interest",
     "Age Problems",
     "Work And Time",
     "Time & Speed",

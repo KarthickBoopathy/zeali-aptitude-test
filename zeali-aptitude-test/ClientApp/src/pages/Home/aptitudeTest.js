@@ -25,7 +25,12 @@ export default function AptitudeTest({ parentCallback }) {
       return;
     }
 
-    const styles = { padding: 10, textAlign: "center" };
+    const styles = {
+      padding: 10,
+      textAlign: "center",
+      backgroundColor: "#f50057",
+      color: "white",
+    };
 
     return (
       <div>
@@ -229,6 +234,8 @@ export default function AptitudeTest({ parentCallback }) {
       </>
     );
   };
+
+  const renderSnackBar = () => {};
 
   const style = { flexGrow: "1" };
 
