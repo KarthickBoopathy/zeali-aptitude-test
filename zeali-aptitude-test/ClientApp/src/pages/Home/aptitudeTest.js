@@ -15,7 +15,7 @@ export default function AptitudeTest({ parentCallback }) {
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
   const [disableQuiz, SetDisablleQuiz] = useState(false);
   const [disablePage, SetDisablePage] = useState(false);
-
+  let count;
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
   }, [setAptitudeQuestions]);
@@ -72,7 +72,13 @@ export default function AptitudeTest({ parentCallback }) {
     };
 
     const handleSubmit = () => {
+      count = 0;
       setAptitudeQuestions(Object.values(aptitudeQuestions));
+      Object.values(aptitudeQuestions).forEach((e, i) => {
+        if (e.userAnswer === e.answer) {
+          count = count + 1;
+        }
+      });
       SetDisablleQuiz(true);
     };
 
@@ -178,59 +184,52 @@ export default function AptitudeTest({ parentCallback }) {
 
     return (
       <>
-        <Grid container>
-          <Grid item xs>
-            <Typography gutterBottom>
-              Score : {aptitudeQuestions.length} / {aptitudeQuestions.length}
-            </Typography>
-            <Divider variant="fullWidth" />
-          </Grid>
-        </Grid>
+        <Typography gutterBottom>
+          Score : {aptitudeQuestions.length} / {aptitudeQuestions.length}
+        </Typography>
+        <Divider variant="fullWidth" />
+
         <br />
-        <Grid container>
-          {aptitudeQuestions?.map((item, i) => (
-            <Grid item xs={12} key={i}>
-              <Typography gutterBottom>{item.question}</Typography>
-              <Typography color="textSecondary" variant="body2">
-                A: {item.optionA}
-              </Typography>
-              <Typography color="textSecondary" variant="body2">
-                B: {item.optionB}
-              </Typography>
-              <Typography color="textSecondary" variant="body2">
-                C: {item.optionC}
-              </Typography>
-              <Typography color="textSecondary" variant="body2">
-                D: {item.optionD}
-              </Typography>
-              <br />
-              <Typography variant="body2" color="secondary">
-                Correct Answer: {item.answer}
-              </Typography>
-              <Typography variant="body2" color="primary">
-                Your Answer: {item.userAnswer}
-              </Typography>
-              <br />
-              <Divider variant="fullWidth" />
-              <br />
-            </Grid>
-          ))}
-        </Grid>
-        <Grid container>
-          <Grid item xs>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => {
-                setAptitudeQuestions([]);
-                SetDisablePage(true);
-                parentCallback(false);
-              }}
-            >
-              Exit Quiz
-            </Button>
-          </Grid>
-        </Grid>
+
+        {aptitudeQuestions?.map((item, i) => (
+          <div key={i}>
+            <Typography gutterBottom>{item.question}</Typography>
+            <Typography color="textSecondary" variant="body2">
+              A: {item.optionA}
+            </Typography>
+            <Typography color="textSecondary" variant="body2">
+              B: {item.optionB}
+            </Typography>
+            <Typography color="textSecondary" variant="body2">
+              C: {item.optionC}
+            </Typography>
+            <Typography color="textSecondary" variant="body2">
+              D: {item.optionD}
+            </Typography>
+            <br />
+            <Typography variant="body2" color="secondary">
+              Correct Answer: {item.answer}
+            </Typography>
+            <Typography variant="body2" color="primary">
+              Your Answer: {item.userAnswer}
+            </Typography>
+            <br />
+            <Divider variant="fullWidth" />
+            <br />
+          </div>
+        ))}
+
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => {
+            setAptitudeQuestions([]);
+            SetDisablePage(true);
+            parentCallback(false);
+          }}
+        >
+          Exit Quiz
+        </Button>
       </>
     );
   };

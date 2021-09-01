@@ -1,22 +1,37 @@
 import { Button, Grid, Typography } from "@material-ui/core";
-import { Component } from "react";
+import React, { Component } from "react";
 import AptitudeTest from "./AptitudeTest";
 import TopicList from "./Landing";
 import Paper from "@material-ui/core/Paper";
 import Fab from "@material-ui/core/Fab";
 import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
+import Drawer from "@material-ui/core/Drawer";
+import UserSettings from "./UserSettings";
 
 export default class ApplicationHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
       disableHome: false,
+      top: false,
     };
   }
 
   callback = (value) => {
     this.setState({ disableHome: value });
   };
+
+  toggleDrawer = (open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    this.setState({ top: open });
+  };
+
   renderTakeTestButton() {
     const { disableHome } = this.state;
 
@@ -87,7 +102,7 @@ export default class ApplicationHome extends Component {
   }
 
   renderFabButton() {
-    const { disableHome } = this.state;
+    const { disableHome, top } = this.state;
     if (disableHome) {
       return;
     }
@@ -96,10 +111,21 @@ export default class ApplicationHome extends Component {
       bottom: "5%",
       right: "5%",
     };
+
     return (
-      <Fab color="secondary" aria-label="add" style={style}>
-        <EmojiObjectsIcon />
-      </Fab>
+      <>
+        <Fab
+          color="secondary"
+          aria-label="add"
+          style={style}
+          onClick={this.toggleDrawer(true)}
+        >
+          <EmojiObjectsIcon />
+        </Fab>
+        <Drawer anchor="top" open={top} onClose={this.toggleDrawer(false)}>
+          <UserSettings />
+        </Drawer>
+      </>
     );
   }
 
