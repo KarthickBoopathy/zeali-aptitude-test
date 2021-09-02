@@ -1,5 +1,5 @@
 import { Button, Grid, Typography } from "@material-ui/core";
-import React, { Component } from "react";
+import { Component } from "react";
 import AptitudeTest from "./AptitudeTest";
 import TopicList from "./Landing";
 import Paper from "@material-ui/core/Paper";
