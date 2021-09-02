@@ -6,7 +6,6 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
-import { auto } from "async";
 import ApplicationHome from "../../pages/Home/ApplicationHome";
 
 function TabPanel(props) {
@@ -41,8 +40,9 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: auto,
+    width: 500,
     height: "90vh",
+    margin:"0 auto"
   },
   tab: {
     fontSize: "large",
