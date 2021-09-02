@@ -40,9 +40,9 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: 500,
+    width: "auto",
     height: "90vh",
-    margin:"0 auto"
+
   },
   tab: {
     fontSize: "large",
