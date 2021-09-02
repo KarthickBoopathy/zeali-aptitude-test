@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import { Component } from "react";
 import AptitudeTest from "./AptitudeTest";
 import TopicList from "./Landing";
@@ -47,24 +47,22 @@ export default class ApplicationHome extends Component {
 
     return (
       <div>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Paper style={style} variant="elevation">
-              Practice Makes a Man Perfect. Happy Cracking !!
-              <br />
-              <br />
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => {
-                  this.setState({ disableHome: true });
-                }}
-              >
-                Take Test
-              </Button>
-            </Paper>
-          </Grid>
-        </Grid>
+
+        <Paper style={style} variant="elevation">
+          Practice Makes a Man Perfect. Happy Cracking !!
+          <br />
+          <br />
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              this.setState({ disableHome: true });
+            }}
+          >
+            Take Test
+          </Button>
+        </Paper>
+
         <br />
       </div>
     );
