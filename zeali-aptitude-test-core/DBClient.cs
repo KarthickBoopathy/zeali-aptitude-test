@@ -23,5 +23,12 @@ namespace zeali_aptitude_test_core
         {
             return _aptitudeQuestions;
         }
+
+
+        //dotnet user-secrets init -p zeali-aptitude-test
+        //dotnet user-secrets set "CONNECTION_STRING" "That Connection String" -p zeali-aptitude-test
+        //dotnet user-secrets lists -p zeali-aptitude-test
+        //dotnet user-secrets list -p zeali-aptitude-test
+        //"CONNECTION_STRING": "mongodb://localhost:27017"
     }
 }

@@ -14,9 +14,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DATABASE_NAME": "zeali-aptitude-test-db",
-        "APTITUDE_QUESTIONS_COLLECTION_NAME": "AptitudeQuestions",
-        "CONNECTION_STRING": "mongodb+srv://karthickboopathy:2.12.1997@zeali-aptitude-test.twxsa.mongodb.net/test"
-        //"CONNECTION_STRING": "mongodb://localhost:27017"
+        "APTITUDE_QUESTIONS_COLLECTION_NAME": "AptitudeQuestions"    
       }
     },
     "zeali_aptitude_test": {
@@ -26,9 +24,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DATABASE_NAME": "zeali-aptitude-test-db",
-        "APTITUDE_QUESTIONS_COLLECTION_NAME": "AptitudeQuestions",
-        "CONNECTION_STRING": "mongodb+srv://karthickboopathy:2.12.1997@zeali-aptitude-test.twxsa.mongodb.net/test"
-        //"CONNECTION_STRING": "mongodb://localhost:27017"
+        "APTITUDE_QUESTIONS_COLLECTION_NAME": "AptitudeQuestions"
       }
     }
   }
