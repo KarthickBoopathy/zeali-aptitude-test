@@ -18,7 +18,20 @@ namespace zeali_aptitude_test_core
 
         public List<AptitudeQuestions> GetAptitudeQuestions()
         {
-            return _aptitudeQuestions.Find(questions => true).ToList();
+            List< AptitudeQuestions > allAptitudeQuestions = _aptitudeQuestions.Find(questions => true).ToList().OrderBy(i => Guid.NewGuid()).ToList();
+            List<AptitudeQuestions> currentTestQuestions = new List<AptitudeQuestions>();
+            int count = 0;
+            foreach (AptitudeQuestions app in allAptitudeQuestions)
+            {
+                count = count + 1;
+                if (count <= 20)
+                {
+                    currentTestQuestions.Add(app);
+
+                }
+            }
+
+            return currentTestQuestions;
         }
 
     }

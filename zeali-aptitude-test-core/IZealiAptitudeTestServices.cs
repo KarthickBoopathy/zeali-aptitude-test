@@ -10,6 +10,5 @@ namespace zeali_aptitude_test_core
     {
         List<AptitudeQuestions> GetAptitudeQuestions();
 
-       
     }
 }
