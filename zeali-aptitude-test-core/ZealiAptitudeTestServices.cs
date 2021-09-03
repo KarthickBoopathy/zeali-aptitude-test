@@ -21,7 +21,7 @@ namespace zeali_aptitude_test_core
             List< AptitudeQuestions > allAptitudeQuestions = _aptitudeQuestions.Find(questions => true).ToList().OrderBy(i => Guid.NewGuid()).ToList();
             List<AptitudeQuestions> currentTestQuestions = new List<AptitudeQuestions>();
             int count = 0;
-            foreach (AptitudeQuestions app in allAptitudeQuestions)
+            (AptitudeQuestions app in allAptitudeQuestions)
             {
                 count = count + 1;
                 if (count <= 20)
