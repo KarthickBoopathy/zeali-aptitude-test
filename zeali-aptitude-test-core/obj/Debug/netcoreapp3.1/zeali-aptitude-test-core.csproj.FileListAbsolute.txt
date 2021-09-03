@@ -1,0 +1,10 @@
+C:\Asp.Net Core\Mobile Apps\zeali-aptitude-test\zeali-aptitude-test-core\bin\Debug\netcoreapp3.1\zeali-aptitude-test-core.deps.json
+C:\Asp.Net Core\Mobile Apps\zeali-aptitude-test\zeali-aptitude-test-core\bin\Debug\netcoreapp3.1\zeali-aptitude-test-core.dll
+C:\Asp.Net Core\Mobile Apps\zeali-aptitude-test\zeali-aptitude-test-core\bin\Debug\netcoreapp3.1\zeali-aptitude-test-core.pdb
+C:\Asp.Net Core\Mobile Apps\zeali-aptitude-test\zeali-aptitude-test-core\obj\Debug\netcoreapp3.1\zeali-aptitude-test-core.csproj.AssemblyReference.cache
+C:\Asp.Net Core\Mobile Apps\zeali-aptitude-test\zeali-aptitude-test-core\obj\Debug\netcoreapp3.1\zeali-aptitude-test-core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Asp.Net Core\Mobile Apps\zeali-aptitude-test\zeali-aptitude-test-core\obj\Debug\netcoreapp3.1\zeali-aptitude-test-core.AssemblyInfoInputs.cache
+C:\Asp.Net Core\Mobile Apps\zeali-aptitude-test\zeali-aptitude-test-core\obj\Debug\netcoreapp3.1\zeali-aptitude-test-core.AssemblyInfo.cs
+C:\Asp.Net Core\Mobile Apps\zeali-aptitude-test\zeali-aptitude-test-core\obj\Debug\netcoreapp3.1\zeali-aptitude-test-core.csproj.CoreCompileInputs.cache
+C:\Asp.Net Core\Mobile Apps\zeali-aptitude-test\zeali-aptitude-test-core\obj\Debug\netcoreapp3.1\zeali-aptitude-test-core.dll
+C:\Asp.Net Core\Mobile Apps\zeali-aptitude-test\zeali-aptitude-test-core\obj\Debug\netcoreapp3.1\zeali-aptitude-test-core.pdb
