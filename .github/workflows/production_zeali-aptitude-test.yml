@@ -8,9 +8,6 @@ on:
     branches:
       - production
   workflow_dispatch:
-  
-  variables:
-  SolutionPath: 'zeali-aptitude-test/zeali-aptitude-test.sln'
 
 jobs:
   build:
@@ -29,13 +26,13 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: dotnet publish
-      run: dotnet publish -c Release -o ${{SolutionPath}}/myapp
+      run: dotnet publish -c Release -o 'zeali-aptitude-test/zeali-aptitude-test.sln'/myapp
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v2
       with:
         name: .net-app
-        path: ${{SolutionPath}}/myapp
+        path: 'zeali-aptitude-test/zeali-aptitude-test.sln'/myapp
 
   deploy:
     runs-on: windows-latest
