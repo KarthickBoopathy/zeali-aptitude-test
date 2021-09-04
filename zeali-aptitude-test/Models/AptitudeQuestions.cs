@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
-using System;
 
-namespace zeali_aptitude_test_core
+
+namespace zeali_aptitude_test.Models
 {
     public class AptitudeQuestions
     {
