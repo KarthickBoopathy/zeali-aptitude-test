@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "zeali-aptitude-test", "zeali-aptitude-test\zeali-aptitude-test.csproj", "{76B82B5E-CD2F-409F-AA60-A9D8FEC7A202}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zeali-aptitude-test-core", "zeali-aptitude-test-core\zeali-aptitude-test-core.csproj", "{0DF60B69-45F0-42C0-B80C-EFCDB2D06F7F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{76B82B5E-CD2F-409F-AA60-A9D8FEC7A202}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76B82B5E-CD2F-409F-AA60-A9D8FEC7A202}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76B82B5E-CD2F-409F-AA60-A9D8FEC7A202}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0DF60B69-45F0-42C0-B80C-EFCDB2D06F7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DF60B69-45F0-42C0-B80C-EFCDB2D06F7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0DF60B69-45F0-42C0-B80C-EFCDB2D06F7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0DF60B69-45F0-42C0-B80C-EFCDB2D06F7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

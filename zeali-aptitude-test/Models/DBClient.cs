@@ -1,12 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace zeali_aptitude_test_core
+
+namespace zeali_aptitude_test.Models
 {
     public class DBClient : IDBClient
     {

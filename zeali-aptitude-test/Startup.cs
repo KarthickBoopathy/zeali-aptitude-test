@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using zeali_aptitude_test_core;
+using zeali_aptitude_test.Models;
+using zeali_aptitude_test.Services;
 
 namespace zeali_aptitude_test
 {

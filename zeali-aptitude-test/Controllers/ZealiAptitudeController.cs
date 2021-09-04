@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-using zeali_aptitude_test_core;
+using zeali_aptitude_test.Services;
 
 namespace zeali_aptitude_test.Controllers
 {
