@@ -24,12 +24,6 @@ namespace zeali_aptitude_test.Controllers
         [EnableCors("ZealiAptitudePolicy")]
         public IActionResult getAptitudeQuestions()
         {
-            StreamWriter sw = new StreamWriter(@"C:\temp\log.txt");
-
-            sw.WriteLine("Hi");
-            sw.Close();
-
-
             return Ok(_zealiAptitudeTestServices.GetAptitudeQuestions());
         }
 
