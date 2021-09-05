@@ -42,7 +42,7 @@ export default function AptitudeTest({ parentCallback }) {
             <Paper style={styles}>Question : {currentIndex}</Paper>
           </Grid>
           <Grid item xs={6}>
-            <Paper style={styles}>Total Questions : 20</Paper>
+            <Paper style={styles}>Total : 20</Paper>
           </Grid>
           <Grid item xs={12}></Grid>
         </Grid>
