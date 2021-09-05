@@ -8,11 +8,12 @@ namespace zeali_aptitude_test.Models
     {
         private readonly IMongoCollection<AptitudeQuestions> _aptitudeQuestions;
 
-        public DBClient(IOptions<ZealiAptitudeTestDBConfig> zealiAptitudeTestDBConfig)
+        public DBClient(ZealiAptitudeTestDBConfig zealiAptitudeTestDBConfig)
         {
-            var client = new MongoClient(zealiAptitudeTestDBConfig.Value.Connection_String);
-            var database = client.GetDatabase(zealiAptitudeTestDBConfig.Value.Database_Name);
-            _aptitudeQuestions = database.GetCollection<AptitudeQuestions>(zealiAptitudeTestDBConfig.Value.Aptitude_Questions_Collection_Name);
+            var client = new MongoClient(zealiAptitudeTestDBConfig.Connection_String);
+            var database = client.GetDatabase(zealiAptitudeTestDBConfig.Database_Name);
+            _aptitudeQuestions = database.GetCollection<AptitudeQuestions>(zealiAptitudeTestDBConfig.Aptitude_Questions_Collection_Name);
+
         }
 
         public IMongoCollection<AptitudeQuestions> GetAptitudeQuestionsCollection()
