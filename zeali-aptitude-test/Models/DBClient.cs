@@ -22,9 +22,8 @@ namespace zeali_aptitude_test.Models
 
 
         //dotnet user-secrets init -p zeali-aptitude-test
-        //dotnet user-secrets set "CONNECTION_STRING" "That Connection String" -p zeali-aptitude-test
-        //dotnet user-secrets lists -p zeali-aptitude-test
+        //dotnet user-secrets set "CONNECTION_STRING" "mongodb+srv://karthickboopathy:2.12.1997@zeali.ttf9l.mongodb.net/test" -p zeali-aptitude-test
         //dotnet user-secrets list -p zeali-aptitude-test
-        //"CONNECTION_STRING": "mongodb://localhost:27017"
+        //"CONNECTION_STRING": "mongodb://localhost:27017" 
     }
 }
