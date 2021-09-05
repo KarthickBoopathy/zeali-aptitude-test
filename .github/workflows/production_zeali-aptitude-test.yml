@@ -53,5 +53,5 @@ jobs:
         with:
           app-name: 'zeali-aptitude-test'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0BF4E6DDE1A249118585D1A0B7142353 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_25382930C87A4EAFB5C3E90C02A45183 }}
           package: .
