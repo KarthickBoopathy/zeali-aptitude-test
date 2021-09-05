@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using zeali_aptitude_test.Models;
 using zeali_aptitude_test.Services;
 
@@ -30,7 +31,12 @@ namespace zeali_aptitude_test
                 });
             });
             services.AddSingleton<IDBClient, DBClient>();
-            services.Configure<ZealiAptitudeTestDBConfig>(Configuration);
+
+            services.Configure<ZealiAptitudeTestDBConfig>(
+               Configuration.GetSection(nameof(ZealiAptitudeTestDBConfig)));
+
+            services.AddSingleton<ZealiAptitudeTestDBConfig>(sp =>
+                sp.GetRequiredService<IOptions<ZealiAptitudeTestDBConfig>>().Value);
             services.AddTransient<IZealiAptitudeTestServices, ZealiAptitudeTestServices>();
           
             services.AddControllersWithViews();
