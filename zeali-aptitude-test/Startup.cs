@@ -35,8 +35,8 @@ namespace zeali_aptitude_test
             services.Configure<ZealiAptitudeTestDBConfig>(
                Configuration.GetSection(nameof(ZealiAptitudeTestDBConfig)));
 
-            //services.AddSingleton<ZealiAptitudeTestDBConfig>(sp =>
-            //    sp.GetRequiredService<IOptions<ZealiAptitudeTestDBConfig>>().Value);
+            services.AddSingleton<ZealiAptitudeTestDBConfig>(sp =>
+                sp.GetRequiredService<IOptions<ZealiAptitudeTestDBConfig>>().Value);
             services.AddTransient<IZealiAptitudeTestServices, ZealiAptitudeTestServices>();
           
             services.AddControllersWithViews();
