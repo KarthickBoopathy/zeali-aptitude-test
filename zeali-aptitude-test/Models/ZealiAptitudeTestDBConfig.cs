@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace zeali_aptitude_test_core
+namespace zeali_aptitude_test.Models
 {
     public class ZealiAptitudeTestDBConfig
     {
