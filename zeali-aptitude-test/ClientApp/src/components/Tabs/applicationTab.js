@@ -7,6 +7,7 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
 import ApplicationHome from "../../pages/Home/ApplicationHome";
+import Login from "../../pages/Login/Login";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -78,6 +79,7 @@ export default function ApplicationTab() {
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>
         <ApplicationHome />
+          {/* <Login/> */}
       </TabPanel>
     </div>
   );
