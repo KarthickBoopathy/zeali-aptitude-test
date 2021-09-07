@@ -3,9 +3,10 @@ import Card from "@material-ui/core/Card";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
-import { Grid, Paper } from "@material-ui/core";
-import { useState } from "react";
-import {userAuthentication} from "../../utils"
+import { Grid, Link, Paper } from "@material-ui/core";
+import { useEffect, useState } from "react";
+import { loginZeali, registerNewZealiUsers } from "../../utils";
+import { ZealiUsers, ErrorMessage } from "../../types/schema";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,45 +26,106 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Login = () => {
   const classes = useStyles();
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [enableLogin, setEnableLogin] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
+    error: false,
+    message: "",
+  });
+  const [userDetails, SetUserDetails] = useState<ZealiUsers>({
+    email: "",
+    password: "",
+  });
 
-  const [emailID, setEmailID] = useState("");
-  const [password, setPassword] = useState("");
-  
+  const handleLogin = (event: any) => {
+    event.preventDefault();
+    if (enableLogin) {
+      setErrorMessage({
+        error: false,
+        message: "",
+      });
 
-  const handleSubmit = () => {
-
-   userAuthentication(emailID, password);
+      loginZeali(userDetails);
+    } else {
+      if (userDetails.password === confirmPassword) {
+        setErrorMessage({
+          error: false,
+          message: "",
+        });
+        registerNewZealiUsers(userDetails);
+      } else {
+        setErrorMessage({
+          error: true,
+          message: "Password does not match with create password",
+        });
+      }
+    }
   };
 
+  const handleEnableLogin = () => {
+    setEnableLogin(true);
+  };
+
+  const handleEnableSignUp = () => {
+    setEnableLogin(false);
+  };
   return (
     <Card variant="outlined">
       <CardContent>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>LOGIN WITH GOOGLE ACCOUNT</Paper>
+            <Paper className={classes.paper}>
+              {enableLogin
+                ? "LOGIN WITH YOUR DETAILS"
+                : "REGISTER WITH YOUR DETAILS"}
+            </Paper>
           </Grid>
         </Grid>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleLogin}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                id="emailID"
+                type="email"
+                id="email"
                 label="Email ID"
-                onChange={(event) => setEmailID(event.target.value)}
+                onChange={(event) =>
+                  SetUserDetails({ ...userDetails, email: event.target.value })
+                }
               />
             </Grid>
+
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
                 id="password"
                 type="password"
-                label="Password"
-                onChange={(event) => setPassword(event.target.value)}
+                label={enableLogin ? "Password" : "Create Password"}
+                onChange={(event) =>
+                  SetUserDetails({
+                    ...userDetails,
+                    password: event.target.value,
+                  })
+                }
               />
             </Grid>
+
+            {!enableLogin && (
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  error={errorMessage.error}
+                  id="confirmPassword"
+                  type="password"
+                  label="Confirm Password"
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  helperText={errorMessage.message}
+                />
+              </Grid>
+            )}
 
             <Grid item xs={12}>
               <Button
@@ -72,9 +134,24 @@ const Login = () => {
                 color="secondary"
                 type="submit"
               >
-                Login
+                {enableLogin ? "LOGIN" : "REGISTER"}
               </Button>
             </Grid>
+
+            {enableLogin && (
+              <Grid item xs={12}>
+                <Link href="#" onClick={handleEnableSignUp}>
+                  Already having Account ?
+                </Link>
+              </Grid>
+            )}
+            {!enableLogin && (
+              <Grid item xs={12}>
+                <Link href="#" onClick={handleEnableLogin}>
+                  New to Zeali ? Register here
+                </Link>
+              </Grid>
+            )}
           </Grid>
         </form>
       </CardContent>

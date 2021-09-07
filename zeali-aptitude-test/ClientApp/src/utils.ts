@@ -1,10 +1,24 @@
+import { ZealiUsers } from "./types/schema";
 
+export const loginZeali = (userDetails: ZealiUsers) => {
+  console.log(userDetails);
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userDetails),
+  };
+  fetch("/api/zealiAptitudeTest/ZealiAptitude/Login", requestOptions)
+    .then((response) => response.json())
+    .then((data) => localStorage.setItem("loginStatus", JSON.stringify(data)));
+};
 
-export const userAuthentication = (credU: string, credP: string) => {
-console.log(credU, credP);
-
-     localStorage.setItem("userLoggedIn", JSON.stringify({
-         "email": "karthickboopathy94@gmail.com",
-         "loggedIn": true
-     }));
-}
+export const registerNewZealiUsers = (userDetails: ZealiUsers)=> {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userDetails),
+  };
+  fetch("/api/zealiAptitudeTest/ZealiAptitude", requestOptions)
+  .then((response) => response.json())
+  .then((data) => localStorage.setItem("loginStatus", JSON.stringify(data)));
+};

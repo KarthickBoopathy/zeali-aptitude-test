@@ -54,6 +54,8 @@ export default function ApplicationTab() {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
+  const loginStatus = JSON.parse(localStorage.getItem('loginStatus'));
+ 
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -78,8 +80,10 @@ export default function ApplicationTab() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>
-        {localStorage.getItem('userLoggedIn')?
+       {loginStatus?.isLoggedIn?
         <ApplicationHome /> : <Login/> }
+
+        {/* <SignUp/> */}
          
       </TabPanel>
     </div>

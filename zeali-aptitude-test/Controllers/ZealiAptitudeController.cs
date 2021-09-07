@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using zeali_aptitude_test.Models;
 using zeali_aptitude_test.Services;
 
 namespace zeali_aptitude_test.Controllers
@@ -8,7 +9,7 @@ namespace zeali_aptitude_test.Controllers
     [ApiController]
     [Route("api/zealiAptitudeTest/[controller]")]
 
- 
+
 
     public class ZealiAptitudeController : ControllerBase
     {
@@ -18,7 +19,7 @@ namespace zeali_aptitude_test.Controllers
         {
             _zealiAptitudeTestServices = zealiAptitudeTestServices;
         }
-     
+
 
         [HttpGet]
         [EnableCors("ZealiAptitudePolicy")]
@@ -27,6 +28,20 @@ namespace zeali_aptitude_test.Controllers
             return Ok(_zealiAptitudeTestServices.GetAptitudeQuestions());
         }
 
+        [HttpPost]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult registerNewZealiUsers(ZealiUsers zealiUsers)
+        {
 
+            return Ok(_zealiAptitudeTestServices.InsertNewZealiUser(zealiUsers));
+        }
+
+        [HttpPost("Login")]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult loginZeali(ZealiUsers zealiUsers)
+        {
+
+            return Ok(_zealiAptitudeTestServices.authenticateZealiUsers(zealiUsers));
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace zeali_aptitude_test.Models
     {
         public string Database_Name { get; set; }
         public string Aptitude_Questions_Collection_Name { get; set; }
-      
+        public string Zeali_Users_Collection_Name { get; set; }
         public string Connection_String { get; set; }
     }
 }
