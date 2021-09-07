@@ -63,34 +63,26 @@ namespace zeali_aptitude_test.Services
             try
             {
                 ZealiUsers zealiUsers_temp = _zealiUsers.Find(user => user.email == zealiUsers.email).First();
-              
-                if (zealiUsers_temp == null)
+
+                if ((zealiUsers_temp.email == zealiUsers.email) && (zealiUsers_temp.password == zealiUsers.email))
                 {
                     zealiLoginAuth.email = zealiUsers.email;
-                    zealiLoginAuth.isLoggedIn = false;
-                    zealiLoginAuth.errorMessage = "This user does not exist. Please register";
+                    zealiLoginAuth.isLoggedIn = true;
                 }
                 else
                 {
-                    if ((zealiUsers_temp.email == zealiUsers.email) && (zealiUsers_temp.password == zealiUsers.email))
-                    {
-                        zealiLoginAuth.email = zealiUsers.email;
-                        zealiLoginAuth.isLoggedIn = true;
-                    }
-                    else
-                    {
-                        zealiLoginAuth.email = zealiUsers.email;
-                        zealiLoginAuth.isLoggedIn = false;
-                        zealiLoginAuth.errorMessage = "Incorrect Password";
-                    }
-
+                    zealiLoginAuth.email = zealiUsers.email;
+                    zealiLoginAuth.isLoggedIn = false;
+                    zealiLoginAuth.errorMessage = "Incorrect Password";
                 }
-
 
                 return zealiLoginAuth;
             }
             catch
             {
+                zealiLoginAuth.email = zealiUsers.email;
+                zealiLoginAuth.isLoggedIn = false;
+                zealiLoginAuth.errorMessage = "This user does not exist. Please register";
                 return zealiLoginAuth;
             }
         }
