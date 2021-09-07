@@ -9,7 +9,7 @@ export const loginZeali = (userDetails: ZealiUsers) => {
   };
   fetch("/api/zealiAptitudeTest/ZealiAptitude/Login", requestOptions)
     .then((response) => response.json())
-    .then((data) => localStorage.setItem("loginStatus", JSON.stringify(data)));
+    .then((data) => localStorage?.setItem("loginStatus", JSON.stringify(data)));
 };
 
 export const registerNewZealiUsers = (userDetails: ZealiUsers)=> {
@@ -20,5 +20,5 @@ export const registerNewZealiUsers = (userDetails: ZealiUsers)=> {
   };
   fetch("/api/zealiAptitudeTest/ZealiAptitude", requestOptions)
   .then((response) => response.json())
-  .then((data) => localStorage.setItem("loginStatus", JSON.stringify(data)));
+  .then((data) => localStorage?.setItem("loginStatus", JSON.stringify(data)));
 };

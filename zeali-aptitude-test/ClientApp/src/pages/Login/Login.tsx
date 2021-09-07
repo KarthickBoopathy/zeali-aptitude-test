@@ -4,7 +4,7 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import { Grid, Link, Paper } from "@material-ui/core";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { loginZeali, registerNewZealiUsers } from "../../utils";
 import { ZealiUsers, ErrorMessage } from "../../types/schema";
 
@@ -38,25 +38,25 @@ const Login = () => {
   });
 
   const handleLogin = (event: any) => {
-    event.preventDefault();
+    
     if (enableLogin) {
-      setErrorMessage({
-        error: false,
-        message: "",
-      });
 
       loginZeali(userDetails);
+
+      const loginStatus = JSON.parse(localStorage?.getItem("loginStatus") ?? "");
+
+      if (!loginStatus?.isLoggedIn) {
+          event.preventDefault();
+        setErrorMessage({ error: true, message: loginStatus?.errorMessage });
+      }
     } else {
       if (userDetails.password === confirmPassword) {
-        setErrorMessage({
-          error: false,
-          message: "",
-        });
         registerNewZealiUsers(userDetails);
       } else {
+        event.preventDefault();
         setErrorMessage({
           error: true,
-          message: "Password does not match with create password",
+          message: "Password does not match",
         });
       }
     }
@@ -100,6 +100,8 @@ const Login = () => {
               <TextField
                 required
                 fullWidth
+                error={errorMessage.error}
+                helperText={errorMessage.message}
                 id="password"
                 type="password"
                 label={enableLogin ? "Password" : "Create Password"}
@@ -118,11 +120,11 @@ const Login = () => {
                   required
                   fullWidth
                   error={errorMessage.error}
+                  helperText={errorMessage.message}
                   id="confirmPassword"
                   type="password"
                   label="Confirm Password"
                   onChange={(event) => setConfirmPassword(event.target.value)}
-                  helperText={errorMessage.message}
                 />
               </Grid>
             )}

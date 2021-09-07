@@ -64,7 +64,7 @@ namespace zeali_aptitude_test.Services
             {
                 ZealiUsers zealiUsers_temp = _zealiUsers.Find(user => user.email == zealiUsers.email).First();
 
-                if ((zealiUsers_temp.email == zealiUsers.email) && (zealiUsers_temp.password == zealiUsers.email))
+                if ((zealiUsers_temp.email == zealiUsers.email) && (zealiUsers_temp.password == zealiUsers.password))
                 {
                     zealiLoginAuth.email = zealiUsers.email;
                     zealiLoginAuth.isLoggedIn = true;

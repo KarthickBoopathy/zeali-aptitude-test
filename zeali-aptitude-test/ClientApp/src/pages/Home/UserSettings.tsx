@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 
 const UserSettings = () => {
   const classes = useStyles();
-  const userDetails = JSON.parse(localStorage.getItem("userLoggedIn") ?? "");
+  const userDetails = JSON.parse(localStorage?.getItem("loginStatus") ?? "");
 
   return (
     <Paper className={classes.paper} variant="elevation">

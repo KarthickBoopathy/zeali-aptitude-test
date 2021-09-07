@@ -2,7 +2,7 @@ import { Button } from "@material-ui/core";
 
 export const Logout = () => {
   const handleSubmit = () => {
-    localStorage.clear();
+    localStorage?.clear();
   };
 
   return (

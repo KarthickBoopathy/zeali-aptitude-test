@@ -11,7 +11,7 @@ export type ErrorMessage = {
     message?: string,
   };
 
-  export type zealiLoginAuth = {
+export type ZealiLoginAuth = {
     email?: string;
     isLoggedIn?: boolean;
     errorMessage?: string,
