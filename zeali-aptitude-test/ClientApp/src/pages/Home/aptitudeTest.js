@@ -6,7 +6,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { getAptitudeQuestions, getIndexQuestion } from "./utils";
+import { getAptitudeQuestions } from "./utils";
 import WrongAnswers from "./WrongAnswers";
 import { Typography } from "@material-ui/core";
 
@@ -129,7 +129,7 @@ export default function AptitudeTest({ parentCallback }) {
         ...aptitudeQuestions,
         [currentIndex - 1]: {
           ...aptitudeQuestions[currentIndex - 1],
-          userAnswer: event.target.value,
+          userAnswer: event?.target?.value,
         },
       });
     };

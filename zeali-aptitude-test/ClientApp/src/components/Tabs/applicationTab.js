@@ -78,8 +78,9 @@ export default function ApplicationTab() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>
-        <ApplicationHome />
-          {/* <Login/> */}
+        {localStorage.getItem('userLoggedIn')?
+        <ApplicationHome /> : <Login/> }
+         
       </TabPanel>
     </div>
   );

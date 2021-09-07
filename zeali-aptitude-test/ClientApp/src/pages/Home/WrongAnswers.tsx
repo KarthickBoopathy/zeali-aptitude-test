@@ -23,31 +23,36 @@ const WrongAnswers = ({ aptitudeQuestions }: any) => {
       {aptitudeQuestions?.map((item: any, i: any) => (
         <div key={i}>
           <Typography gutterBottom>
-            {i + 1} . {item?.question??""}
+            {i + 1} . {item?.question ?? ""}
           </Typography>
           <Typography color="textSecondary" variant="body2">
-            A: {item?.optionA??""}
+            A: {item?.optionA ?? ""}
           </Typography>
           <Typography color="textSecondary" variant="body2">
-            B: {item?.optionB??""}
+            B: {item?.optionB ?? ""}
           </Typography>
           <Typography color="textSecondary" variant="body2">
-            C: {item?.optionC??""}
+            C: {item?.optionC ?? ""}
           </Typography>
           <Typography color="textSecondary" variant="body2">
-            D: {item?.optionD??""}
+            D: {item?.optionD ?? ""}
           </Typography>
           <br />
           <Typography variant="body2" color="secondary">
-            Correct Answer: {item?.answer??""}
+            Correct Answer: {item?.answer ?? ""}
           </Typography>
           <Typography variant="body2" color="primary">
-            Your Answer: {item?.userAnswer??""}
+            Your Answer: {item?.userAnswer ?? "Not Answered"}
           </Typography>
           <br />
           <SimpleAccordion
-            title="Solutions"
-            children={<Typography variant="body2" >{item?.steps?? "Sorry !!! Currently, the steps for this problem is not available."}</Typography>}
+            title="Solution"
+            children={
+              <div>
+                {item?.steps ??
+                  "Sorry !!! Currently, the steps for this problem is not available."}
+              </div>
+            }
           />
           <br />
           <Divider variant="fullWidth" />
@@ -68,16 +73,6 @@ const evaluateScore = (aptitudeQuestions: any[]) => {
   return userScore;
 };
 
-const startingMinutes = 10;
-let time = startingMinutes * 60;
 
-const timerCountDown = () => {
-  const minutes = Math.floor(time / 60);
-  let seconds: any = time % 60;
-  seconds = seconds < 10 ? "0" + seconds : seconds;
-
-  time--;
-  return minutes + ":" + seconds;
-};
 
 export default WrongAnswers;

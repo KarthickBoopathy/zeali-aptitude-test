@@ -1,22 +1,29 @@
-import { Paper } from "@material-ui/core";
+import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Logout } from "../Login/Logout";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: 15,
-    textAlign: "center",
     fontSize: 16,
+    textAlign: "center",
   },
 }));
 
 const UserSettings = () => {
   const classes = useStyles();
+  const userDetails = JSON.parse(localStorage.getItem("userLoggedIn") ?? "");
 
   return (
     <Paper className={classes.paper} variant="elevation">
-      <br />
-      New Features are coming soon ...
-      <br />
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          Hello, {userDetails.email}
+        </Grid>
+        <Grid item xs={12}>
+          <Logout />
+        </Grid>
+      </Grid>
     </Paper>
   );
 };
