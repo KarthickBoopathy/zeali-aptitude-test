@@ -3,12 +3,12 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { getAptitudeQuestions } from "./utils";
+import { getAptitudeQuestions } from "./../../common/utils";
 import WrongAnswers from "./WrongAnswers";
+import { Typography } from "@material-ui/core";
 
 export default function AptitudeTest({ parentCallback }) {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -129,7 +129,7 @@ export default function AptitudeTest({ parentCallback }) {
         ...aptitudeQuestions,
         [currentIndex - 1]: {
           ...aptitudeQuestions[currentIndex - 1],
-          userAnswer: event.target.value,
+          userAnswer: event?.target?.value,
         },
       });
     };
@@ -137,9 +137,12 @@ export default function AptitudeTest({ parentCallback }) {
     return (
       <div>
         <FormControl component="fieldset">
-          <FormLabel component="legend">
+
+
+          <Typography>
             {aptitudeQuestions[currentIndex - 1]?.question ?? []}
-          </FormLabel>
+          </Typography>
+
           <br />
           <RadioGroup
             aria-label="questions"

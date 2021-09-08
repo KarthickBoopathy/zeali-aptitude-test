@@ -9,7 +9,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       width: "100%",
-      maxWidth: 350,
+      maxWidth: "95%",
       backgroundColor: "white",
     },
   })
