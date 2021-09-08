@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
 import ApplicationHome from "../../pages/Home/ApplicationHome";
+import Login from "../../pages/Login/Login";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -37,12 +38,12 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
-    width: "auto",
+    backgroundColor: "#fcfcfc",
+    width: "500px",
     height: "90vh",
-
+    margin: "auto"
   },
   tab: {
     fontSize: "large",
@@ -51,17 +52,32 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ApplicationTab() {
   const classes = useStyles();
-  const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
-  const handleChange = (event, newValue) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const callback = (value) => {
+    setIsLoggedIn(value);
+  };
+
+
+  const renderContent = () => {
+    if (isLoggedIn) {
+      return <ApplicationHome />;
+    }
+    else {
+      return <Login parentCallback={callback} />;
+    }
+  };
+  const handleChange = (newValue) => {
     setValue(newValue);
   };
+
+
 
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{ background: "#3b5998" }}>
-        {/* Here place our logo */}
         <Tabs
           value={value}
           onChange={handleChange}
@@ -76,8 +92,8 @@ export default function ApplicationTab() {
           />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0} dir={theme.direction}>
-        <ApplicationHome />
+      <TabPanel value={value} index={0}>
+        {renderContent()}
       </TabPanel>
     </div>
   );

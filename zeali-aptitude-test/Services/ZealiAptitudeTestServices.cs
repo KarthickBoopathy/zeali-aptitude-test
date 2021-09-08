@@ -10,14 +10,17 @@ namespace zeali_aptitude_test.Services
     {
         private readonly IMongoCollection<AptitudeQuestions> _aptitudeQuestions;
 
+        private readonly IMongoCollection<ZealiUsers> _zealiUsers;
+
         public ZealiAptitudeTestServices(IDBClient dBClient)
         {
             _aptitudeQuestions = dBClient.GetAptitudeQuestionsCollection();
+            _zealiUsers = dBClient.GetZealiUsers();
         }
 
         public List<AptitudeQuestions> GetAptitudeQuestions()
         {
-            List< AptitudeQuestions > allAptitudeQuestions = _aptitudeQuestions.Find(questions => true).ToList().OrderBy(i => Guid.NewGuid()).ToList();
+            List<AptitudeQuestions> allAptitudeQuestions = _aptitudeQuestions.Find(questions => true).ToList().OrderBy(i => Guid.NewGuid()).ToList();
             List<AptitudeQuestions> currentTestQuestions = new List<AptitudeQuestions>();
             int count = 0;
             foreach (AptitudeQuestions app in allAptitudeQuestions)
@@ -32,6 +35,59 @@ namespace zeali_aptitude_test.Services
 
             return currentTestQuestions;
         }
+
+        public ZealiLoginAuth InsertNewZealiUser(ZealiUsers zealiUsers)
+        {
+
+            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+            try
+            {
+                _zealiUsers.InsertOne(zealiUsers);
+                zealiLoginAuth.email = zealiUsers.email;
+                zealiLoginAuth.isLoggedIn = true;
+
+                return zealiLoginAuth;
+            }
+            catch
+            {
+                return zealiLoginAuth;
+            }
+
+
+        }
+
+        public ZealiLoginAuth authenticateZealiUsers(ZealiUsers zealiUsers)
+        {
+            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+
+            try
+            {
+                ZealiUsers zealiUsers_temp = _zealiUsers.Find(user => user.email == zealiUsers.email).First();
+
+                if ((zealiUsers_temp.email == zealiUsers.email) && (zealiUsers_temp.password == zealiUsers.password))
+                {
+                    zealiLoginAuth.email = zealiUsers.email;
+                    zealiLoginAuth.isLoggedIn = true;
+                }
+                else
+                {
+                    zealiLoginAuth.email = zealiUsers.email;
+                    zealiLoginAuth.isLoggedIn = false;
+                    zealiLoginAuth.errorMessage = "Incorrect Password";
+                }
+
+                return zealiLoginAuth;
+            }
+            catch
+            {
+                zealiLoginAuth.email = zealiUsers.email;
+                zealiLoginAuth.isLoggedIn = false;
+                zealiLoginAuth.errorMessage = "This user does not exist. Please register";
+                return zealiLoginAuth;
+            }
+        }
+
+
 
     }
 }
