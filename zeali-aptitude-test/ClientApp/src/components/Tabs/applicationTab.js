@@ -41,7 +41,7 @@ function a11yProps(index) {
 const useStyles = makeStyles(() => ({
   root: {
     backgroundColor: "#fcfcfc",
-    width: "500px",
+    maxWidth: "500px",
     height: "90vh",
     margin: "auto"
   },
