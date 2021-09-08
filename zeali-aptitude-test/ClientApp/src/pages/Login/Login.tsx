@@ -29,16 +29,18 @@ const Login = ({ parentCallback }: any) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [enableLogin, setEnableLogin] = useState(true);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
+    emailError: false,
     passwordError: false,
     createPasswordError: false,
     confirmPasswordError: false,
+    emailMessage: "",
     passwordMessage: "",
     createPasswordMessage: "",
     confirmPasswordMessage: "",
   });
   const [userDetails, SetUserDetails] = useState<ZealiUsers>({
     email: "",
-    password: "",
+    password: ""
   });
 
   const handleLogin = useCallback(
@@ -47,10 +49,18 @@ const Login = ({ parentCallback }: any) => {
       loginZeali(userDetails).then((data) => {
         parentCallback(data?.isLoggedIn ?? false);
         localStorage?.setItem("loginStatus", JSON.stringify(data));
-        setErrorMessage({
-          passwordError: !data?.isLoggedIn,
-          passwordMessage: data?.errorMessage,
-        });
+
+        if (data?.errorMessage === "Incorrect Password") {
+          setErrorMessage({
+            passwordError: !data?.isLoggedIn,
+            passwordMessage: data?.errorMessage,
+          });
+        } else {
+          setErrorMessage({
+            emailError: !data?.isLoggedIn,
+            emailMessage: data?.errorMessage,
+          });
+        }
       });
     },
     [userDetails, parentCallback]
@@ -69,11 +79,17 @@ const Login = ({ parentCallback }: any) => {
         registerNewZealiUsers(userDetails).then((data: any) => {
           parentCallback(data?.isLoggedIn ?? false);
           localStorage?.setItem("loginStatus", JSON.stringify(data));
+          setErrorMessage({
+            emailError: !data?.isLoggedIn,
+            emailMessage: data?.errorMessage,
+          });
         });
       }
     },
     [userDetails, parentCallback, confirmPassword]
   );
+
+  const handleForgotPassword = () => {};
 
   const handleEnableLogin = () => {
     setEnableLogin(true);
@@ -101,6 +117,8 @@ const Login = ({ parentCallback }: any) => {
               <TextField
                 required
                 fullWidth
+                error={errorMessage.emailError}
+                helperText={errorMessage.emailMessage}
                 type="email"
                 id="email"
                 label="Email ID"
@@ -175,16 +193,23 @@ const Login = ({ parentCallback }: any) => {
             </Grid>
 
             {enableLogin && (
-              <Grid item xs={12}>
-                <Link href="#" onClick={handleEnableSignUp}>
-                  Already having Account ?
-                </Link>
-              </Grid>
+              <>
+                <Grid item xs={6}>
+                  <Link href="#" onClick={handleEnableSignUp}>
+                    New to Zeali ? 
+                  </Link>
+                </Grid>
+                <Grid item xs={6}>
+                  <Link href="#" onClick={handleForgotPassword}>
+                    Forgot password ?
+                  </Link>
+                </Grid>
+              </>
             )}
             {!enableLogin && (
               <Grid item xs={12}>
                 <Link href="#" onClick={handleEnableLogin}>
-                  New to Zeali ? Register here
+                  Already having Account ?
                 </Link>
               </Grid>
             )}
