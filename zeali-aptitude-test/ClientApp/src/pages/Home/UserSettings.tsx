@@ -1,5 +1,6 @@
 import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { exportLocalStorage } from "../../utils";
 import { Logout } from "../Login/Logout";
 
 const useStyles = makeStyles((theme) => ({
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 const UserSettings = () => {
   const classes = useStyles();
-  const userDetails = JSON.parse(localStorage?.getItem("loginStatus") ?? "");
+  const userDetails = exportLocalStorage();
 
   return (
     <Paper className={classes.paper} variant="elevation">

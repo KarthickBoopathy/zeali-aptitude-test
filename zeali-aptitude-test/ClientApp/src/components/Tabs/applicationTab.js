@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -8,6 +8,7 @@ import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
 import ApplicationHome from "../../pages/Home/ApplicationHome";
 import Login from "../../pages/Login/Login";
+import { getLoginStatus } from "../../utils";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -38,9 +39,9 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "white",
     width: "auto",
     height: "90vh",
 
@@ -52,19 +53,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ApplicationTab() {
   const classes = useStyles();
-  const theme = useTheme();
   const [value, setValue] = React.useState(0);
-  const loginStatus = JSON.parse(localStorage?.getItem('loginStatus'))??"";
 
+  const renderContent = () => {
+    const loginStatus = getLoginStatus();
 
+    if (loginStatus) {
+      return <ApplicationHome />;
+    }
+    else {
+      return <Login />;
+    }
+  };
   const handleChange = (newValue) => {
     setValue(newValue);
   };
 
+
+
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{ background: "#3b5998" }}>
-        {/* Here place our logo */}
         <Tabs
           value={value}
           onChange={handleChange}
@@ -79,9 +88,8 @@ export default function ApplicationTab() {
           />
         </Tabs>
       </AppBar>
-      <TabPanel value={value} index={0} dir={theme.direction}>
-        {loginStatus?.isLoggedIn ?
-          <ApplicationHome /> : <Login />}
+      <TabPanel value={value} index={0}>
+        {renderContent()}
       </TabPanel>
     </div>
   );

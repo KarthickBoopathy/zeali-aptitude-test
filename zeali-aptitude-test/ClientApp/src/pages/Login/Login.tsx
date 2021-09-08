@@ -4,8 +4,12 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import { Grid, Link, Paper } from "@material-ui/core";
-import { useState } from "react";
-import { loginZeali, registerNewZealiUsers } from "../../utils";
+import { useCallback, useState } from "react";
+import {
+  exportLocalStorage,
+  loginZeali,
+  registerNewZealiUsers,
+} from "../../utils";
 import { ZealiUsers, ErrorMessage } from "../../types/schema";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -37,30 +41,43 @@ const Login = () => {
     password: "",
   });
 
-  const handleLogin = (event: any) => {
-    
-    if (enableLogin) {
+  // const handleLogin = (event: any) => {
+  //   event.preventDefault();
+  //   if (enableLogin) {
+  //     loginZeali(userDetails);
+  //     const loginStatus = exportLocalStorage();
 
-      loginZeali(userDetails);
+  //     if (!loginStatus?.isLoggedIn) {
+  //       setErrorMessage({ error: true, message: loginStatus?.errorMessage });
+  //     }
+  //     else{
+  //       window.location.reload();
+  //     }
+  //   } else {
+  //     if (userDetails.password === confirmPassword) {
+  //       setErrorMessage({
+  //         error: true,
+  //         message: "Password does not match",
+  //       });
+  //     } else {
+  //       registerNewZealiUsers(userDetails);
+  //     }
+  //   }
+  // };
 
-      const loginStatus = JSON.parse(localStorage?.getItem("loginStatus") ?? "");
+  const handleLogin = useCallback((event: any) => {
+    event.preventDefault();
+    loginZeali(userDetails).then((data) => {
+      console.log(data);
+    });
+  }, [userDetails]);
 
-      if (!loginStatus?.isLoggedIn) {
-          event.preventDefault();
-        setErrorMessage({ error: true, message: loginStatus?.errorMessage });
-      }
-    } else {
-      if (userDetails.password === confirmPassword) {
-        registerNewZealiUsers(userDetails);
-      } else {
-        event.preventDefault();
-        setErrorMessage({
-          error: true,
-          message: "Password does not match",
-        });
-      }
-    }
-  };
+  const handleSignUp = useCallback((event: any) => {
+    event.preventDefault();
+    registerNewZealiUsers(userDetails).then((data: any) => {
+      console.log(data);
+    });
+  }, [userDetails]);
 
   const handleEnableLogin = () => {
     setEnableLogin(true);
@@ -81,7 +98,7 @@ const Login = () => {
             </Paper>
           </Grid>
         </Grid>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={enableLogin? handleLogin: handleSignUp}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
