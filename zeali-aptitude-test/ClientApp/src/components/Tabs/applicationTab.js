@@ -8,7 +8,6 @@ import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
 import ApplicationHome from "../../pages/Home/ApplicationHome";
 import Login from "../../pages/Login/Login";
-import { getLoginStatus } from "../../utils";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,16 +52,21 @@ const useStyles = makeStyles(() => ({
 
 export default function ApplicationTab() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const callback = (value) => {
+    setIsLoggedIn(value);
+  };
+
 
   const renderContent = () => {
-    const loginStatus = getLoginStatus();
-
-    if (loginStatus) {
+    if (isLoggedIn) {
       return <ApplicationHome />;
     }
     else {
-      return <Login />;
+      return <Login parentCallback={callback} />;
     }
   };
   const handleChange = (newValue) => {

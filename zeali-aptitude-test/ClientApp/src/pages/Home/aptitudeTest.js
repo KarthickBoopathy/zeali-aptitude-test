@@ -6,7 +6,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { getAptitudeQuestions } from "./utils";
+import { getAptitudeQuestions } from "./../../common/utils";
 import WrongAnswers from "./WrongAnswers";
 import { Typography } from "@material-ui/core";
 

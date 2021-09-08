@@ -5,11 +5,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import { Grid, Link, Paper } from "@material-ui/core";
 import { useCallback, useState } from "react";
-import {
-  exportLocalStorage,
-  loginZeali,
-  registerNewZealiUsers,
-} from "../../utils";
+import { loginZeali, registerNewZealiUsers } from "../../common/utils";
 import { ZealiUsers, ErrorMessage } from "../../types/schema";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,56 +24,56 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Login = () => {
+const Login = ({ parentCallback }: any) => {
   const classes = useStyles();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [enableLogin, setEnableLogin] = useState(true);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
-    error: false,
-    message: "",
+    passwordError: false,
+    createPasswordError: false,
+    confirmPasswordError: false,
+    passwordMessage: "",
+    createPasswordMessage: "",
+    confirmPasswordMessage: "",
   });
   const [userDetails, SetUserDetails] = useState<ZealiUsers>({
     email: "",
     password: "",
   });
 
-  // const handleLogin = (event: any) => {
-  //   event.preventDefault();
-  //   if (enableLogin) {
-  //     loginZeali(userDetails);
-  //     const loginStatus = exportLocalStorage();
+  const handleLogin = useCallback(
+    (event: any) => {
+      event.preventDefault();
+      loginZeali(userDetails).then((data) => {
+        parentCallback(data?.isLoggedIn ?? false);
+        localStorage?.setItem("loginStatus", JSON.stringify(data));
+        setErrorMessage({
+          passwordError: !data?.isLoggedIn,
+          passwordMessage: data?.errorMessage,
+        });
+      });
+    },
+    [userDetails, parentCallback]
+  );
 
-  //     if (!loginStatus?.isLoggedIn) {
-  //       setErrorMessage({ error: true, message: loginStatus?.errorMessage });
-  //     }
-  //     else{
-  //       window.location.reload();
-  //     }
-  //   } else {
-  //     if (userDetails.password === confirmPassword) {
-  //       setErrorMessage({
-  //         error: true,
-  //         message: "Password does not match",
-  //       });
-  //     } else {
-  //       registerNewZealiUsers(userDetails);
-  //     }
-  //   }
-  // };
+  const handleSignUp = useCallback(
+    (event: any) => {
+      event.preventDefault();
 
-  const handleLogin = useCallback((event: any) => {
-    event.preventDefault();
-    loginZeali(userDetails).then((data) => {
-      console.log(data);
-    });
-  }, [userDetails]);
-
-  const handleSignUp = useCallback((event: any) => {
-    event.preventDefault();
-    registerNewZealiUsers(userDetails).then((data: any) => {
-      console.log(data);
-    });
-  }, [userDetails]);
+      if (userDetails?.password !== confirmPassword) {
+        setErrorMessage({
+          confirmPasswordError: true,
+          confirmPasswordMessage: "Password does not match",
+        });
+      } else {
+        registerNewZealiUsers(userDetails).then((data: any) => {
+          parentCallback(data?.isLoggedIn ?? false);
+          localStorage?.setItem("loginStatus", JSON.stringify(data));
+        });
+      }
+    },
+    [userDetails, parentCallback, confirmPassword]
+  );
 
   const handleEnableLogin = () => {
     setEnableLogin(true);
@@ -86,6 +82,7 @@ const Login = () => {
   const handleEnableSignUp = () => {
     setEnableLogin(false);
   };
+
   return (
     <Card variant="outlined">
       <CardContent>
@@ -98,7 +95,7 @@ const Login = () => {
             </Paper>
           </Grid>
         </Grid>
-        <form onSubmit={enableLogin? handleLogin: handleSignUp}>
+        <form onSubmit={enableLogin ? handleLogin : handleSignUp}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
@@ -112,32 +109,52 @@ const Login = () => {
                 }
               />
             </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                error={errorMessage.error}
-                helperText={errorMessage.message}
-                id="password"
-                type="password"
-                label={enableLogin ? "Password" : "Create Password"}
-                onChange={(event) =>
-                  SetUserDetails({
-                    ...userDetails,
-                    password: event.target.value,
-                  })
-                }
-              />
-            </Grid>
+            {enableLogin && (
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  error={errorMessage.passwordError}
+                  helperText={errorMessage.passwordMessage}
+                  id="password"
+                  type="password"
+                  label="Password"
+                  onChange={(event) =>
+                    SetUserDetails({
+                      ...userDetails,
+                      password: event.target.value,
+                    })
+                  }
+                />
+              </Grid>
+            )}
+            {!enableLogin && (
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  error={errorMessage.createPasswordError}
+                  helperText={errorMessage.createPasswordMessage}
+                  id="createPassword"
+                  type="password"
+                  label="Create Password"
+                  onChange={(event) =>
+                    SetUserDetails({
+                      ...userDetails,
+                      password: event.target.value,
+                    })
+                  }
+                />
+              </Grid>
+            )}
 
             {!enableLogin && (
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  error={errorMessage.error}
-                  helperText={errorMessage.message}
+                  error={errorMessage.confirmPasswordError}
+                  helperText={errorMessage.confirmPasswordMessage}
                   id="confirmPassword"
                   type="password"
                   label="Confirm Password"

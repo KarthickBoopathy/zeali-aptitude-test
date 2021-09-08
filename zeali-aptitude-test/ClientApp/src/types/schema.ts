@@ -5,14 +5,11 @@ export type ZealiUsers = {
     
 }
 
-
 export type ErrorMessage = {
-    error?: boolean,
-    message?: string,
-  };
-
-export type ZealiLoginAuth = {
-    email?: string;
-    isLoggedIn?: boolean;
-    errorMessage?: string,
+    passwordError?: boolean,
+    createPasswordError?: boolean,
+    confirmPasswordError?: boolean,
+    passwordMessage?: string,
+    createPasswordMessage?: string
+    confirmPasswordMessage?: string
   };

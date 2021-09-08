@@ -1,6 +1,6 @@
 import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { exportLocalStorage } from "../../utils";
+import { exportLocalStorage } from "../../common/utils";
 import { Logout } from "../Login/Logout";
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const UserSettings = () => {
     <Paper className={classes.paper} variant="elevation">
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          Hello, {userDetails.email}
+          Hello, {userDetails?.email??""}
         </Grid>
         <Grid item xs={12}>
           <Logout />
