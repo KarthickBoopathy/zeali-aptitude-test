@@ -60,7 +60,7 @@ export default function ApplicationTab() {
   useEffect(() => {
     const loginStatus = exportLocalStorage();
     setIsLoggedIn(loginStatus?.isLoggedIn);
-  });
+  },[setIsLoggedIn]);
 
 
   const callback = (value) => {
