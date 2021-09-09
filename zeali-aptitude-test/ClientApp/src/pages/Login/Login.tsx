@@ -66,6 +66,19 @@ const Login = ({ parentCallback }: any) => {
     [userDetails, parentCallback]
   );
 
+const clearErrorMessages = () =>{
+  setErrorMessage({
+    emailError: false,
+    passwordError: false,
+    createPasswordError: false,
+    confirmPasswordError: false,
+    emailMessage: "",
+    passwordMessage: "",
+    createPasswordMessage: "",
+    confirmPasswordMessage: "",
+  });
+}
+
   const handleSignUp = useCallback(
     (event: any) => {
       event.preventDefault();
@@ -92,10 +105,12 @@ const Login = ({ parentCallback }: any) => {
   const handleForgotPassword = () => {};
 
   const handleEnableLogin = () => {
+    clearErrorMessages();
     setEnableLogin(true);
   };
 
   const handleEnableSignUp = () => {
+    clearErrorMessages();
     setEnableLogin(false);
   };
 
@@ -196,12 +211,12 @@ const Login = ({ parentCallback }: any) => {
               <>
                 <Grid item xs={6}>
                   <Link href="#" onClick={handleEnableSignUp}>
-                    New to Zeali ? 
+                    New to Zeali? 
                   </Link>
                 </Grid>
                 <Grid item xs={6}>
                   <Link href="#" onClick={handleForgotPassword}>
-                    Forgot password ?
+                    Forgot password?
                   </Link>
                 </Grid>
               </>
@@ -209,7 +224,7 @@ const Login = ({ parentCallback }: any) => {
             {!enableLogin && (
               <Grid item xs={12}>
                 <Link href="#" onClick={handleEnableLogin}>
-                  Already having Account ?
+                  Already having Account?
                 </Link>
               </Grid>
             )}
