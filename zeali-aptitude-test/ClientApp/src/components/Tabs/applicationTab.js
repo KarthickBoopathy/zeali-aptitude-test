@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -8,6 +8,7 @@ import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
 import ApplicationHome from "../../pages/Home/ApplicationHome";
 import Login from "../../pages/Login/Login";
+import { exportLocalStorage } from "../../common/utils";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -55,6 +56,12 @@ export default function ApplicationTab() {
   const [value, setValue] = useState(0);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const loginStatus = exportLocalStorage();
+    setIsLoggedIn(loginStatus?.isLoggedIn);
+  });
+
 
   const callback = (value) => {
     setIsLoggedIn(value);
