@@ -1,15 +1,16 @@
 export type ZealiUsers = {
-    email?: string;
-    password?: string;
-    isSubscribed?: boolean;
-    
-}
+  email?: string;
+  password?: string;
+  isSubscribed?: boolean;
+};
 
 export type ErrorMessage = {
-    passwordError?: boolean,
-    createPasswordError?: boolean,
-    confirmPasswordError?: boolean,
-    passwordMessage?: string,
-    createPasswordMessage?: string
-    confirmPasswordMessage?: string
-  };
+  emailError?: boolean;
+  passwordError?: boolean;
+  createPasswordError?: boolean;
+  confirmPasswordError?: boolean;
+  emailMessage?: string;
+  passwordMessage?: string;
+  createPasswordMessage?: string;
+  confirmPasswordMessage?: string;
+};
