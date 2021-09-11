@@ -1,11 +1,13 @@
 import TextField from "@material-ui/core/TextField";
-import Card from "@material-ui/core/Card";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import { Grid, Link, Paper } from "@material-ui/core";
 import { useCallback, useState } from "react";
-import { loginZeali, registerNewZealiUsers } from "../../common/utils";
+import {
+  generateSignUpOTP,
+  loginZeali,
+  registerNewZealiUsers,
+} from "../../common/utils";
 import { ZealiUsers, ErrorMessage } from "../../types/schema";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,81 +30,41 @@ const Login = ({ parentCallback }: any) => {
   const classes = useStyles();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [enableLogin, setEnableLogin] = useState(true);
+  const [serverOTP, setServerOTP] = useState("");
+  const [userOTP, setUserOTP] = useState("");
+  const [enablePasswordChamber, setEnablePasswordChamber] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
     emailError: false,
     passwordError: false,
     createPasswordError: false,
     confirmPasswordError: false,
+    otpError: false,
     emailMessage: "",
     passwordMessage: "",
     createPasswordMessage: "",
     confirmPasswordMessage: "",
+    otpMessage: "",
   });
   const [userDetails, SetUserDetails] = useState<ZealiUsers>({
     email: "",
-    password: ""
+    password: "",
+    username: "",
   });
 
-  const handleLogin = useCallback(
-    (event: any) => {
-      event.preventDefault();
-      loginZeali(userDetails).then((data) => {
-        parentCallback(data?.isLoggedIn ?? false);
-        localStorage?.setItem("loginStatus", JSON.stringify(data));
-
-        if (data?.errorMessage === "Incorrect Password") {
-          setErrorMessage({
-            passwordError: !data?.isLoggedIn,
-            passwordMessage: data?.errorMessage,
-          });
-        } else {
-          setErrorMessage({
-            emailError: !data?.isLoggedIn,
-            emailMessage: data?.errorMessage,
-          });
-        }
-      });
-    },
-    [userDetails, parentCallback]
-  );
-
-const clearErrorMessages = () =>{
-  setErrorMessage({
-    emailError: false,
-    passwordError: false,
-    createPasswordError: false,
-    confirmPasswordError: false,
-    emailMessage: "",
-    passwordMessage: "",
-    createPasswordMessage: "",
-    confirmPasswordMessage: "",
-  });
-}
-
-  const handleSignUp = useCallback(
-    (event: any) => {
-      event.preventDefault();
-
-      if (userDetails?.password !== confirmPassword) {
-        setErrorMessage({
-          confirmPasswordError: true,
-          confirmPasswordMessage: "Password does not match",
-        });
-      } else {
-        registerNewZealiUsers(userDetails).then((data: any) => {
-          parentCallback(data?.isLoggedIn ?? false);
-          localStorage?.setItem("loginStatus", JSON.stringify(data));
-          setErrorMessage({
-            emailError: !data?.isLoggedIn,
-            emailMessage: data?.errorMessage,
-          });
-        });
-      }
-    },
-    [userDetails, parentCallback, confirmPassword]
-  );
-
-  const handleForgotPassword = () => {};
+  const clearErrorMessages = () => {
+    setErrorMessage({
+      emailError: false,
+      passwordError: false,
+      createPasswordError: false,
+      confirmPasswordError: false,
+      otpError: false,
+      emailMessage: "",
+      passwordMessage: "",
+      createPasswordMessage: "",
+      confirmPasswordMessage: "",
+      otpMessage: "",
+    });
+  };
 
   const handleEnableLogin = () => {
     clearErrorMessages();
@@ -114,19 +76,106 @@ const clearErrorMessages = () =>{
     setEnableLogin(false);
   };
 
-  return (
-    <Card variant="outlined">
-      <CardContent>
+  const handleLogin = useCallback(
+    (event: any) => {
+      event.preventDefault();
+      loginZeali(userDetails).then((data) => {
+        parentCallback(data?.isLoggedIn ?? false);
+        localStorage?.setItem("loginStatus", JSON.stringify(data));
+
+        setErrorMessage({
+          emailError: data?.emailError,
+          passwordError: data?.passwordError,
+          createPasswordError: data?.createPasswordError,
+          confirmPasswordError: data?.confirmPasswordError,
+          otpError: data?.otpError,
+          emailMessage: data?.emailMessage,
+          passwordMessage: data?.passwordMessage,
+          createPasswordMessage: data?.createPasswordMessage,
+          confirmPasswordMessage: data?.confirmPasswordMessage,
+          otpMessage: data?.otpMessage,
+        });
+      });
+    },
+    [userDetails, parentCallback]
+  );
+
+  const handleSignUp = useCallback(
+    (event: any) => {
+      event.preventDefault();
+      if (userOTP && userOTP === serverOTP) {
+        if (userDetails?.password !== confirmPassword) {
+          setErrorMessage({
+            confirmPasswordError: true,
+            confirmPasswordMessage: "Password does not match",
+          });
+        } else {
+          registerNewZealiUsers(userDetails).then((data: any) => {
+            parentCallback(data?.isLoggedIn ?? false);
+            localStorage?.setItem("loginStatus", JSON.stringify(data));
+
+            setErrorMessage({
+              emailError: data?.emailError,
+              passwordError: data?.passwordError,
+              createPasswordError: data?.createPasswordError,
+              confirmPasswordError: data?.confirmPasswordError,
+              otpError: data?.otpError,
+              emailMessage: data?.emailMessage,
+              passwordMessage: data?.passwordMessage,
+              createPasswordMessage: data?.createPasswordMessage,
+              confirmPasswordMessage: data?.confirmPasswordMessage,
+              otpMessage: data?.otpMessage,
+            });
+          });
+        }
+      } else {
+        setErrorMessage({
+          otpError: true,
+          otpMessage: "OTP does not match",
+        });
+      }
+    },
+    [userDetails, parentCallback, confirmPassword, userOTP, serverOTP]
+  );
+
+  const handleForgotPassword = () => {};
+
+  const handleSignUpOTP = useCallback(
+    (event: any) => {
+      event.preventDefault();
+      setEnablePasswordChamber(true);
+      generateSignUpOTP(userDetails).then((data) => {
+        setServerOTP(data?.otp);
+        setErrorMessage({
+          emailError: data?.emailError,
+          passwordError: data?.passwordError,
+          createPasswordError: data?.createPasswordError,
+          confirmPasswordError: data?.confirmPasswordError,
+          otpError: data?.otpError,
+          emailMessage: data?.emailMessage,
+          passwordMessage: data?.passwordMessage,
+          createPasswordMessage: data?.createPasswordMessage,
+          confirmPasswordMessage: data?.confirmPasswordMessage,
+          otpMessage: data?.otpMessage,
+        });
+      });
+    },
+    [userDetails, setServerOTP]
+  );
+
+  const renderLogin = () => {
+    if (!enableLogin) {
+      return;
+    }
+
+    return (
+      <>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              {enableLogin
-                ? "LOGIN WITH YOUR DETAILS"
-                : "REGISTER WITH YOUR DETAILS"}
-            </Paper>
+            <Paper className={classes.paper}>LOGIN WITH YOUR DETAILS</Paper>
           </Grid>
         </Grid>
-        <form onSubmit={enableLogin ? handleLogin : handleSignUp}>
+        <form onSubmit={handleLogin}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
@@ -142,59 +191,24 @@ const clearErrorMessages = () =>{
                 }
               />
             </Grid>
-            {enableLogin && (
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  error={errorMessage.passwordError}
-                  helperText={errorMessage.passwordMessage}
-                  id="password"
-                  type="password"
-                  label="Password"
-                  onChange={(event) =>
-                    SetUserDetails({
-                      ...userDetails,
-                      password: event.target.value,
-                    })
-                  }
-                />
-              </Grid>
-            )}
-            {!enableLogin && (
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  error={errorMessage.createPasswordError}
-                  helperText={errorMessage.createPasswordMessage}
-                  id="createPassword"
-                  type="password"
-                  label="Create Password"
-                  onChange={(event) =>
-                    SetUserDetails({
-                      ...userDetails,
-                      password: event.target.value,
-                    })
-                  }
-                />
-              </Grid>
-            )}
 
-            {!enableLogin && (
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  error={errorMessage.confirmPasswordError}
-                  helperText={errorMessage.confirmPasswordMessage}
-                  id="confirmPassword"
-                  type="password"
-                  label="Confirm Password"
-                  onChange={(event) => setConfirmPassword(event.target.value)}
-                />
-              </Grid>
-            )}
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                error={errorMessage.passwordError}
+                helperText={errorMessage.passwordMessage}
+                id="password"
+                type="password"
+                label="Password"
+                onChange={(event) =>
+                  SetUserDetails({
+                    ...userDetails,
+                    password: event.target.value,
+                  })
+                }
+              />
+            </Grid>
 
             <Grid item xs={12}>
               <Button
@@ -203,35 +217,154 @@ const clearErrorMessages = () =>{
                 color="secondary"
                 type="submit"
               >
-                {enableLogin ? "LOGIN" : "REGISTER"}
+                LOGIN
               </Button>
             </Grid>
 
-            {enableLogin && (
+            <Grid item xs={6}>
+              <Link href="#" onClick={handleEnableSignUp}>
+                New to Zeali?
+              </Link>
+            </Grid>
+            <Grid item xs={6}>
+              <Link href="#" onClick={handleForgotPassword}>
+                Forgot password?
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </>
+    );
+  };
+
+  const renderSignUp = () => {
+    if (enableLogin) {
+      return;
+    }
+
+    return (
+      <>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>REGISTER WITH YOUR DETAILS</Paper>
+          </Grid>
+        </Grid>
+        <form onSubmit={enablePasswordChamber ? handleSignUp : handleSignUpOTP}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                error={errorMessage.emailError}
+                helperText={errorMessage.emailMessage}
+                type="email"
+                id="email"
+                label="Email ID"
+                onChange={(event) =>
+                  SetUserDetails({ ...userDetails, email: event.target.value })
+                }
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="username"
+                type="text"
+                label="User Name"
+                onChange={(event) =>
+                  SetUserDetails({
+                    ...userDetails,
+                    username: event.target.value,
+                  })
+                }
+              />
+            </Grid>
+
+            <Grid item xs={6}>
+              <TextField
+                required={enablePasswordChamber}
+                fullWidth
+                error={errorMessage.otpError}
+                helperText={errorMessage.otpMessage}
+                id="otp"
+                type="password"
+                label="Enter OTP"
+                onChange={(event) => setUserOTP(event.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                type="submit"
+              >
+                SEND OTP
+              </Button>
+            </Grid>
+            {enablePasswordChamber && (
               <>
-                <Grid item xs={6}>
-                  <Link href="#" onClick={handleEnableSignUp}>
-                    New to Zeali? 
-                  </Link>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={errorMessage.createPasswordError}
+                    helperText={errorMessage.createPasswordMessage}
+                    id="createPassword"
+                    type="password"
+                    label="Create Password"
+                    onChange={(event) =>
+                      SetUserDetails({
+                        ...userDetails,
+                        password: event.target.value,
+                      })
+                    }
+                  />
                 </Grid>
-                <Grid item xs={6}>
-                  <Link href="#" onClick={handleForgotPassword}>
-                    Forgot password?
-                  </Link>
+
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={errorMessage.confirmPasswordError}
+                    helperText={errorMessage.confirmPasswordMessage}
+                    id="confirmPassword"
+                    type="password"
+                    label="Confirm Password"
+                    onChange={(event) => setConfirmPassword(event.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    type="submit"
+                  >
+                    REGISTER
+                  </Button>
                 </Grid>
               </>
             )}
-            {!enableLogin && (
-              <Grid item xs={12}>
-                <Link href="#" onClick={handleEnableLogin}>
-                  Already having Account?
-                </Link>
-              </Grid>
-            )}
+            <Grid item xs={12}>
+              <Link href="#" onClick={handleEnableLogin}>
+                Already having Account?
+              </Link>
+            </Grid>
           </Grid>
         </form>
-      </CardContent>
-    </Card>
+      </>
+    );
+  };
+
+  return (
+    <div>
+      {renderLogin()}
+      {renderSignUp()}
+    </div>
   );
 };
 

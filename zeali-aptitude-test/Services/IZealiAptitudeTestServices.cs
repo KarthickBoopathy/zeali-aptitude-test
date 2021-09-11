@@ -8,7 +8,8 @@ namespace zeali_aptitude_test.Services
     {
         List<AptitudeQuestions> GetAptitudeQuestions();
         ZealiLoginAuth InsertNewZealiUser(ZealiUsers zealiUsers);
-
         ZealiLoginAuth authenticateZealiUsers (ZealiUsers zealiUsers);
+        ZealiLoginAuth generateOTP(ZealiUsers zealiUsers, string mode);
+        ZealiUsers findUsers(ZealiUsers zealiUsers);
     }
 }
