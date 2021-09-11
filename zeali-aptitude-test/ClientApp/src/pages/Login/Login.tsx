@@ -32,7 +32,7 @@ const Login = ({ parentCallback }: any) => {
   const [enableLogin, setEnableLogin] = useState(true);
   const [serverOTP, setServerOTP] = useState("");
   const [userOTP, setUserOTP] = useState("");
-  const [enablePasswordChamber, setEnablePasswordChamber] = useState(false);
+  const [enableSignUpPasswordChamber, setEnableSignUpPasswordChamber] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
     emailError: false,
     passwordError: false,
@@ -143,7 +143,7 @@ const Login = ({ parentCallback }: any) => {
   const handleSignUpOTP = useCallback(
     (event: any) => {
       event.preventDefault();
-      setEnablePasswordChamber(true);
+      setEnableSignUpPasswordChamber(true);
       generateSignUpOTP(userDetails).then((data) => {
         setServerOTP(data?.otp);
         setErrorMessage({
@@ -249,7 +249,7 @@ const Login = ({ parentCallback }: any) => {
             <Paper className={classes.paper}>REGISTER WITH YOUR DETAILS</Paper>
           </Grid>
         </Grid>
-        <form onSubmit={enablePasswordChamber ? handleSignUp : handleSignUpOTP}>
+        <form onSubmit={enableSignUpPasswordChamber ? handleSignUp : handleSignUpOTP}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
@@ -284,7 +284,7 @@ const Login = ({ parentCallback }: any) => {
 
             <Grid item xs={6}>
               <TextField
-                required={enablePasswordChamber}
+                required={enableSignUpPasswordChamber}
                 fullWidth
                 error={errorMessage.otpError}
                 helperText={errorMessage.otpMessage}
@@ -304,7 +304,7 @@ const Login = ({ parentCallback }: any) => {
                 SEND OTP
               </Button>
             </Grid>
-            {enablePasswordChamber && (
+            {enableSignUpPasswordChamber && (
               <>
                 <Grid item xs={12}>
                   <TextField
