@@ -160,7 +160,7 @@ const Login = ({ parentCallback }: any) => {
         });
       });
     },
-    [userDetails, setServerOTP]
+    [userDetails, setServerOTP, setErrorMessage]
   );
 
   const renderLogin = () => {
@@ -301,7 +301,7 @@ const Login = ({ parentCallback }: any) => {
                 color="secondary"
                 type="submit"
               >
-                SEND OTP
+                Send OTP
               </Button>
             </Grid>
             {enableSignUpPasswordChamber && (

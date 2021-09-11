@@ -81,7 +81,7 @@ namespace zeali_aptitude_test.Services
         }
         public string createEmailBody(string userName, string otp, string mode)
         {
-            return "Hello " + userName + ", your OTP is [" + otp + "]. Please Enter this OTP in your " + mode + "Page";
+            return "Hello " + userName + ", your OTP is [" + otp + "]. Please enter this OTP in your " + mode + " page and please do not share this to anyone.";
         }
 
 
