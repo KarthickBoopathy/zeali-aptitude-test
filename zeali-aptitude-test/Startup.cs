@@ -35,11 +35,18 @@ namespace zeali_aptitude_test
             services.Configure<ZealiAptitudeTestDBConfig>(
                Configuration.GetSection(nameof(ZealiAptitudeTestDBConfig)));
 
+         
+
             services.AddSingleton<ZealiAptitudeTestDBConfig>(sp =>
                 sp.GetRequiredService<IOptions<ZealiAptitudeTestDBConfig>>().Value);
 
+            services.Configure<OTPConfiguration>(
+            Configuration.GetSection(nameof(OTPConfiguration)));
+            services.AddSingleton<OTPConfiguration>(sp =>
+                sp.GetRequiredService<IOptions<OTPConfiguration>>().Value);
+
             services.AddTransient<IZealiAptitudeTestServices, ZealiAptitudeTestServices>();
-          
+            services.AddTransient<IEmailAndSecurityManagment, EmailAndSecurityManagment>();
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory
