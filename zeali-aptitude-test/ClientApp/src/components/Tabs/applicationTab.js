@@ -53,7 +53,7 @@ const useStyles = makeStyles(() => ({
 
 export default function ApplicationTab() {
   const classes = useStyles();
-  const [value, setValue] = useState(0);
+  const value = 0;
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -76,9 +76,7 @@ export default function ApplicationTab() {
       return <Login parentCallback={callback} />;
     }
   };
-  const handleChange = (newValue) => {
-    setValue(newValue);
-  };
+
 
 
 
@@ -87,7 +85,6 @@ export default function ApplicationTab() {
       <AppBar position="static" style={{ background: "#3b5998" }}>
         <Tabs
           value={value}
-          onChange={handleChange}
           variant="fullWidth"
           aria-label="full width tabs example"
         >

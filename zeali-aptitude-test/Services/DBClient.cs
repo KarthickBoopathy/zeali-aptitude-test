@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using zeali_aptitude_test.Models;
 
-
-namespace zeali_aptitude_test.Models
+namespace zeali_aptitude_test.Services
 {
     public class DBClient : IDBClient
     {
@@ -13,6 +13,7 @@ namespace zeali_aptitude_test.Models
         {
             var client = new MongoClient(zealiAptitudeTestDBConfig.Connection_String);
             var database = client.GetDatabase(zealiAptitudeTestDBConfig.Database_Name);
+
             _aptitudeQuestions = database.GetCollection<AptitudeQuestions>(zealiAptitudeTestDBConfig.Aptitude_Questions_Collection_Name);
             _zealiUsers = database.GetCollection<ZealiUsers>(zealiAptitudeTestDBConfig.Zeali_Users_Collection_Name);
         }
