@@ -13,7 +13,7 @@ namespace zeali_aptitude_test.Controllers
     public class ZealiAptitudeController : ControllerBase
     {
         private readonly IZealiAptitudeTestServices _zealiAptitudeTestServices;
-        public static string ZAPT01 = "ForgotPassword";
+        public static string ZAPT01 = "Login";
         public static string ZAPT02 = "SignUp";
         public ZealiAptitudeController(IZealiAptitudeTestServices zealiAptitudeTestServices)
         {
@@ -55,7 +55,7 @@ namespace zeali_aptitude_test.Controllers
             {
                 if(zealiUsers_temp == null)
                 {
-                    return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, mode));
+                    return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, ZAPT02));
 
                 }
                 else
@@ -80,7 +80,7 @@ namespace zeali_aptitude_test.Controllers
                 else
                 {
                     zealiUsers.username = zealiUsers_temp.username;
-                    return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, mode));
+                    return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, ZAPT01));
            
                 }
 

@@ -43,7 +43,7 @@ export const generateForgotPasswordOTP = async (userDetails: ZealiUsers) => {
     body: JSON.stringify(userDetails),
   };
   return await fetch(
-    "/api/zealiAptitudeTest/ZealiAptitude/ForgotPassword/OTP",
+    "/api/zealiAptitudeTest/ZealiAptitude/Login/OTP",
     requestOptions
   ).then((response) => response.json());
 };
