@@ -45,16 +45,16 @@ const Login = ({ parentCallback }: any) => {
     createPasswordError: false,
     confirmPasswordError: false,
     otpError: false,
-    emailMessage: undefined,
-    passwordMessage: undefined,
-    createPasswordMessage: undefined,
-    confirmPasswordMessage: undefined,
-    otpMessage: undefined,
+    emailMessage: "",
+    passwordMessage: "",
+    createPasswordMessage: "",
+    confirmPasswordMessage: "",
+    otpMessage: "",
   });
   const [userDetails, SetUserDetails] = useState<ZealiUsers>({
-    email: undefined,
-    password: undefined,
-    username: undefined,
+    email: "",
+    password: "",
+    username: "",
   });
 
   const clearErrorMessages = () => {
@@ -64,12 +64,13 @@ const Login = ({ parentCallback }: any) => {
       createPasswordError: false,
       confirmPasswordError: false,
       otpError: false,
-      emailMessage: undefined,
-      passwordMessage: undefined,
-      createPasswordMessage: undefined,
-      confirmPasswordMessage: undefined,
-      otpMessage: undefined,
+      emailMessage: "",
+      passwordMessage: "",
+      createPasswordMessage: "",
+      confirmPasswordMessage: "",
+      otpMessage: "",
     });
+    setEnableSignUpPasswordChamber(false);
   };
 
   const handleEnableLogin = () => {
@@ -80,7 +81,13 @@ const Login = ({ parentCallback }: any) => {
 
   const handleEnableSignUp = () => {
     clearErrorMessages();
+    setEnableForgotPassword(false);
     setEnableLogin(false);
+  };
+
+  const handleEnableForgotPassword = () => {
+    clearErrorMessages();
+    setEnableForgotPassword(true);
   };
 
   const handleLogin = useCallback(
@@ -106,39 +113,45 @@ const Login = ({ parentCallback }: any) => {
     },
     [userDetails, parentCallback]
   );
-  const handleChangePassword = useCallback((event: any) => {
-    if (userOTP && userOTP === serverOTP) {
-      if (userDetails?.password !== confirmPassword) {
-        setErrorMessage({
-          confirmPasswordError: true,
-          confirmPasswordMessage: "Password does not match",
-        });
-      } else {
-        userChangePassword(userDetails).then((data: any) => {
-          parentCallback(data?.isLoggedIn ?? false);
-          localStorage?.setItem("loginStatus", JSON.stringify(data));
 
+  const handleChangePassword = useCallback(
+    (event: any) => {
+      event.preventDefault();
+      if (userOTP && userOTP === serverOTP) {
+        if (userDetails?.password !== confirmPassword) {
           setErrorMessage({
-            emailError: data?.emailError,
-            passwordError: data?.passwordError,
-            createPasswordError: data?.createPasswordError,
-            confirmPasswordError: data?.confirmPasswordError,
-            otpError: data?.otpError,
-            emailMessage: data?.emailMessage,
-            passwordMessage: data?.passwordMessage,
-            createPasswordMessage: data?.createPasswordMessage,
-            confirmPasswordMessage: data?.confirmPasswordMessage,
-            otpMessage: data?.otpMessage,
+            confirmPasswordError: true,
+            confirmPasswordMessage: "Password does not match",
           });
+        } else {
+          userChangePassword(userDetails).then((data: any) => {
+            parentCallback(data?.isLoggedIn ?? false);
+            localStorage?.setItem("loginStatus", JSON.stringify(data));
+
+            setErrorMessage({
+              emailError: data?.emailError,
+              passwordError: data?.passwordError,
+              createPasswordError: data?.createPasswordError,
+              confirmPasswordError: data?.confirmPasswordError,
+              otpError: data?.otpError,
+              emailMessage: data?.emailMessage,
+              passwordMessage: data?.passwordMessage,
+              createPasswordMessage: data?.createPasswordMessage,
+              confirmPasswordMessage: data?.confirmPasswordMessage,
+              otpMessage: data?.otpMessage,
+            });
+          });
+
+        }
+      } else {
+        setErrorMessage({
+          otpError: true,
+          otpMessage: "OTP does not match",
         });
       }
-    } else {
-      setErrorMessage({
-        otpError: true,
-        otpMessage: "OTP does not match",
-      });
-    }
-  }, []);
+    },
+    [userDetails, parentCallback, confirmPassword, userOTP, serverOTP]
+  );
 
   const handleSignUp = useCallback(
     (event: any) => {
@@ -178,14 +191,34 @@ const Login = ({ parentCallback }: any) => {
     [userDetails, parentCallback, confirmPassword, userOTP, serverOTP]
   );
 
-  const handleForgotPassword = () => {
-
-  };
+  const handleLoginOTP = useCallback(
+    (event: any) => {
+      event.preventDefault();
+      
+      generateForgotPasswordOTP(userDetails).then((data) => {
+        setServerOTP(data?.otp);
+        setErrorMessage({
+          emailError: data?.emailError,
+          passwordError: data?.passwordError,
+          createPasswordError: data?.createPasswordError,
+          confirmPasswordError: data?.confirmPasswordError,
+          otpError: data?.otpError,
+          emailMessage: data?.emailMessage,
+          passwordMessage: data?.passwordMessage,
+          createPasswordMessage: data?.createPasswordMessage,
+          confirmPasswordMessage: data?.confirmPasswordMessage,
+          otpMessage: data?.otpMessage,
+        });
+        setEnableSignUpPasswordChamber(!data?.emailError??false);
+      });
+    },
+    [userDetails, setServerOTP, setErrorMessage]
+  );
 
   const handleSignUpOTP = useCallback(
     (event: any) => {
       event.preventDefault();
-      setEnableSignUpPasswordChamber(true);
+  
       generateSignUpOTP(userDetails).then((data) => {
         setServerOTP(data?.otp);
         setErrorMessage({
@@ -200,6 +233,8 @@ const Login = ({ parentCallback }: any) => {
           confirmPasswordMessage: data?.confirmPasswordMessage,
           otpMessage: data?.otpMessage,
         });
+
+        setEnableSignUpPasswordChamber(!data?.emailError??false);
       });
     },
     [userDetails, setServerOTP, setErrorMessage]
@@ -269,7 +304,7 @@ const Login = ({ parentCallback }: any) => {
               </Link>
             </Grid>
             <Grid item xs={6}>
-              <Link href="#" onClick={handleForgotPassword}>
+              <Link href="#" onClick={handleEnableForgotPassword}>
                 Forgot password?
               </Link>
             </Grid>
@@ -278,6 +313,8 @@ const Login = ({ parentCallback }: any) => {
       </>
     );
   };
+
+
 
   const renderSignUp = () => {
     if (enableLogin) {
@@ -343,6 +380,7 @@ const Login = ({ parentCallback }: any) => {
             <Grid item xs={6}>
               <Button
                 fullWidth
+                disabled={(enableSignUpPasswordChamber&&!errorMessage.emailError)}
                 variant="contained"
                 color="secondary"
                 type="submit"
@@ -406,9 +444,125 @@ const Login = ({ parentCallback }: any) => {
     );
   };
 
+  const renderForgotPassword = () => {
+    if ((enableLogin && !enableForgotPassword) || (!enableForgotPassword)) {
+      return;
+    }
+
+  
+
+    return (
+      <>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>CREATE YOUR NEW PASSWORD</Paper>
+          </Grid>
+        </Grid>
+        <form
+          onSubmit={
+            enableSignUpPasswordChamber ? handleChangePassword : handleLoginOTP
+          }
+        >
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                error={errorMessage.emailError}
+                helperText={errorMessage.emailMessage}
+                type="email"
+                id="email"
+                label="Email ID"
+                onChange={(event) =>
+                  SetUserDetails({ ...userDetails, email: event.target.value })
+                }
+              />
+            </Grid>
+
+            <Grid item xs={6}>
+              <TextField
+                required={enableSignUpPasswordChamber}
+                fullWidth
+                error={errorMessage.otpError}
+                helperText={errorMessage.otpMessage}
+                id="otp"
+                type="password"
+                label="Enter OTP"
+                onChange={(event) => setUserOTP(event.target.value)}
+              />
+            </Grid>
+
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                disabled={(enableSignUpPasswordChamber&&!errorMessage.emailError)}
+                variant="contained"
+                color="secondary"
+                type="submit"
+              >
+                Send OTP
+              </Button>
+            </Grid>
+            {enableSignUpPasswordChamber && (
+              <>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={errorMessage.createPasswordError}
+                    helperText={errorMessage.createPasswordMessage}
+                    id="createPassword"
+                    type="password"
+                    label="Create Password"
+                    onChange={(event) =>
+                      SetUserDetails({
+                        ...userDetails,
+                        password: event.target.value,
+                      })
+                    }
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    error={errorMessage.confirmPasswordError}
+                    helperText={errorMessage.confirmPasswordMessage}
+                    id="confirmPassword"
+                    type="password"
+                    label="Confirm Password"
+                    onChange={(event) => setConfirmPassword(event.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    type="submit"
+                  >
+                    REGISTER
+                  </Button>
+                </Grid>
+              </>
+            )}
+            <Grid item xs={12}>
+              <Link href="#" onClick={handleEnableLogin}>
+                Back to Login?
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </>
+    );
+  };
+
   return (
     <div>
       {renderLogin()}
+      {renderForgotPassword()}
       {renderSignUp()}
     </div>
   );

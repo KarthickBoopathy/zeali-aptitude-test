@@ -156,10 +156,13 @@ namespace zeali_aptitude_test.Services
                 if (FindUsers(zealiUsers) != null)
                 {
                     var filterDefinition = Builders<ZealiUsers>.Filter.Eq(z => z.email, zealiUsers.email);
-                    var updateDefinition = Builders<ZealiUsers>.Update.Set(z => z.password, zealiUsers.password);
+                    var updateDefinition = Builders<ZealiUsers>.Update.Set(z => z.password, _emailAndSecurityManagment.encryptPassword(zealiUsers.password));
                     var options = new UpdateOptions { IsUpsert = true };
                     _zealiUsers.UpdateOne(filterDefinition, updateDefinition, options);
                     zealiLoginAuth.isPasswordChangedSuccessfully = true;
+                    zealiLoginAuth.email = zealiUsers_temp.email;
+                    zealiLoginAuth.username = zealiUsers_temp.username;
+                    zealiLoginAuth.isLoggedIn = true;
                     return zealiLoginAuth;
                 }
                 else
