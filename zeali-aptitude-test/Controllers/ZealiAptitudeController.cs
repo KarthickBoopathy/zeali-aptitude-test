@@ -13,8 +13,8 @@ namespace zeali_aptitude_test.Controllers
     public class ZealiAptitudeController : ControllerBase
     {
         private readonly IZealiAptitudeTestServices _zealiAptitudeTestServices;
-        public static string ZAPT01 = "FORGOT PASSWORD";
-        public static string ZAPT02 = "SIGNUP";
+        public static string ZAPT01 = "ForgotPassword";
+        public static string ZAPT02 = "SignUp";
         public ZealiAptitudeController(IZealiAptitudeTestServices zealiAptitudeTestServices)
         {
             _zealiAptitudeTestServices = zealiAptitudeTestServices;
@@ -41,44 +41,65 @@ namespace zeali_aptitude_test.Controllers
         public IActionResult loginZeali(ZealiUsers zealiUsers)
         {
 
-            return Ok(_zealiAptitudeTestServices.authenticateZealiUsers(zealiUsers));
+            return Ok(_zealiAptitudeTestServices.AuthenticateZealiUsers(zealiUsers));
         }
 
-        [HttpPost("ForgotPassword/OTP")]
+
+        [HttpPost("{mode}/OTP")]
         [EnableCors("ZealiAptitudePolicy")]
-        public IActionResult generateForgotPasswordOTP(ZealiUsers zealiUsers)
+        public IActionResult generateSignUpOTP(string mode, ZealiUsers zealiUsers)
         {
-            if (_zealiAptitudeTestServices.findUsers(zealiUsers) != null)
+            ZealiUsers zealiUsers_temp = _zealiAptitudeTestServices.FindUsers(zealiUsers);
+
+            if (mode== ZAPT02)
             {
-                return Ok(_zealiAptitudeTestServices.generateOTP(zealiUsers, ZAPT01));
+                if(zealiUsers_temp == null)
+                {
+                    return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, mode));
+
+                }
+                else
+                {
+                    ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+                    zealiLoginAuth.emailError = true;
+                    zealiLoginAuth.emailMessage = "Already an existing user. Please use different email address";
+                    return Ok(zealiLoginAuth);
+                }
+
+            }
+            else if (mode == ZAPT01)
+            {
+                if (zealiUsers_temp == null)
+                {
+
+                    ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+                    zealiLoginAuth.emailError = true;
+                    zealiLoginAuth.emailMessage = "User does not Exist. Please click \"New to Zeali?\" to register";
+                    return Ok(zealiLoginAuth);
+                }
+                else
+                {
+                    zealiUsers.username = zealiUsers_temp.username;
+                    return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, mode));
+           
+                }
+
             }
             else
             {
-                ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
-                zealiLoginAuth.emailError = true;
-                zealiLoginAuth.emailMessage = "User does not Exist. Please register";
-                return Ok(zealiLoginAuth);
+                return Ok();
             }
+
+            
+
+
         }
 
-        [HttpPost("SignUp/OTP")]
+        [HttpPost("ChangePassword")]
         [EnableCors("ZealiAptitudePolicy")]
-        public IActionResult generateSignUpOTP(ZealiUsers zealiUsers)
+        public IActionResult userChangePassword(ZealiUsers zealiUsers)
         {
-           
-            if (_zealiAptitudeTestServices.findUsers(zealiUsers) == null)
-            {
-                return Ok(_zealiAptitudeTestServices.generateOTP(zealiUsers, ZAPT02));
-            }
-            else
-            {
-                ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
-                zealiLoginAuth.emailError = true;
-                zealiLoginAuth.emailMessage = "User does already Exist. Please try again";
-                return Ok(zealiLoginAuth);
-            }
-
-           
+            return Ok(_zealiAptitudeTestServices.ChangePassword(zealiUsers));
 
         }
 

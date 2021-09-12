@@ -60,6 +60,18 @@ export const generateSignUpOTP = async (userDetails: ZealiUsers) => {
   ).then((response) => response.json());
 };
 
+export const userChangePassword = async (userDetails: ZealiUsers) => {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userDetails),
+  };
+  return await fetch(
+    "/api/zealiAptitudeTest/ZealiAptitude/ChangePassword",
+    requestOptions
+  ).then((response) => response.json());
+};
+
 
 export const exportLocalStorage = () => {
   return (

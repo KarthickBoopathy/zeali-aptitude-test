@@ -4,9 +4,11 @@ import Button from "@material-ui/core/Button";
 import { Grid, Link, Paper } from "@material-ui/core";
 import { useCallback, useState } from "react";
 import {
+  generateForgotPasswordOTP,
   generateSignUpOTP,
   loginZeali,
   registerNewZealiUsers,
+  userChangePassword,
 } from "../../common/utils";
 import { ZealiUsers, ErrorMessage } from "../../types/schema";
 
@@ -30,25 +32,29 @@ const Login = ({ parentCallback }: any) => {
   const classes = useStyles();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [enableLogin, setEnableLogin] = useState(true);
+  const [enableForgotPassword, setEnableForgotPassword] = useState(false);
   const [serverOTP, setServerOTP] = useState("");
   const [userOTP, setUserOTP] = useState("");
-  const [enableSignUpPasswordChamber, setEnableSignUpPasswordChamber] = useState(false);
+  const [
+    enableSignUpPasswordChamber,
+    setEnableSignUpPasswordChamber,
+  ] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
     emailError: false,
     passwordError: false,
     createPasswordError: false,
     confirmPasswordError: false,
     otpError: false,
-    emailMessage: "",
-    passwordMessage: "",
-    createPasswordMessage: "",
-    confirmPasswordMessage: "",
-    otpMessage: "",
+    emailMessage: undefined,
+    passwordMessage: undefined,
+    createPasswordMessage: undefined,
+    confirmPasswordMessage: undefined,
+    otpMessage: undefined,
   });
   const [userDetails, SetUserDetails] = useState<ZealiUsers>({
-    email: "",
-    password: "",
-    username: "",
+    email: undefined,
+    password: undefined,
+    username: undefined,
   });
 
   const clearErrorMessages = () => {
@@ -58,17 +64,18 @@ const Login = ({ parentCallback }: any) => {
       createPasswordError: false,
       confirmPasswordError: false,
       otpError: false,
-      emailMessage: "",
-      passwordMessage: "",
-      createPasswordMessage: "",
-      confirmPasswordMessage: "",
-      otpMessage: "",
+      emailMessage: undefined,
+      passwordMessage: undefined,
+      createPasswordMessage: undefined,
+      confirmPasswordMessage: undefined,
+      otpMessage: undefined,
     });
   };
 
   const handleEnableLogin = () => {
     clearErrorMessages();
     setEnableLogin(true);
+    setEnableForgotPassword(false);
   };
 
   const handleEnableSignUp = () => {
@@ -99,6 +106,39 @@ const Login = ({ parentCallback }: any) => {
     },
     [userDetails, parentCallback]
   );
+  const handleChangePassword = useCallback((event: any) => {
+    if (userOTP && userOTP === serverOTP) {
+      if (userDetails?.password !== confirmPassword) {
+        setErrorMessage({
+          confirmPasswordError: true,
+          confirmPasswordMessage: "Password does not match",
+        });
+      } else {
+        userChangePassword(userDetails).then((data: any) => {
+          parentCallback(data?.isLoggedIn ?? false);
+          localStorage?.setItem("loginStatus", JSON.stringify(data));
+
+          setErrorMessage({
+            emailError: data?.emailError,
+            passwordError: data?.passwordError,
+            createPasswordError: data?.createPasswordError,
+            confirmPasswordError: data?.confirmPasswordError,
+            otpError: data?.otpError,
+            emailMessage: data?.emailMessage,
+            passwordMessage: data?.passwordMessage,
+            createPasswordMessage: data?.createPasswordMessage,
+            confirmPasswordMessage: data?.confirmPasswordMessage,
+            otpMessage: data?.otpMessage,
+          });
+        });
+      }
+    } else {
+      setErrorMessage({
+        otpError: true,
+        otpMessage: "OTP does not match",
+      });
+    }
+  }, []);
 
   const handleSignUp = useCallback(
     (event: any) => {
@@ -138,7 +178,9 @@ const Login = ({ parentCallback }: any) => {
     [userDetails, parentCallback, confirmPassword, userOTP, serverOTP]
   );
 
-  const handleForgotPassword = () => {};
+  const handleForgotPassword = () => {
+
+  };
 
   const handleSignUpOTP = useCallback(
     (event: any) => {
@@ -164,7 +206,7 @@ const Login = ({ parentCallback }: any) => {
   );
 
   const renderLogin = () => {
-    if (!enableLogin) {
+    if (!enableLogin || enableForgotPassword) {
       return;
     }
 
@@ -249,7 +291,11 @@ const Login = ({ parentCallback }: any) => {
             <Paper className={classes.paper}>REGISTER WITH YOUR DETAILS</Paper>
           </Grid>
         </Grid>
-        <form onSubmit={enableSignUpPasswordChamber ? handleSignUp : handleSignUpOTP}>
+        <form
+          onSubmit={
+            enableSignUpPasswordChamber ? handleSignUp : handleSignUpOTP
+          }
+        >
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField

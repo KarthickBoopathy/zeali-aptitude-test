@@ -65,7 +65,7 @@ namespace zeali_aptitude_test.Services
                 };
                 Message.To.Add(ToEmail);
 
-                Client.Send(Message);
+                Client.SendMailAsync(Message);
                 return true;
             }
             catch

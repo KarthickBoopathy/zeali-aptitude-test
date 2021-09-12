@@ -21,7 +21,7 @@ namespace zeali_aptitude_test.Services
             _aptitudeQuestions = dBClient.GetAptitudeQuestionsCollection();
             _zealiUsers = dBClient.GetZealiUsers();
             _emailAndSecurityManagment = emailAndSecurityManagment;
-            
+
         }
 
 
@@ -48,14 +48,15 @@ namespace zeali_aptitude_test.Services
         {
 
             ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
-            
+
             try
             {
-                if (findUsers(zealiUsers) == null)
+                if (FindUsers(zealiUsers) == null)
                 {
                     zealiUsers.password = _emailAndSecurityManagment.encryptPassword(zealiUsers.password);
                     _zealiUsers.InsertOne(zealiUsers);
                     zealiLoginAuth.email = zealiUsers.email;
+                    zealiLoginAuth.username = zealiUsers.username;
                     zealiLoginAuth.isLoggedIn = true;
 
                 }
@@ -64,7 +65,7 @@ namespace zeali_aptitude_test.Services
                     zealiLoginAuth.email = zealiUsers.email;
                     zealiLoginAuth.isLoggedIn = false;
                     zealiLoginAuth.emailError = true;
-                    zealiLoginAuth.emailMessage = "This user does already exist. Please try login";
+                    zealiLoginAuth.emailMessage = "Already an existing user. Please use different email address";
                 }
 
                 return zealiLoginAuth;
@@ -81,18 +82,19 @@ namespace zeali_aptitude_test.Services
 
         }
 
-        public ZealiLoginAuth authenticateZealiUsers(ZealiUsers zealiUsers)
+        public ZealiLoginAuth AuthenticateZealiUsers(ZealiUsers zealiUsers)
         {
             ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
 
             try
             {
-                ZealiUsers zealiUsers_temp = findUsers(zealiUsers);
+                ZealiUsers zealiUsers_temp = FindUsers(zealiUsers);
                 if (zealiUsers_temp != null)
                 {
                     if ((zealiUsers_temp.email == zealiUsers.email) && (zealiUsers_temp.password == _emailAndSecurityManagment.encryptPassword(zealiUsers.password)))
                     {
-                        zealiLoginAuth.email = zealiUsers.email;
+                        zealiLoginAuth.email = zealiUsers_temp.email;
+                        zealiLoginAuth.username = zealiUsers_temp.username;
                         zealiLoginAuth.isLoggedIn = true;
                     }
                     else
@@ -108,7 +110,7 @@ namespace zeali_aptitude_test.Services
                     zealiLoginAuth.email = zealiUsers.email;
                     zealiLoginAuth.isLoggedIn = false;
                     zealiLoginAuth.emailError = true;
-                    zealiLoginAuth.emailMessage = "This user does not exist. Please register";
+                    zealiLoginAuth.emailMessage = "User does not Exist. Please click \"New to Zeali?\" to register";
 
                 }
 
@@ -125,13 +127,13 @@ namespace zeali_aptitude_test.Services
             }
         }
 
-       
 
-        public ZealiLoginAuth generateOTP(ZealiUsers zealiUsers, string mode)
+
+        public ZealiLoginAuth GenerateOTP(ZealiUsers zealiUsers, string mode)
         {
             ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
             string otp = _emailAndSecurityManagment.createOTP();
-           var result = _emailAndSecurityManagment.sendEmail(zealiUsers.email, zealiUsers.username, mode, otp);
+            var result = _emailAndSecurityManagment.sendEmail(zealiUsers.email, zealiUsers.username, mode, otp);
             if (result)
             {
                 zealiLoginAuth.otp = otp;
@@ -145,7 +147,45 @@ namespace zeali_aptitude_test.Services
             return zealiLoginAuth;
         }
 
-        public ZealiUsers findUsers(ZealiUsers zealiUsers)
+        public ZealiLoginAuth ChangePassword(ZealiUsers zealiUsers)
+        {
+            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+            try
+            {
+                ZealiUsers zealiUsers_temp = FindUsers(zealiUsers);
+                if (FindUsers(zealiUsers) != null)
+                {
+                    var filterDefinition = Builders<ZealiUsers>.Filter.Eq(z => z.email, zealiUsers.email);
+                    var updateDefinition = Builders<ZealiUsers>.Update.Set(z => z.password, zealiUsers.password);
+                    var options = new UpdateOptions { IsUpsert = true };
+                    _zealiUsers.UpdateOne(filterDefinition, updateDefinition, options);
+                    zealiLoginAuth.isPasswordChangedSuccessfully = true;
+                    return zealiLoginAuth;
+                }
+                else
+                {
+                    zealiLoginAuth.email = zealiUsers.email;
+                    zealiLoginAuth.isLoggedIn = false;
+                    zealiLoginAuth.emailError = true;
+                    zealiLoginAuth.isPasswordChangedSuccessfully = false;
+                    zealiLoginAuth.emailMessage = "User does not Exist. Please click \"New to Zeali?\" to register";
+
+                    return zealiLoginAuth;
+
+                }
+            }
+            catch
+            {
+                zealiLoginAuth.isLoggedIn = false;
+                zealiLoginAuth.emailError = true;
+                zealiLoginAuth.isPasswordChangedSuccessfully = false;
+                zealiLoginAuth.emailMessage = "Something went wrong. Please try again";
+                return zealiLoginAuth;
+            }
+          
+        }
+
+        public ZealiUsers FindUsers(ZealiUsers zealiUsers)
         {
             return _zealiUsers.Find(user => user.email == zealiUsers.email).FirstOrDefault();
         }
