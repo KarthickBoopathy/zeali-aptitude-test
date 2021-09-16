@@ -24,7 +24,6 @@ namespace zeali_aptitude_test.Services
 
         public string createOTP()
         {
-
             var library = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
             var otp = new char[6];
             var random = new Random();
@@ -38,7 +37,6 @@ namespace zeali_aptitude_test.Services
 
         public bool sendEmail(string email, string userName, string mode, string otp)
         {
-
             try
             {
                 SmtpClient Client = new SmtpClient()
@@ -72,7 +70,6 @@ namespace zeali_aptitude_test.Services
             {
                 return false;
             }
-
         }
 
         public string createEmailSubject(string mode)
@@ -83,19 +80,5 @@ namespace zeali_aptitude_test.Services
         {
             return "Hello " + userName + ", your OTP is [" + otp + "]. Please enter this OTP in your " + mode + " page and please do not share this to anyone.";
         }
-
-
-
-        //public string decryptPassword(string encryptedPassword)
-        //{
-        //    UTF8Encoding encodepwd = new UTF8Encoding();
-        //    Decoder Decode = encodepwd.GetDecoder();
-        //    byte[] todecode_byte = Convert.FromBase64String(encryptedPassword);
-        //    int charCount = Decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
-        //    char[] decoded_char = new char[charCount];
-        //    Decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
-        //    return new String(decoded_char);
-        //}
-
     }
 }
