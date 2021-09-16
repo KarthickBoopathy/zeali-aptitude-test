@@ -32,7 +32,6 @@ namespace zeali_aptitude_test.Controllers
         [EnableCors("ZealiAptitudePolicy")]
         public IActionResult registerNewZealiUsers(ZealiUsers zealiUsers)
         {
-
             return Ok(_zealiAptitudeTestServices.InsertNewZealiUser(zealiUsers));
         }
 
@@ -40,10 +39,8 @@ namespace zeali_aptitude_test.Controllers
         [EnableCors("ZealiAptitudePolicy")]
         public IActionResult loginZeali(ZealiUsers zealiUsers)
         {
-
             return Ok(_zealiAptitudeTestServices.AuthenticateZealiUsers(zealiUsers));
         }
-
 
         [HttpPost("{mode}/OTP")]
         [EnableCors("ZealiAptitudePolicy")]
@@ -56,7 +53,6 @@ namespace zeali_aptitude_test.Controllers
                 if(zealiUsers_temp == null)
                 {
                     return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, ZAPT02));
-
                 }
                 else
                 {
@@ -71,7 +67,6 @@ namespace zeali_aptitude_test.Controllers
             {
                 if (zealiUsers_temp == null)
                 {
-
                     ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
                     zealiLoginAuth.emailError = true;
                     zealiLoginAuth.emailMessage = "User does not Exist. Please click \"New to Zeali?\" to register";
@@ -81,7 +76,6 @@ namespace zeali_aptitude_test.Controllers
                 {
                     zealiUsers.username = zealiUsers_temp.username;
                     return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, ZAPT01));
-           
                 }
 
             }
@@ -89,10 +83,6 @@ namespace zeali_aptitude_test.Controllers
             {
                 return Ok();
             }
-
-            
-
-
         }
 
         [HttpPost("ChangePassword")]
