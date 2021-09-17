@@ -75,7 +75,7 @@ namespace zeali_aptitude_test
             app.UseSpaStaticFiles();
 
             app.UseRouting();
-            app.UseCors(); // ################ THIS IS NEWLY ADDED ################
+            app.UseCors(); 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: 10,
     textAlign: "center",
-    backgroundColor: "#f50057",
+    backgroundColor: "#69924a",
     color: "white",
   },
 }));
@@ -38,11 +38,11 @@ const WrongAnswers = ({ aptitudeQuestions }: any) => {
             D: {item?.optionD ?? ""}
           </Typography>
           <br />
-          <Typography variant="body2" color="secondary">
-            Correct Answer: {item?.answer ?? ""}
-          </Typography>
           <Typography variant="body2" color="primary">
             Your Answer: {item?.userAnswer ?? "Not Answered"}
+          </Typography>
+          <Typography variant="body2" color="secondary">
+            Correct Answer: {item?.answer ?? ""}
           </Typography>
           <br />
           <SimpleAccordion

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -10,11 +10,12 @@ import { getAptitudeQuestions } from "./../../common/utils";
 import WrongAnswers from "./WrongAnswers";
 import { Typography } from "@material-ui/core";
 
-export default function AptitudeQuestions({ parentCallback }) {
+export default function AptitudeQuestions({ homeCallback }) {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
-  const [disableQuiz, SetDisablleQuiz] = useState(false);
+  const [disableQuiz, SetDisableQuiz] = useState(false);
   const [disablePage, SetDisablePage] = useState(false);
+  const [enableReview, SetEnableReview] = useState(false);
 
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
@@ -23,8 +24,10 @@ export default function AptitudeQuestions({ parentCallback }) {
     };
   }, [setAptitudeQuestions]);
 
+
+
   const renderHeader = () => {
-    if (disableQuiz || disablePage) {
+    if (disableQuiz || disablePage || enableReview) {
       return;
     }
 
@@ -51,10 +54,15 @@ export default function AptitudeQuestions({ parentCallback }) {
     );
   };
 
-  const renderButtons = () => {
-    if (disableQuiz || disablePage) {
+  const renderFooterButtons = () => {
+    if (disableQuiz || disablePage || enableReview) {
       return;
     }
+
+    const styles = {
+      backgroundColor: "#69924a",
+      color: "white",
+    };
 
     const handleNext = () => {
       setCurrentIndex(currentIndex === 20 ? 20 : currentIndex + 1);
@@ -73,10 +81,19 @@ export default function AptitudeQuestions({ parentCallback }) {
     };
 
     const handleSubmit = () => {
-      setAptitudeQuestions(Object.values(aptitudeQuestions));
+      const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
+      if (confirmSubmit) {
+        setAptitudeQuestions(Object.values(aptitudeQuestions));
+        SetDisableQuiz(true);
+      }
 
-      SetDisablleQuiz(true);
     };
+
+    const handleReview = () => {
+      SetDisableQuiz(true);
+      SetEnableReview(true);
+
+    }
 
     return (
       <div>
@@ -84,34 +101,35 @@ export default function AptitudeQuestions({ parentCallback }) {
         <br />
         <Grid container spacing={3}>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={handleFirst}>
+            <Button fullWidth variant="contained" color="primary" onClick={handleFirst}>
               First
             </Button>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={handlePrev}>
+            <Button fullWidth variant="contained" color="primary" onClick={handlePrev}>
               Prev
             </Button>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={handleNext}>
+            <Button fullWidth variant="contained" color="primary" onClick={handleNext}>
               Next
             </Button>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={handleLast}>
+            <Button fullWidth variant="contained" color="primary" onClick={handleLast}>
               Last
             </Button>
           </Grid>
           <br />
           <br />
           <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleSubmit}
-            >
-              Submit Quiz
+            <Button fullWidth variant="contained" style={styles} onClick={handleReview}>
+              Review
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button fullWidth variant="contained" color="secondary" onClick={handleSubmit}>
+              Submit
             </Button>
           </Grid>
         </Grid>
@@ -119,8 +137,8 @@ export default function AptitudeQuestions({ parentCallback }) {
     );
   };
 
-  const renderOnlineQuiz = () => {
-    if (disableQuiz || disablePage) {
+  const renderAptitudeTest = () => {
+    if (disableQuiz || disablePage || enableReview) {
       return;
     }
 
@@ -177,35 +195,82 @@ export default function AptitudeQuestions({ parentCallback }) {
   };
 
   const renderWrongAnswers = () => {
-    if (!disableQuiz || disablePage) {
+    if (!disableQuiz || disablePage || enableReview) {
       return;
     }
 
     return (
       <>
         <WrongAnswers aptitudeQuestions={aptitudeQuestions} />
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            SetDisablePage(true);
-            parentCallback(false);
-          }}
-        >
-          Exit Quiz
-        </Button>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Button variant="contained" color="secondary" fullWidth
+              onClick={() => {
+                SetDisablePage(true);
+                homeCallback(false);
+              }}
+            >
+              Exit Test
+            </Button>
+          </Grid>
+        </Grid>
+
       </>
     );
   };
+
+  const reviewAnswersCallBack = useCallback((index) => {
+    SetDisableQuiz(false);
+    SetEnableReview(false);
+    setCurrentIndex(index + 1);
+  }, []);
+
+  const renderReviewAnswers = () => {
+    if (!disableQuiz || disablePage || !enableReview) {
+      return;
+    }
+
+    const answeredButtonStyle = {
+      backgroundColor: "rgb(106 134 86)",
+      color: "white",
+    }
+
+    const unAnsweredButtonStyle = {
+      backgroundColor: "rgb(245 0 87)",
+      color: "white",
+    }
+
+    return (
+      <>
+        <Grid container spacing={3}>
+          {Object.values(aptitudeQuestions)?.map((item, index) => (
+            <Grid item xs={6} key={index}>
+              <Button
+                fullWidth
+                variant="contained"
+                style={item?.userAnswer === "Not Selected" ? unAnsweredButtonStyle : answeredButtonStyle}
+
+                key={index}
+                onClick={() => reviewAnswersCallBack(index)}
+              >
+                {index + 1}. {item?.userAnswer === "Not Selected" ? "Not Answered" : "Answered"}
+              </Button>
+            </Grid>
+          ))}
+        </Grid>
+      </>
+    );
+  }
 
   const style = { flexGrow: "1" };
 
   return (
     <div style={style}>
+      {renderReviewAnswers()}
       {renderWrongAnswers()}
       {renderHeader()}
-      {renderOnlineQuiz()}
-      {renderButtons()}
+      {renderAptitudeTest()}
+      {renderFooterButtons()}
     </div>
   );
 }
