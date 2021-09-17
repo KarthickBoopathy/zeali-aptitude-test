@@ -88,7 +88,7 @@ export default class Home extends Component {
     if (!disableHome) {
       return;
     }
-    return <AptitudeQuestions parentCallback={this.callback} />;
+    return <AptitudeQuestions homeCallback={this.callback} />;
   }
 
   renderTopicsDivider() {
