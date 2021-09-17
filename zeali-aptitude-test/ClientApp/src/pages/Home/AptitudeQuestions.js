@@ -56,6 +56,11 @@ export default function AptitudeQuestions({ parentCallback }) {
       return;
     }
 
+    const styles = {
+      backgroundColor: "#69924a",
+      color: "white",
+    };
+
     const handleNext = () => {
       setCurrentIndex(currentIndex === 20 ? 20 : currentIndex + 1);
     };
@@ -73,9 +78,12 @@ export default function AptitudeQuestions({ parentCallback }) {
     };
 
     const handleSubmit = () => {
-      setAptitudeQuestions(Object.values(aptitudeQuestions));
+      const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
+      if (confirmSubmit) {
+        setAptitudeQuestions(Object.values(aptitudeQuestions));
+        SetDisablleQuiz(true);
+      }
 
-      SetDisablleQuiz(true);
     };
 
     return (
@@ -84,34 +92,35 @@ export default function AptitudeQuestions({ parentCallback }) {
         <br />
         <Grid container spacing={3}>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={handleFirst}>
+            <Button fullWidth variant="contained" color="primary" onClick={handleFirst}>
               First
             </Button>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={handlePrev}>
+            <Button fullWidth variant="contained" color="primary" onClick={handlePrev}>
               Prev
             </Button>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={handleNext}>
+            <Button fullWidth variant="contained" color="primary" onClick={handleNext}>
               Next
             </Button>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" onClick={handleLast}>
+            <Button fullWidth variant="contained" color="primary" onClick={handleLast}>
               Last
             </Button>
           </Grid>
           <br />
           <br />
           <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleSubmit}
-            >
-              Submit Quiz
+            <Button fullWidth variant="contained" style={styles} onClick={handleSubmit}>
+              Review
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button fullWidth variant="contained" color="secondary" onClick={handleSubmit}>
+              Submit
             </Button>
           </Grid>
         </Grid>
