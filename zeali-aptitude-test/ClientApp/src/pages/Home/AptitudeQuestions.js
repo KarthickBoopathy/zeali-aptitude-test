@@ -10,7 +10,7 @@ import { getAptitudeQuestions } from "./../../common/utils";
 import WrongAnswers from "./WrongAnswers";
 import { Typography } from "@material-ui/core";
 
-export default function AptitudeTest({ parentCallback }) {
+export default function AptitudeQuestions({ parentCallback }) {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
   const [disableQuiz, SetDisablleQuiz] = useState(false);

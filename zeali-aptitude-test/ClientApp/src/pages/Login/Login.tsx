@@ -550,7 +550,7 @@ const Login = ({ parentCallback }: any) => {
             )}
             <Grid item xs={12}>
               <Link href="#" onClick={handleEnableLogin}>
-                Back to Login?
+                Back to Login page
               </Link>
             </Grid>
           </Grid>
