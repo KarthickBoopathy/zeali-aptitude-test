@@ -1,4 +1,4 @@
-import ZealiApplicationsTab from "./components/Tabs/ZealiApplicationsTab";
+import ZealiApplicationsTab from "./components/ZealiApplicationsTab";
 
 function App() {
   return <ZealiApplicationsTab />;
