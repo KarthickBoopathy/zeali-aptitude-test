@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -6,7 +6,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
-import ApplicationHome from "../../pages/Home/ApplicationHome";
+import Home from "../../pages/Home/Home";
 import Login from "../../pages/Login/Login";
 import { exportLocalStorage } from "../../common/utils";
 
@@ -51,7 +51,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function ApplicationTab() {
+export default function ZealiApplicationsTab() {
   const classes = useStyles();
   const value = 0;
 
@@ -70,7 +70,7 @@ export default function ApplicationTab() {
 
   const renderContent = () => {
     if (isLoggedIn) {
-      return <ApplicationHome />;
+      return <Home />;
     }
     else {
       return <Login parentCallback={callback} />;

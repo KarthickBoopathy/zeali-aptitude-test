@@ -1,6 +1,6 @@
 import { Button, Typography } from "@material-ui/core";
 import { Component } from "react";
-import AptitudeTest from "./AptitudeTest";
+import AptitudeQuestions from "./AptitudeQuestions";
 import TopicList from "./Landing";
 import Paper from "@material-ui/core/Paper";
 import Fab from "@material-ui/core/Fab";
@@ -8,7 +8,7 @@ import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
 import Drawer from "@material-ui/core/Drawer";
 import UserSettings from "./UserSettings";
 
-export default class ApplicationHome extends Component {
+export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -88,7 +88,7 @@ export default class ApplicationHome extends Component {
     if (!disableHome) {
       return;
     }
-    return <AptitudeTest parentCallback={this.callback} />;
+    return <AptitudeQuestions parentCallback={this.callback} />;
   }
 
   renderTopicsDivider() {

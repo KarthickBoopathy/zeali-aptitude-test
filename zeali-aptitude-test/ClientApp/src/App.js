@@ -1,8 +1,7 @@
-import React from "react";
-import ApplicationTab from "./components/Tabs/ApplicationTab";
+import ZealiApplicationsTab from "./components/Tabs/ZealiApplicationsTab";
 
 function App() {
-  return <ApplicationTab />;
+  return <ZealiApplicationsTab />;
 }
 
 export default App;
