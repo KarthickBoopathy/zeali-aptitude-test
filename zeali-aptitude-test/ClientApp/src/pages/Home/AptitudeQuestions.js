@@ -253,7 +253,7 @@ export default function AptitudeQuestions({ homeCallback }) {
                 key={index}
                 onClick={() => reviewAnswersCallBack(index)}
               >
-                {index + 1}. {item?.userAnswer === "Not Selected" ? "Not Answered" : "Answered"}
+                Question {index + 1}
               </Button>
             </Grid>
           ))}
