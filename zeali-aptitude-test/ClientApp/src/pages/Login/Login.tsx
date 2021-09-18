@@ -141,7 +141,6 @@ const Login = ({ parentCallback }: any) => {
               otpMessage: data?.otpMessage,
             });
           });
-
         }
       } else {
         setErrorMessage({
@@ -194,7 +193,7 @@ const Login = ({ parentCallback }: any) => {
   const handleLoginOTP = useCallback(
     (event: any) => {
       event.preventDefault();
-      
+
       generateForgotPasswordOTP(userDetails).then((data) => {
         setServerOTP(data?.otp);
         setErrorMessage({
@@ -209,7 +208,7 @@ const Login = ({ parentCallback }: any) => {
           confirmPasswordMessage: data?.confirmPasswordMessage,
           otpMessage: data?.otpMessage,
         });
-        setEnableSignUpPasswordChamber(!data?.emailError??false);
+        setEnableSignUpPasswordChamber(!data?.emailError ?? false);
       });
     },
     [userDetails, setServerOTP, setErrorMessage]
@@ -218,7 +217,7 @@ const Login = ({ parentCallback }: any) => {
   const handleSignUpOTP = useCallback(
     (event: any) => {
       event.preventDefault();
-  
+
       generateSignUpOTP(userDetails).then((data) => {
         setServerOTP(data?.otp);
         setErrorMessage({
@@ -234,7 +233,7 @@ const Login = ({ parentCallback }: any) => {
           otpMessage: data?.otpMessage,
         });
 
-        setEnableSignUpPasswordChamber(!data?.emailError??false);
+        setEnableSignUpPasswordChamber(!data?.emailError ?? false);
       });
     },
     [userDetails, setServerOTP, setErrorMessage]
@@ -314,8 +313,6 @@ const Login = ({ parentCallback }: any) => {
     );
   };
 
-
-
   const renderSignUp = () => {
     if (enableLogin) {
       return;
@@ -380,7 +377,9 @@ const Login = ({ parentCallback }: any) => {
             <Grid item xs={6}>
               <Button
                 fullWidth
-                disabled={(enableSignUpPasswordChamber&&!errorMessage.emailError)}
+                disabled={
+                  enableSignUpPasswordChamber && !errorMessage.emailError
+                }
                 variant="contained"
                 color="secondary"
                 type="submit"
@@ -445,11 +444,9 @@ const Login = ({ parentCallback }: any) => {
   };
 
   const renderForgotPassword = () => {
-    if ((enableLogin && !enableForgotPassword) || (!enableForgotPassword)) {
+    if ((enableLogin && !enableForgotPassword) || !enableForgotPassword) {
       return;
     }
-
-  
 
     return (
       <>
@@ -495,7 +492,9 @@ const Login = ({ parentCallback }: any) => {
             <Grid item xs={6}>
               <Button
                 fullWidth
-                disabled={(enableSignUpPasswordChamber&&!errorMessage.emailError)}
+                disabled={
+                  enableSignUpPasswordChamber && !errorMessage.emailError
+                }
                 variant="contained"
                 color="secondary"
                 type="submit"

@@ -6,9 +6,9 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
-import Home from "../../pages/Home/Home";
-import Login from "../../pages/Login/Login";
-import { exportLocalStorage } from "../../common/utils";
+import Home from "../pages/Home/Home";
+import Login from "../pages/Login/Login";
+import { exportLocalStorage } from "../common/utils";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -43,7 +43,7 @@ const useStyles = makeStyles(() => ({
   root: {
     backgroundColor: "#fcfcfc",
     maxWidth: "500px",
-    height: "90vh",
+    height: "100vh",
     margin: "auto"
   },
   tab: {
@@ -60,7 +60,7 @@ export default function ZealiApplicationsTab() {
   useEffect(() => {
     const loginStatus = exportLocalStorage();
     setIsLoggedIn(loginStatus?.isLoggedIn);
-  },[setIsLoggedIn]);
+  }, [setIsLoggedIn]);
 
 
   const callback = (value) => {
@@ -76,9 +76,6 @@ export default function ZealiApplicationsTab() {
       return <Login parentCallback={callback} />;
     }
   };
-
-
-
 
   return (
     <div className={classes.root}>
