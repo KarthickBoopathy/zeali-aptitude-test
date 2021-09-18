@@ -60,7 +60,7 @@ export default function ZealiApplicationsTab() {
   useEffect(() => {
     const loginStatus = exportLocalStorage();
     setIsLoggedIn(loginStatus?.isLoggedIn);
-  },[setIsLoggedIn]);
+  }, [setIsLoggedIn]);
 
 
   const callback = (value) => {
@@ -76,9 +76,6 @@ export default function ZealiApplicationsTab() {
       return <Login parentCallback={callback} />;
     }
   };
-
-
-
 
   return (
     <div className={classes.root}>

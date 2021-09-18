@@ -1,35 +1,26 @@
 import { Backdrop } from "@material-ui/core";
-import { useEffect, useState } from "react";
 
 const backdropStyle = {
   maxWidth: 500,
   margin: "auto",
   zIndex: 2,
-  background: "#73a2b6",
+  background: "#3b5998",
 };
 
 const textStyle = {
-  color: "white"
+  color: "white",
 };
 
-export const PageLoader = () => {
-  const [pageLoad, SetPageLoad] = useState(true);
+type PageLoadProps = {
+  label: string;
+};
 
-  useEffect(() => {
-    setTimeout(() => {
-      SetPageLoad(false);
-    }, 1000);
-  }, []);
-
+export const PageLoader = ({ label }: PageLoadProps) => {
   return (
     <>
-      {pageLoad ? (
-        <Backdrop open style={backdropStyle}>
-          <h1 style={textStyle}>Zeali</h1>
-        </Backdrop>
-      ) : (
-        <></>
-      )}
+      <Backdrop open style={backdropStyle}>
+        <h1 style={textStyle}>{label}</h1>
+      </Backdrop>
     </>
   );
 };

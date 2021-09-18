@@ -74,6 +74,4 @@ const evaluateScore = (aptitudeQuestions: any[]) => {
   return userScore;
 };
 
-
-
 export default WrongAnswers;

@@ -1,4 +1,4 @@
-import { Button, Typography } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { Component } from "react";
 import AptitudeQuestions from "./AptitudeQuestions";
 import TopicList from "./Landing";
@@ -49,12 +49,10 @@ export default class Home extends Component {
       <div>
 
         <Paper style={style} variant="elevation">
-          Practice Makes a Man Perfect. Happy Cracking !!
+          Practice Makes a Man Perfect. Happy Cracking!!
           <br />
           <br />
-          <Button
-            variant="contained"
-            color="secondary"
+          <Button variant="contained" color="secondary"
             onClick={() => {
               this.setState({ disableHome: true });
             }}
@@ -68,20 +66,6 @@ export default class Home extends Component {
     );
   }
 
-  renderInstructionBanner() {
-    return (
-      <div>
-        <Typography>
-          Dear friend, remember this quiz is all about evaluating yourself for
-          your upcoming MNC Interviews.
-        </Typography>
-        <Typography>
-          Please be consious on Timings to yourself and start your Aptitude
-          Test.
-        </Typography>
-      </div>
-    );
-  }
 
   renderAptitudeTest() {
     const { disableHome } = this.state;
