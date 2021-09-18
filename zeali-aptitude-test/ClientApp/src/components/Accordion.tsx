@@ -1,14 +1,14 @@
-import React, { ReactNode } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import React, { ReactNode } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: 'auto',
+    width: "auto",
     margin: `${theme.spacing(0.5)}px auto`,
   },
   heading: {
@@ -17,13 +17,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export type AccordionProps ={
-    title: string;
-    children : ReactNode;
-
+export type AccordionProps = {
+  title: string;
+  children: ReactNode;
 };
 
-const SimpleAccordion=({title, children}: AccordionProps)=> {
+const SimpleAccordion = ({ title, children }: AccordionProps) => {
   const classes = useStyles();
 
   return (
@@ -36,13 +35,10 @@ const SimpleAccordion=({title, children}: AccordionProps)=> {
         >
           <Typography className={classes.heading}>{title}</Typography>
         </AccordionSummary>
-        <AccordionDetails>
-            {children}
-        </AccordionDetails>
+        <AccordionDetails>{children}</AccordionDetails>
       </Accordion>
-  
     </div>
   );
-}
+};
 
 export default SimpleAccordion;

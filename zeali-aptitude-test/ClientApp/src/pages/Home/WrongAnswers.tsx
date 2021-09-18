@@ -1,6 +1,7 @@
 import { Divider, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import SimpleAccordion from "../../components/Accordion/Accordion";
+import SimpleAccordion from "../../components/Accordion";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: 10,
@@ -72,7 +73,5 @@ const evaluateScore = (aptitudeQuestions: any[]) => {
   });
   return userScore;
 };
-
-
 
 export default WrongAnswers;

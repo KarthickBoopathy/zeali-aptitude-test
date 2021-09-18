@@ -9,6 +9,8 @@ import Button from "@material-ui/core/Button";
 import { getAptitudeQuestions } from "./../../common/utils";
 import WrongAnswers from "./WrongAnswers";
 import { Typography } from "@material-ui/core";
+import PageLoader from "../../components/PageLoader";
+
 
 export default function AptitudeQuestions({ homeCallback }) {
   const [currentIndex, setCurrentIndex] = useState(1);
@@ -16,13 +18,24 @@ export default function AptitudeQuestions({ homeCallback }) {
   const [disableQuiz, SetDisableQuiz] = useState(false);
   const [disablePage, SetDisablePage] = useState(false);
   const [enableReview, SetEnableReview] = useState(false);
+  const [pageLoad, SetPageLoad] = useState(true);
 
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
+    setTimeout(() => {
+      SetPageLoad(false);
+    }, 1500);
     return () => {
       setAptitudeQuestions([]);
     };
-  }, [setAptitudeQuestions]);
+  }, []);
+
+
+  const renderPageLoader = () => {
+    return (
+      <PageLoader label="Happy Cracking!!" />
+    );
+  };
 
 
 
@@ -155,8 +168,6 @@ export default function AptitudeQuestions({ homeCallback }) {
     return (
       <div>
         <FormControl component="fieldset">
-
-
           <Typography>
             {aptitudeQuestions[currentIndex - 1]?.question ?? []}
           </Typography>
@@ -194,6 +205,24 @@ export default function AptitudeQuestions({ homeCallback }) {
     );
   };
 
+
+  const renderExitTestButton = () => {
+    return (
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Button variant="contained" color="secondary" fullWidth
+            onClick={() => {
+              SetDisablePage(true);
+              homeCallback(false);
+            }}
+          >
+            Exit Test
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  }
+
   const renderWrongAnswers = () => {
     if (!disableQuiz || disablePage || enableReview) {
       return;
@@ -201,20 +230,11 @@ export default function AptitudeQuestions({ homeCallback }) {
 
     return (
       <>
-        <WrongAnswers aptitudeQuestions={aptitudeQuestions} />
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Button variant="contained" color="secondary" fullWidth
-              onClick={() => {
-                SetDisablePage(true);
-                homeCallback(false);
-              }}
-            >
-              Exit Test
-            </Button>
-          </Grid>
-        </Grid>
 
+        {renderExitTestButton()}
+        <br />
+        <WrongAnswers aptitudeQuestions={aptitudeQuestions} />
+        {renderExitTestButton()}
       </>
     );
   };
@@ -231,12 +251,12 @@ export default function AptitudeQuestions({ homeCallback }) {
     }
 
     const answeredButtonStyle = {
-      backgroundColor: "rgb(106 134 86)",
+      backgroundColor: "#6a8656",
       color: "white",
     }
 
     const unAnsweredButtonStyle = {
-      backgroundColor: "rgb(245 0 87)",
+      backgroundColor: "#f50057",
       color: "white",
     }
 
@@ -249,7 +269,6 @@ export default function AptitudeQuestions({ homeCallback }) {
                 fullWidth
                 variant="contained"
                 style={item?.userAnswer === "Not Selected" ? unAnsweredButtonStyle : answeredButtonStyle}
-
                 key={index}
                 onClick={() => reviewAnswersCallBack(index)}
               >
@@ -262,15 +281,15 @@ export default function AptitudeQuestions({ homeCallback }) {
     );
   }
 
-  const style = { flexGrow: "1" };
-
   return (
-    <div style={style}>
-      {renderReviewAnswers()}
-      {renderWrongAnswers()}
-      {renderHeader()}
-      {renderAptitudeTest()}
-      {renderFooterButtons()}
+    <div>
+      {pageLoad && renderPageLoader()}
+      {aptitudeQuestions && renderReviewAnswers()}
+      {aptitudeQuestions && renderWrongAnswers()}
+      {aptitudeQuestions && renderHeader()}
+      {aptitudeQuestions && renderAptitudeTest()}
+      {aptitudeQuestions && renderFooterButtons()}
+
     </div>
   );
 }
