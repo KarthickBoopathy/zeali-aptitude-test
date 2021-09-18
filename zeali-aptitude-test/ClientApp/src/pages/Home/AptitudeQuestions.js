@@ -19,12 +19,11 @@ export default function AptitudeQuestions({ homeCallback }) {
   const [disablePage, SetDisablePage] = useState(false);
   const [enableReview, SetEnableReview] = useState(false);
   const [pageLoad, SetPageLoad] = useState(true);
-
+  const [pageLoadText, SetPageLoadText] = useState("Happy Cracking!!");
+  const [startSound, SetStartSound] = useState(true);
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
-    setTimeout(() => {
-      SetPageLoad(false);
-    }, 1500);
+    setTimeout(() => { SetPageLoad(false); }, 2800);
     return () => {
       setAptitudeQuestions([]);
     };
@@ -33,10 +32,9 @@ export default function AptitudeQuestions({ homeCallback }) {
 
   const renderPageLoader = () => {
     return (
-      <PageLoader label="Happy Cracking!!" />
+      <PageLoader label={pageLoadText} start={startSound} />
     );
   };
-
 
 
   const renderHeader = () => {
@@ -94,10 +92,15 @@ export default function AptitudeQuestions({ homeCallback }) {
     };
 
     const handleSubmit = () => {
+      SetPageLoadText("You're Rocking!!");
+
       const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
       if (confirmSubmit) {
+        SetStartSound(false);
+        SetPageLoad(true);
         setAptitudeQuestions(Object.values(aptitudeQuestions));
         SetDisableQuiz(true);
+        setTimeout(() => { SetPageLoad(false); }, 2800);
       }
 
     };
