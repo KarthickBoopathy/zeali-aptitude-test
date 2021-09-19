@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import { Component } from "react";
-import AptitudeQuestions from "./AptitudeQuestions";
+import AptitudeQuestions from "../AptitudeQuestions/AptitudeQuestions";
 import TopicList from "./Landing";
 import Paper from "@material-ui/core/Paper";
 import Fab from "@material-ui/core/Fab";
