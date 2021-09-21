@@ -1,12 +1,17 @@
 import { Button } from "@material-ui/core";
 import { Component } from "react";
 import AptitudeQuestions from "../AptitudeQuestions/AptitudeQuestions";
-import TopicList from "./Landing";
+import TopicList from "./TopicList";
 import Paper from "@material-ui/core/Paper";
-import Fab from "@material-ui/core/Fab";
+
 import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+import TimelineIcon from '@mui/icons-material/Timeline';
 import Drawer from "@material-ui/core/Drawer";
 import UserSettings from "./UserSettings";
+
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
 
 export default class Home extends Component {
   constructor(props) {
@@ -94,16 +99,33 @@ export default class Home extends Component {
       right: "5%",
     };
 
+    const fabStyle = {
+      background: "#f50057"
+    }
+
     return (
       <>
-        <Fab
-          color="secondary"
-          aria-label="add"
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
           style={style}
-          onClick={this.toggleDrawer(true)}
+          icon={<EmojiObjectsIcon />}
+          FabProps={{ style: fabStyle }}
         >
-          <EmojiObjectsIcon />
-        </Fab>
+          <SpeedDialAction
+            key="dashboard"
+            icon={<TimelineIcon />}
+            tooltipTitle="Dashboard"
+            onClick={this.toggleDrawer(true)}
+          />
+
+          <SpeedDialAction
+            key="profile"
+            icon={<PersonPinIcon />}
+            tooltipTitle="Profile"
+            onClick={this.toggleDrawer(true)}
+          />
+
+        </SpeedDial>
         <Drawer anchor="top" open={top} onClose={this.toggleDrawer(false)}>
           <UserSettings />
         </Drawer>
