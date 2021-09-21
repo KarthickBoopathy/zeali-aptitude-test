@@ -12,6 +12,7 @@ import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
 
 
+
 export default function AptitudeQuestions({ homeCallback }) {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
@@ -21,6 +22,9 @@ export default function AptitudeQuestions({ homeCallback }) {
   const [pageLoad, SetPageLoad] = useState(true);
   const [pageLoadText, SetPageLoadText] = useState("Happy Cracking!!");
   const [startSound, SetStartSound] = useState(true);
+  const [minutes, setMinutes] = useState(59);
+  const [seconds, setSeconds] = useState(60);
+
   useEffect(() => {
     getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
     setTimeout(() => { SetPageLoad(false); }, 2800);
@@ -28,6 +32,32 @@ export default function AptitudeQuestions({ homeCallback }) {
       setAptitudeQuestions([]);
     };
   }, []);
+
+
+  useEffect(() => {
+    if (!seconds) {
+      if (minutes) {
+        setSeconds(60);
+        setMinutes(minutes - 1);
+      }
+      else {
+        SetPageLoadText("You're Time's Up!!");
+        SetStartSound(false);
+        SetPageLoad(true);
+        setAptitudeQuestions(a => Object.values(a));
+        SetDisableQuiz(true);
+        setTimeout(() => { SetPageLoad(false); }, 2800);
+        return;
+      }
+
+    }
+    const intervalId = setInterval(() => {
+      setSeconds(seconds - 1);
+    }, 1000);
+    return () => clearInterval(intervalId);
+
+  }, [seconds, minutes]);
+
 
 
   const renderPageLoader = () => {
@@ -56,7 +86,9 @@ export default function AptitudeQuestions({ homeCallback }) {
             <Paper style={styles}>Question : {currentIndex}</Paper>
           </Grid>
           <Grid item xs={6}>
-            <Paper style={styles}>Total : 20</Paper>
+            <Paper style={styles}>
+              00 : {minutes === 60 ? "00" : minutes < 10 ? "0" + minutes : minutes} : {seconds === 60 ? "00" : seconds < 10 ? "0" + seconds : seconds}
+            </Paper>
           </Grid>
           <Grid item xs={12}></Grid>
         </Grid>
@@ -64,6 +96,7 @@ export default function AptitudeQuestions({ homeCallback }) {
       </div>
     );
   };
+
 
   const renderFooterButtons = () => {
     if (disableQuiz || disablePage || enableReview) {
@@ -98,7 +131,7 @@ export default function AptitudeQuestions({ homeCallback }) {
       if (confirmSubmit) {
         SetStartSound(false);
         SetPageLoad(true);
-        setAptitudeQuestions(Object.values(aptitudeQuestions));
+        setAptitudeQuestions(a => Object.values(a));
         SetDisableQuiz(true);
         setTimeout(() => { SetPageLoad(false); }, 2800);
       }
@@ -292,7 +325,6 @@ export default function AptitudeQuestions({ homeCallback }) {
       {aptitudeQuestions && renderHeader()}
       {aptitudeQuestions && renderAptitudeTest()}
       {aptitudeQuestions && renderFooterButtons()}
-
     </div>
   );
 }

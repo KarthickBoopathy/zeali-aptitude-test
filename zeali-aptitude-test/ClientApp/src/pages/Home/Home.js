@@ -17,7 +17,7 @@ export default class Home extends Component {
     };
   }
 
-  callback = (value) => {
+  aptitudeQuestionCallback = (value) => {
     this.setState({ disableHome: value });
   };
 
@@ -72,7 +72,7 @@ export default class Home extends Component {
     if (!disableHome) {
       return;
     }
-    return <AptitudeQuestions homeCallback={this.callback} />;
+    return <AptitudeQuestions homeCallback={this.aptitudeQuestionCallback} />;
   }
 
   renderTopicsDivider() {
