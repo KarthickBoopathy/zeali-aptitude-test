@@ -1,6 +1,6 @@
 import { Button } from "@material-ui/core";
 import { Component } from "react";
-import AptitudeQuestions from "./AptitudeQuestions";
+import AptitudeQuestions from "../AptitudeQuestions/AptitudeQuestions";
 import TopicList from "./Landing";
 import Paper from "@material-ui/core/Paper";
 import Fab from "@material-ui/core/Fab";
@@ -17,7 +17,7 @@ export default class Home extends Component {
     };
   }
 
-  callback = (value) => {
+  aptitudeQuestionCallback = (value) => {
     this.setState({ disableHome: value });
   };
 
@@ -72,7 +72,7 @@ export default class Home extends Component {
     if (!disableHome) {
       return;
     }
-    return <AptitudeQuestions homeCallback={this.callback} />;
+    return <AptitudeQuestions homeCallback={this.aptitudeQuestionCallback} />;
   }
 
   renderTopicsDivider() {
