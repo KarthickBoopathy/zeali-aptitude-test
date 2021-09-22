@@ -87,7 +87,7 @@ export default function AptitudeQuestions({ homeCallback }) {
           </Grid>
           <Grid item xs={6}>
             <Paper style={styles}>
-              00 : {minutes === 60 ? "00" : minutes < 10 ? "0" + minutes : minutes} : {seconds === 60 ? "00" : seconds < 10 ? "0" + seconds : seconds}
+              Time : {minutes === 60 ? "00" : minutes < 10 ? "0" + minutes : minutes}:{seconds === 60 ? "00" : seconds < 10 ? "0" + seconds : seconds}
             </Paper>
           </Grid>
           <Grid item xs={12}></Grid>
