@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WrongAnswers = ({ aptitudeQuestions }: any) => {
+const Summary = ({ aptitudeQuestions }: any) => {
   const score = evaluateScore(aptitudeQuestions);
   const classes = useStyles();
 
@@ -51,7 +51,7 @@ const WrongAnswers = ({ aptitudeQuestions }: any) => {
             children={
               <div>
                 {item?.steps ??
-                  "Sorry !!! Currently, the steps for this problem is not available."}
+                  "Sorry, the solution is not available at this moment."}
               </div>
             }
           />
@@ -74,4 +74,4 @@ const evaluateScore = (aptitudeQuestions: any[]) => {
   return userScore;
 };
 
-export default WrongAnswers;
+export default Summary;

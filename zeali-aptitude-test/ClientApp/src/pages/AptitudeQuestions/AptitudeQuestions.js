@@ -7,7 +7,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { getAptitudeQuestions } from "../../common/utils";
-import WrongAnswers from "./WrongAnswers";
+import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
 
@@ -259,7 +259,7 @@ export default function AptitudeQuestions({ homeCallback }) {
     );
   }
 
-  const renderWrongAnswers = () => {
+  const renderSummary = () => {
     if (!disableQuiz || disablePage || enableReview) {
       return;
     }
@@ -269,7 +269,7 @@ export default function AptitudeQuestions({ homeCallback }) {
 
         {renderExitTestButton()}
         <br />
-        <WrongAnswers aptitudeQuestions={aptitudeQuestions} />
+        <Summary aptitudeQuestions={aptitudeQuestions} />
         {renderExitTestButton()}
       </>
     );
@@ -304,7 +304,7 @@ export default function AptitudeQuestions({ homeCallback }) {
               <Button
                 fullWidth
                 variant="contained"
-                style={item?.userAnswer === "Not Selected" ? unAnsweredButtonStyle : answeredButtonStyle}
+                style={item?.userAnswer === "Not Answered" ? unAnsweredButtonStyle : answeredButtonStyle}
                 key={index}
                 onClick={() => reviewAnswersCallBack(index)}
               >
@@ -321,7 +321,7 @@ export default function AptitudeQuestions({ homeCallback }) {
     <div>
       {pageLoad && renderPageLoader()}
       {aptitudeQuestions && renderReviewAnswers()}
-      {aptitudeQuestions && renderWrongAnswers()}
+      {aptitudeQuestions && renderSummary()}
       {aptitudeQuestions && renderHeader()}
       {aptitudeQuestions && renderAptitudeTest()}
       {aptitudeQuestions && renderFooterButtons()}
