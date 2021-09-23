@@ -19,8 +19,8 @@ export default class Home extends Component {
     super(props);
     this.state = {
       disableHome: false,
-      top: false,
-      isDashboard: false
+      isDashboard: false,
+      isUserSettings: false
     };
   }
 
@@ -28,15 +28,22 @@ export default class Home extends Component {
     this.setState({ disableHome: value });
   };
 
-  toggleDrawer = (open, openDashboard) => (event) => {
+  toggleUserSettings = (open) => (event) => {
     if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
     }
-    this.setState({
-      top: open,
-      isDashboard: openDashboard
-    });
+    this.setState({ isUserSettings: open });
   };
+
+  toggleDashboard= (open) => (event) => {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+      return;
+    }
+    this.setState({ isDashboard: open });
+  };
+
+  
+
 
   renderTakeTestButton() {
     const { disableHome } = this.state;
@@ -83,7 +90,7 @@ export default class Home extends Component {
   }
 
   renderFabButton() {
-    const { disableHome, top, isDashboard } = this.state;
+    const { disableHome, isDashboard, isUserSettings } = this.state;
     if (disableHome) {
       return;
     }
@@ -97,9 +104,7 @@ export default class Home extends Component {
       background: "#f50057"
     }
 
-    const drawerStyle = {
-      maxWidth: 500,
-    }
+
 
     return (
       <>
@@ -113,20 +118,22 @@ export default class Home extends Component {
             key="dashboard"
             icon={<TimelineIcon />}
             tooltipTitle="Dashboard"
-            onClick={this.toggleDrawer(true, true)}
+            onClick={this.toggleDashboard(true)}
           />
 
           <SpeedDialAction
             key="profile"
             icon={<PersonPinIcon />}
             tooltipTitle="Profile"
-            onClick={this.toggleDrawer(true, false)}
+            onClick={this.toggleUserSettings(true)}
           />
 
         </SpeedDial>
-        <Drawer style={drawerStyle} anchor="top" open={top} onClose={this.toggleDrawer(false)}>
-          {!isDashboard && <UserSettings />}
-          {isDashboard && <Dashboard />}
+        <Drawer anchor="top" open={isUserSettings} onClose={this.toggleUserSettings(false)}>
+          <UserSettings />
+        </Drawer>
+        <Drawer anchor="top" open={isDashboard} onClose={this.toggleDashboard(false)}>
+          <Dashboard />
         </Drawer>
       </>
     );
