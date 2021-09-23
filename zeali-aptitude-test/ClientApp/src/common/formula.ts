@@ -9,16 +9,16 @@ export const evaluateScore = (aptitudeQuestions: any[]) => {
 };
 
 export const getUserBadge = (star: number) => {
-  if (star > 0 && star <= 1) {
-    return "Novice";
-  } else if (star > 1 && star <= 2) {
-    return "Competent";
-  } else if (star > 2 && star <= 3) {
-    return "Proficient";
+  if (star > 4 && star <= 5) {
+    return "Guru";
   } else if (star > 3 && star <= 4) {
     return "Expert";
-  } else if (star > 4 && star <= 5) {
-    return "Guru";
+  } else if (star > 2 && star <= 3) {
+    return "Proficient";
+  } else if (star > 1 && star <= 2) {
+    return "Competent";
+  } else if (star > 0 && star <= 1) {
+    return "Novice";
   } else {
     return "Novice";
   }

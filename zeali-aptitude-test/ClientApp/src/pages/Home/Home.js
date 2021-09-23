@@ -20,6 +20,7 @@ export default class Home extends Component {
     this.state = {
       disableHome: false,
       top: false,
+      isDashboard: false
     };
   }
 
@@ -27,11 +28,14 @@ export default class Home extends Component {
     this.setState({ disableHome: value });
   };
 
-  toggleDrawer = (open) => (event) => {
+  toggleDrawer = (open, openDashboard) => (event) => {
     if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
     }
-    this.setState({ top: open });
+    this.setState({
+      top: open,
+      isDashboard: openDashboard
+    });
   };
 
   renderTakeTestButton() {
@@ -79,7 +83,7 @@ export default class Home extends Component {
   }
 
   renderFabButton() {
-    const { disableHome, top } = this.state;
+    const { disableHome, top, isDashboard } = this.state;
     if (disableHome) {
       return;
     }
@@ -109,20 +113,20 @@ export default class Home extends Component {
             key="dashboard"
             icon={<TimelineIcon />}
             tooltipTitle="Dashboard"
-            onClick={this.toggleDrawer(true)}
+            onClick={this.toggleDrawer(true, true)}
           />
 
           <SpeedDialAction
             key="profile"
             icon={<PersonPinIcon />}
             tooltipTitle="Profile"
-            onClick={this.toggleDrawer(true)}
+            onClick={this.toggleDrawer(true, false)}
           />
 
         </SpeedDial>
         <Drawer style={drawerStyle} anchor="top" open={top} onClose={this.toggleDrawer(false)}>
-          {/* <UserSettings /> */}
-          <Dashboard/>
+          {!isDashboard && <UserSettings />}
+          {isDashboard && <Dashboard />}
         </Drawer>
       </>
     );
