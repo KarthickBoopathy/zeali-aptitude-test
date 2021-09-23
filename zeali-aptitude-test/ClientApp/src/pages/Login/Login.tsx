@@ -8,6 +8,7 @@ import {
   generateSignUpOTP,
   loginZeali,
   registerNewZealiUsers,
+  setLocalStorageLoginStatus,
   userChangePassword,
 } from "../../common/utils";
 import { ZealiUsers, ErrorMessage } from "../../types/schema";
@@ -95,8 +96,7 @@ const Login = ({ parentCallback }: any) => {
       event.preventDefault();
       loginZeali(userDetails).then((data) => {
         parentCallback(data?.isLoggedIn ?? false);
-        localStorage?.setItem("loginStatus", JSON.stringify(data));
-
+        setLocalStorageLoginStatus(data);
         setErrorMessage({
           emailError: data?.emailError,
           passwordError: data?.passwordError,
@@ -125,9 +125,8 @@ const Login = ({ parentCallback }: any) => {
           });
         } else {
           userChangePassword(userDetails).then((data: any) => {
-            parentCallback(data?.isLoggedIn ?? false);
-            localStorage?.setItem("loginStatus", JSON.stringify(data));
-
+            parentCallback(data?.isLoggedIn ?? false);  
+            setLocalStorageLoginStatus(data);
             setErrorMessage({
               emailError: data?.emailError,
               passwordError: data?.passwordError,
@@ -164,8 +163,7 @@ const Login = ({ parentCallback }: any) => {
         } else {
           registerNewZealiUsers(userDetails).then((data: any) => {
             parentCallback(data?.isLoggedIn ?? false);
-            localStorage?.setItem("loginStatus", JSON.stringify(data));
-
+            setLocalStorageLoginStatus(data);
             setErrorMessage({
               emailError: data?.emailError,
               passwordError: data?.passwordError,

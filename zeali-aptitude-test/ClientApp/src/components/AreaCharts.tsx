@@ -16,15 +16,14 @@ const margin = {
 };
 
 export const AreaCharts = ({ chartData }: any) => {
-
   return (
     <ResponsiveContainer width="95%" height={100}>
       <AreaChart data={chartData} margin={margin}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="Test" />
+        <XAxis dataKey="test" />
         <YAxis />
         <Tooltip />
-        <Area type="monotone" dataKey="Score" stroke="#f50057" fill="#3f51b5" />
+        <Area type="monotone" dataKey="score" stroke="#f50057" fill="#3f51b5" />
       </AreaChart>
     </ResponsiveContainer>
   );

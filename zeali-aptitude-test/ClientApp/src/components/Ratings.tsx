@@ -1,7 +1,7 @@
 import { Grid, makeStyles, Paper } from "@material-ui/core";
 import Rating from "@mui/material/Rating";
 import { getUserBadge } from "../common/formula";
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   paper: {
     padding: 10,
     textAlign: "center",
@@ -33,4 +33,3 @@ const Ratings = ({ star }: any) => {
 
 export default Ratings;
 
-//star should be based on the latest score

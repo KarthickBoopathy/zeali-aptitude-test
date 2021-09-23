@@ -42,8 +42,6 @@ export default class Home extends Component {
     this.setState({ isDashboard: open });
   };
 
-  
-
 
   renderTakeTestButton() {
     const { disableHome } = this.state;
@@ -103,8 +101,6 @@ export default class Home extends Component {
     const fabStyle = {
       background: "#f50057"
     }
-
-
 
     return (
       <>

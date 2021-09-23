@@ -8,7 +8,7 @@ export const evaluateScore = (aptitudeQuestions: any[]) => {
   return userScore;
 };
 
-export const getUserBadge = (star: number) => {
+export const getUserBadge = (star: any) => {
   if (star > 4 && star <= 5) {
     return "Guru";
   } else if (star > 3 && star <= 4) {

@@ -3,6 +3,12 @@ export type ZealiUsers = {
   password?: string;
   username?: string;
   isSubscribed?: boolean;
+  signUpDate?: string;
+  isTrialOver?: boolean;
+  performance?: Performance[];
+  highScore?: number;
+  latestScore?: number;
+  star?: any;
 };
 
 export type ErrorMessage = {
@@ -19,6 +25,6 @@ export type ErrorMessage = {
 };
 
 export type Performance = {
-  Test?:string;
-  Score?:number;
-}
+  test?: string;
+  score?: number;
+};

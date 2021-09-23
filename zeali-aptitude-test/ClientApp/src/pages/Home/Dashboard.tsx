@@ -2,82 +2,32 @@ import AreaCharts from "../../components/AreaCharts";
 import BarCharts from "../../components/BarCharts";
 import SimpleAccordion from "../../components/Accordion";
 import Ratings from "../../components/Ratings";
+import { useEffect, useState } from "react";
+import { exportLocalStorage, getZealiUserInfo } from "../../common/utils";
+import { ZealiUsers } from "../../types/schema";
 
 export const Dashboard = () => {
-  const data = [
-    {
-      Test: "T1",
-      Score: 15,
-    },
-    {
-      Test: "T2",
-      Score: 7,
-    },
-    {
-      Test: "T3",
-      Score: 20,
-    },
-    {
-      Test: "T4",
-      Score: 11,
-    },
-    {
-      Test: "T5",
-      Score: 12,
-    },
-    {
-      Test: "T6",
-      Score: 16,
-    },
-    {
-      Test: "T7",
-      Score: 19,
-    },
-    {
-      Test: "T1",
-      Score: 15,
-    },
-    {
-      Test: "T2",
-      Score: 7,
-    },
-    {
-      Test: "T3",
-      Score: 20,
-    },
-    {
-      Test: "T4",
-      Score: 11,
-    },
-    {
-      Test: "T5",
-      Score: 12,
-    },
-    {
-      Test: "T6",
-      Score: 16,
-    },
-    {
-      Test: "T7",
-      Score: 19,
-    },
-  ];
+  const [userInfo, SetUserInfo] = useState<ZealiUsers>();
+  useEffect(() => {
+    const getLocalData = exportLocalStorage();
+    getZealiUserInfo(getLocalData?.email).then((data) => SetUserInfo(data));
+  }, []);
 
   const bardata = [
     {
       Test: "Highest Score",
-      Score: 15,
+      Score: userInfo?.highScore,
     },
     {
       Test: "Latest Score",
-      Score: 7,
+      Score: userInfo?.latestScore,
     },
   ];
   const renderTestPerformance = () => {
     return (
       <SimpleAccordion
         title="Performance"
-        children={<AreaCharts chartData={data} />}
+        children={<AreaCharts chartData={userInfo?.performance} />}
       />
     );
   };
@@ -95,7 +45,7 @@ export const Dashboard = () => {
     return (
       <SimpleAccordion
         title="Badge"
-        children={<Ratings star={0.6} />}
+        children={<Ratings star={userInfo?.star ?? 0} />}
       />
     );
   };

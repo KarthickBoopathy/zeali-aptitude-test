@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace zeali_aptitude_test.Models
+﻿namespace zeali_aptitude_test.Models
 {
     public class ZealiLoginAuth
     {
@@ -20,7 +15,6 @@ namespace zeali_aptitude_test.Models
         public bool createPasswordError { get; set; }
         public bool confirmPasswordError { get; set; }
         public bool otpError { get; set; }
-        public bool isPasswordChangedSuccessfully { get; set; }
         public string emailMessage { get; set; }
         public string passwordMessage { get; set; }
         public string createPasswordMessage { get; set; }

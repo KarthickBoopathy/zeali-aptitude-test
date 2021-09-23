@@ -46,7 +46,7 @@ namespace zeali_aptitude_test.Controllers
         [EnableCors("ZealiAptitudePolicy")]
         public IActionResult generateSignUpOTP(string mode, ZealiUsers zealiUsers)
         {
-            ZealiUsers zealiUsers_temp = _zealiAptitudeTestServices.FindUsers(zealiUsers);
+            ZealiUsers zealiUsers_temp = _zealiAptitudeTestServices.FindUser(zealiUsers.email);
 
             if (mode== ZAPT02)
             {
@@ -91,6 +91,20 @@ namespace zeali_aptitude_test.Controllers
         {
             return Ok(_zealiAptitudeTestServices.ChangePassword(zealiUsers));
 
+        }
+
+        [HttpPost("SaveTest")]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult saveTestResults([FromBody] string email, int score)
+        {
+            return Ok(_zealiAptitudeTestServices.SaveTestDetails(email, score));
+        }
+
+        [HttpPost("ZealiUserInfo")]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult getZealiUserInfo([FromBody] string email)
+        {
+            return Ok(_zealiAptitudeTestServices.GetDashboardData(email));
         }
 
     }

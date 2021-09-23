@@ -3,7 +3,7 @@ import { ZealiUsers } from "../types/schema";
 export const getAptitudeQuestions = (): Promise<any> => {
   const headers = { "Content-Type": "application/json" };
 
-  return fetch('/api/zealiAptitudeTest/ZealiAptitude', {
+  return fetch("/api/zealiAptitudeTest/ZealiAptitude", {
     headers,
   }).then((response) => {
     if (response) {
@@ -19,7 +19,7 @@ export const loginZeali = async (userDetails: ZealiUsers) => {
     body: JSON.stringify(userDetails),
   };
   return await fetch(
-    '/api/zealiAptitudeTest/ZealiAptitude/Login',
+    "/api/zealiAptitudeTest/ZealiAptitude/Login",
     requestOptions
   ).then((response) => response.json());
 };
@@ -31,7 +31,7 @@ export const registerNewZealiUsers = async (userDetails: ZealiUsers) => {
     body: JSON.stringify(userDetails),
   };
   return await fetch(
-    '/api/zealiAptitudeTest/ZealiAptitude',
+    "/api/zealiAptitudeTest/ZealiAptitude",
     requestOptions
   ).then((response) => response.json());
 };
@@ -43,7 +43,7 @@ export const generateForgotPasswordOTP = async (userDetails: ZealiUsers) => {
     body: JSON.stringify(userDetails),
   };
   return await fetch(
-    '/api/zealiAptitudeTest/ZealiAptitude/Login/OTP',
+    "/api/zealiAptitudeTest/ZealiAptitude/Login/OTP",
     requestOptions
   ).then((response) => response.json());
 };
@@ -55,7 +55,7 @@ export const generateSignUpOTP = async (userDetails: ZealiUsers) => {
     body: JSON.stringify(userDetails),
   };
   return await fetch(
-    '/api/zealiAptitudeTest/ZealiAptitude/SignUp/OTP',
+    "/api/zealiAptitudeTest/ZealiAptitude/SignUp/OTP",
     requestOptions
   ).then((response) => response.json());
 };
@@ -67,7 +67,31 @@ export const userChangePassword = async (userDetails: ZealiUsers) => {
     body: JSON.stringify(userDetails),
   };
   return await fetch(
-    '/api/zealiAptitudeTest/ZealiAptitude/ChangePassword',
+    "/api/zealiAptitudeTest/ZealiAptitude/ChangePassword",
+    requestOptions
+  ).then((response) => response.json());
+};
+
+export const saveTestResults = (email: string, score: number) => {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({email, score}),
+  };
+  return fetch(
+    "/api/zealiAptitudeTest/ZealiAptitude/SaveTest",
+    requestOptions
+  ).then((response) => response.json());
+};
+
+export const getZealiUserInfo = (email: string) => {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(email),
+  };
+  return fetch(
+    "/api/zealiAptitudeTest/ZealiAptitude/ZealiUserInfo",
     requestOptions
   ).then((response) => response.json());
 };
@@ -77,6 +101,10 @@ export const exportLocalStorage = () => {
     localStorage?.getItem("loginStatus") &&
     JSON.parse(localStorage?.getItem("loginStatus") ?? "")
   );
+};
+
+export const setLocalStorageLoginStatus = (data: any) => {
+  localStorage?.setItem("loginStatus", JSON.stringify(data));
 };
 
 export const getLoginStatus = () => {
