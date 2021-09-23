@@ -1,8 +1,9 @@
 import { Divider, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { evaluateScore } from "../../common/formula";
 import SimpleAccordion from "../../components/Accordion";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   paper: {
     padding: 10,
     textAlign: "center",
@@ -64,14 +65,6 @@ const Summary = ({ aptitudeQuestions }: any) => {
   );
 };
 
-const evaluateScore = (aptitudeQuestions: any[]) => {
-  let userScore = 0;
-  aptitudeQuestions?.forEach((item: any) => {
-    if (item.userAnswer === item.answer) {
-      userScore = userScore + 1;
-    }
-  });
-  return userScore;
-};
+
 
 export default Summary;

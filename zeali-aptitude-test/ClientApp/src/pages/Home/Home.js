@@ -1,7 +1,7 @@
 import { Button } from "@material-ui/core";
 import { Component } from "react";
 import AptitudeQuestions from "../AptitudeQuestions/AptitudeQuestions";
-import TopicList from "./TopicList";
+import Topics from "./Topics";
 import Paper from "@material-ui/core/Paper";
 
 import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
@@ -12,6 +12,7 @@ import UserSettings from "./UserSettings";
 
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
+import Dashboard from "./Dashboard";
 
 export default class Home extends Component {
   constructor(props) {
@@ -27,19 +28,14 @@ export default class Home extends Component {
   };
 
   toggleDrawer = (open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
     }
-
     this.setState({ top: open });
   };
 
   renderTakeTestButton() {
     const { disableHome } = this.state;
-
     if (disableHome) {
       return;
     }
@@ -52,20 +48,14 @@ export default class Home extends Component {
 
     return (
       <div>
-
         <Paper style={style} variant="elevation">
           Practice Makes a Man Perfect. Happy Cracking!!
           <br />
           <br />
-          <Button variant="contained" color="secondary"
-            onClick={() => {
-              this.setState({ disableHome: true });
-            }}
-          >
+          <Button variant="contained" color="secondary" onClick={() => { this.setState({ disableHome: true }); }} >
             Take Test
           </Button>
         </Paper>
-
         <br />
       </div>
     );
@@ -85,7 +75,7 @@ export default class Home extends Component {
     if (disableHome) {
       return;
     }
-    return <TopicList />;
+    return <Topics />;
   }
 
   renderFabButton() {
@@ -101,6 +91,10 @@ export default class Home extends Component {
 
     const fabStyle = {
       background: "#f50057"
+    }
+
+    const drawerStyle = {
+      maxWidth: 500,
     }
 
     return (
@@ -126,8 +120,9 @@ export default class Home extends Component {
           />
 
         </SpeedDial>
-        <Drawer anchor="top" open={top} onClose={this.toggleDrawer(false)}>
-          <UserSettings />
+        <Drawer style={drawerStyle} anchor="top" open={top} onClose={this.toggleDrawer(false)}>
+          {/* <UserSettings /> */}
+          <Dashboard/>
         </Drawer>
       </>
     );

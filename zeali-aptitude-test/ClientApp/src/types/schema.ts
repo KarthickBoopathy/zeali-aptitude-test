@@ -17,3 +17,8 @@ export type ErrorMessage = {
   confirmPasswordMessage?: string;
   otpMessage?: string;
 };
+
+export type Performance = {
+  Test?:string;
+  Score?:number;
+}

@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
-
+using System.Collections.Generic;
 
 namespace zeali_aptitude_test.Models
 {
@@ -15,8 +15,9 @@ namespace zeali_aptitude_test.Models
         public string signUpDate { get; set; }
         public bool isTrialOver { get; set; }
         public bool isSubscribed { get; set; }
-      
-
-       
+        public List<Performance> userPerformance { get; set; }
+        public int highScore { get; set; }
+        public int latestScore { get; set; }
+        public int star { get; set; }
     }
 }
