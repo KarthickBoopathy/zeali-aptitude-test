@@ -6,12 +6,12 @@ namespace zeali_aptitude_test.Services
    public interface IZealiAptitudeTestServices
     {
         List<AptitudeQuestions> GetAptitudeQuestions();
-        ZealiLoginAuth InsertNewZealiUser(ZealiUsers zealiUsers);
-        ZealiLoginAuth AuthenticateZealiUsers (ZealiUsers zealiUsers);
-        ZealiLoginAuth GenerateOTP(ZealiUsers zealiUsers, string mode);
+        ZealiLoginAuthDTO InsertNewZealiUser(ZealiUsers zealiUsers);
+        ZealiLoginAuthDTO AuthenticateZealiUsers (ZealiUsers zealiUsers);
+        ZealiLoginAuthDTO GenerateOTP(ZealiUsers zealiUsers, string mode);
         ZealiUsers FindUser(string email);
-        ZealiLoginAuth ChangePassword(ZealiUsers zealiUsers);
+        ZealiLoginAuthDTO ChangePassword(ZealiUsers zealiUsers);
         bool SaveTestDetails(string email, int score);
-        Dashboard GetDashboardData(string email);
+        DashboardDTO GetDashboardData(string email);
     }
 }

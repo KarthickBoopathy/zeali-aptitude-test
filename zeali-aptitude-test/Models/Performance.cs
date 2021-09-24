@@ -1,7 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace zeali_aptitude_test.Models
+﻿namespace zeali_aptitude_test.Models
 {
     public class Performance
     {

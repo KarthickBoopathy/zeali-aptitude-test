@@ -40,10 +40,10 @@ namespace zeali_aptitude_test.Services
             return currentTestQuestions;
         }
 
-        public ZealiLoginAuth InsertNewZealiUser(ZealiUsers zealiUsers)
+        public ZealiLoginAuthDTO InsertNewZealiUser(ZealiUsers zealiUsers)
         {
 
-            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+            ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
             try
             {
                 if (FindUser(zealiUsers.email) == null)
@@ -74,9 +74,9 @@ namespace zeali_aptitude_test.Services
             }
         }
 
-        public ZealiLoginAuth AuthenticateZealiUsers(ZealiUsers zealiUsers)
+        public ZealiLoginAuthDTO AuthenticateZealiUsers(ZealiUsers zealiUsers)
         {
-            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+            ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
             try
             {
                 ZealiUsers zealiUsers_temp = FindUser(zealiUsers.email);
@@ -117,9 +117,9 @@ namespace zeali_aptitude_test.Services
 
 
 
-        public ZealiLoginAuth GenerateOTP(ZealiUsers zealiUsers, string mode)
+        public ZealiLoginAuthDTO GenerateOTP(ZealiUsers zealiUsers, string mode)
         {
-            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+            ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
             string otp = _emailAndSecurityManagment.createOTP();
             var result = _emailAndSecurityManagment.sendEmail(zealiUsers.email, zealiUsers.username, mode, otp);
             if (result)
@@ -135,9 +135,9 @@ namespace zeali_aptitude_test.Services
             return zealiLoginAuth;
         }
 
-        public ZealiLoginAuth ChangePassword(ZealiUsers zealiUsers)
+        public ZealiLoginAuthDTO ChangePassword(ZealiUsers zealiUsers)
         {
-            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+            ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
             try
             {
                 ZealiUsers zealiUsers_temp = FindUser(zealiUsers.email);
@@ -187,9 +187,9 @@ namespace zeali_aptitude_test.Services
             }
         }
 
-        public Dashboard GetDashboardData(string email)
+        public DashboardDTO GetDashboardData(string email)
         {
-            Dashboard dashboard = new Dashboard();
+            DashboardDTO dashboard = new DashboardDTO();
             ZealiUsers zealiUsers = FindUser(email);
             dashboard.email = zealiUsers.email;
             dashboard.username = zealiUsers.username;
@@ -241,12 +241,11 @@ namespace zeali_aptitude_test.Services
 
         public void UpdateZealiUsers(string email, UpdateDefinition<ZealiUsers> updateDefinition)
         {
-            var filterDefinition = Builders<ZealiUsers>.Filter.Eq(z => z.email.ToLower(), email.ToLower());
+            var filterDefinition = Builders<ZealiUsers>.Filter.And(
+            Builders<ZealiUsers>.Filter.Where(user => user.email.ToLower() == email.ToLower()));
             var options = new UpdateOptions { IsUpsert = true };
             _zealiUsers.UpdateOne(filterDefinition, updateDefinition, options);
 
         }
-
-
     }
 }

@@ -72,11 +72,11 @@ export const userChangePassword = async (userDetails: ZealiUsers) => {
   ).then((response) => response.json());
 };
 
-export const saveTestResults = (email: string, score: number) => {
+export const saveTestResults = (email: string, latestScore: number) => {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({email, score}),
+    body: JSON.stringify({ email, latestScore }),
   };
   return fetch(
     "/api/zealiAptitudeTest/ZealiAptitude/SaveTest",

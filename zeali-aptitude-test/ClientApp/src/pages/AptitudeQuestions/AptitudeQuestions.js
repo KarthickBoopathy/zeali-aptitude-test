@@ -6,10 +6,11 @@ import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { getAptitudeQuestions } from "../../common/utils";
+import { exportLocalStorage, getAptitudeQuestions, saveTestResults } from "../../common/utils";
 import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
+import { evaluateScore } from "../../common/formula";
 
 
 
@@ -98,6 +99,25 @@ export default function AptitudeQuestions({ homeCallback }) {
   };
 
 
+  const handleSubmit= useCallback(()=>{
+    SetPageLoadText("You're Rocking!!");
+    const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
+    if (confirmSubmit) {
+
+      const getLocalData = exportLocalStorage();
+      const getScore = evaluateScore(Object.values(aptitudeQuestions));
+ 
+      saveTestResults(getLocalData?.email, getScore ).then((data) => {});
+
+      SetStartSound(false);
+      SetPageLoad(true);
+      setAptitudeQuestions(a => Object.values(a));
+      SetDisableQuiz(true);
+      setTimeout(() => { SetPageLoad(false); }, 2800);
+    }
+  },[aptitudeQuestions]);
+
+
   const renderFooterButtons = () => {
     if (disableQuiz || disablePage || enableReview) {
       return;
@@ -124,7 +144,7 @@ export default function AptitudeQuestions({ homeCallback }) {
       setCurrentIndex(20);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit_ = () => {
       SetPageLoadText("You're Rocking!!");
 
       const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
