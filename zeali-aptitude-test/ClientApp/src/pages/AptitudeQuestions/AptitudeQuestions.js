@@ -144,20 +144,6 @@ export default function AptitudeQuestions({ homeCallback }) {
       setCurrentIndex(20);
     };
 
-    const handleSubmit_ = () => {
-      SetPageLoadText("You're Rocking!!");
-
-      const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
-      if (confirmSubmit) {
-        SetStartSound(false);
-        SetPageLoad(true);
-        setAptitudeQuestions(a => Object.values(a));
-        SetDisableQuiz(true);
-        setTimeout(() => { SetPageLoad(false); }, 2800);
-      }
-
-    };
-
     const handleReview = () => {
       SetDisableQuiz(true);
       SetEnableReview(true);
