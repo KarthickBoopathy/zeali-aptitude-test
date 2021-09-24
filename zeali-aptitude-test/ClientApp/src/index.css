@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.MuiDrawer-paper,
+.MuiBackdrop-root {
+  max-width: 500px;
+  margin: auto;
+}

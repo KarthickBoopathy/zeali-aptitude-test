@@ -6,10 +6,11 @@ import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { getAptitudeQuestions } from "../../common/utils";
-import WrongAnswers from "./WrongAnswers";
+import { exportLocalStorage, getAptitudeQuestions, saveTestResults } from "../../common/utils";
+import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
+import { evaluateScore } from "../../common/formula";
 
 
 
@@ -87,7 +88,7 @@ export default function AptitudeQuestions({ homeCallback }) {
           </Grid>
           <Grid item xs={6}>
             <Paper style={styles}>
-              00 : {minutes === 60 ? "00" : minutes < 10 ? "0" + minutes : minutes} : {seconds === 60 ? "00" : seconds < 10 ? "0" + seconds : seconds}
+              Time : {minutes === 60 ? "00" : minutes < 10 ? "0" + minutes : minutes}:{seconds === 60 ? "00" : seconds < 10 ? "0" + seconds : seconds}
             </Paper>
           </Grid>
           <Grid item xs={12}></Grid>
@@ -96,6 +97,25 @@ export default function AptitudeQuestions({ homeCallback }) {
       </div>
     );
   };
+
+
+  const handleSubmit= useCallback(()=>{
+    SetPageLoadText("You're Rocking!!");
+    const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
+    if (confirmSubmit) {
+
+      const getLocalData = exportLocalStorage();
+      const getScore = evaluateScore(Object.values(aptitudeQuestions));
+ 
+      saveTestResults(getLocalData?.email, getScore ).then((data) => {});
+
+      SetStartSound(false);
+      SetPageLoad(true);
+      setAptitudeQuestions(a => Object.values(a));
+      SetDisableQuiz(true);
+      setTimeout(() => { SetPageLoad(false); }, 2800);
+    }
+  },[aptitudeQuestions]);
 
 
   const renderFooterButtons = () => {
@@ -124,7 +144,7 @@ export default function AptitudeQuestions({ homeCallback }) {
       setCurrentIndex(20);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit_ = () => {
       SetPageLoadText("You're Rocking!!");
 
       const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
@@ -259,7 +279,7 @@ export default function AptitudeQuestions({ homeCallback }) {
     );
   }
 
-  const renderWrongAnswers = () => {
+  const renderSummary = () => {
     if (!disableQuiz || disablePage || enableReview) {
       return;
     }
@@ -269,7 +289,7 @@ export default function AptitudeQuestions({ homeCallback }) {
 
         {renderExitTestButton()}
         <br />
-        <WrongAnswers aptitudeQuestions={aptitudeQuestions} />
+        <Summary aptitudeQuestions={aptitudeQuestions} />
         {renderExitTestButton()}
       </>
     );
@@ -304,7 +324,7 @@ export default function AptitudeQuestions({ homeCallback }) {
               <Button
                 fullWidth
                 variant="contained"
-                style={item?.userAnswer === "Not Selected" ? unAnsweredButtonStyle : answeredButtonStyle}
+                style={item?.userAnswer === "Not Answered" ? unAnsweredButtonStyle : answeredButtonStyle}
                 key={index}
                 onClick={() => reviewAnswersCallBack(index)}
               >
@@ -321,7 +341,7 @@ export default function AptitudeQuestions({ homeCallback }) {
     <div>
       {pageLoad && renderPageLoader()}
       {aptitudeQuestions && renderReviewAnswers()}
-      {aptitudeQuestions && renderWrongAnswers()}
+      {aptitudeQuestions && renderSummary()}
       {aptitudeQuestions && renderHeader()}
       {aptitudeQuestions && renderAptitudeTest()}
       {aptitudeQuestions && renderFooterButtons()}

@@ -40,13 +40,13 @@ namespace zeali_aptitude_test.Services
             return currentTestQuestions;
         }
 
-        public ZealiLoginAuth InsertNewZealiUser(ZealiUsers zealiUsers)
+        public ZealiLoginAuthDTO InsertNewZealiUser(ZealiUsers zealiUsers)
         {
 
-            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+            ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
             try
             {
-                if (FindUsers(zealiUsers) == null)
+                if (FindUser(zealiUsers.email) == null)
                 {
                     zealiUsers.password = _emailAndSecurityManagment.encryptPassword(zealiUsers.password);
                     _zealiUsers.InsertOne(zealiUsers);
@@ -74,12 +74,12 @@ namespace zeali_aptitude_test.Services
             }
         }
 
-        public ZealiLoginAuth AuthenticateZealiUsers(ZealiUsers zealiUsers)
+        public ZealiLoginAuthDTO AuthenticateZealiUsers(ZealiUsers zealiUsers)
         {
-            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+            ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
             try
             {
-                ZealiUsers zealiUsers_temp = FindUsers(zealiUsers);
+                ZealiUsers zealiUsers_temp = FindUser(zealiUsers.email);
                 if (zealiUsers_temp != null)
                 {
                     if ((zealiUsers_temp.email.ToLower() == zealiUsers.email.ToLower()) && (zealiUsers_temp.password == _emailAndSecurityManagment.encryptPassword(zealiUsers.password)))
@@ -117,9 +117,9 @@ namespace zeali_aptitude_test.Services
 
 
 
-        public ZealiLoginAuth GenerateOTP(ZealiUsers zealiUsers, string mode)
+        public ZealiLoginAuthDTO GenerateOTP(ZealiUsers zealiUsers, string mode)
         {
-            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+            ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
             string otp = _emailAndSecurityManagment.createOTP();
             var result = _emailAndSecurityManagment.sendEmail(zealiUsers.email, zealiUsers.username, mode, otp);
             if (result)
@@ -135,19 +135,18 @@ namespace zeali_aptitude_test.Services
             return zealiLoginAuth;
         }
 
-        public ZealiLoginAuth ChangePassword(ZealiUsers zealiUsers)
+        public ZealiLoginAuthDTO ChangePassword(ZealiUsers zealiUsers)
         {
-            ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+            ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
             try
             {
-                ZealiUsers zealiUsers_temp = FindUsers(zealiUsers);
-                if (FindUsers(zealiUsers) != null)
+                ZealiUsers zealiUsers_temp = FindUser(zealiUsers.email);
+                if (FindUser(zealiUsers.email) != null)
                 {
                     var filterDefinition = Builders<ZealiUsers>.Filter.Eq(z => z.email.ToLower(), zealiUsers.email.ToLower());
                     var updateDefinition = Builders<ZealiUsers>.Update.Set(z => z.password, _emailAndSecurityManagment.encryptPassword(zealiUsers.password));
                     var options = new UpdateOptions { IsUpsert = true };
                     _zealiUsers.UpdateOne(filterDefinition, updateDefinition, options);
-                    zealiLoginAuth.isPasswordChangedSuccessfully = true;
                     zealiLoginAuth.email = zealiUsers_temp.email;
                     zealiLoginAuth.username = zealiUsers_temp.username;
                     zealiLoginAuth.isLoggedIn = true;
@@ -158,7 +157,6 @@ namespace zeali_aptitude_test.Services
                     zealiLoginAuth.email = zealiUsers.email;
                     zealiLoginAuth.isLoggedIn = false;
                     zealiLoginAuth.emailError = true;
-                    zealiLoginAuth.isPasswordChangedSuccessfully = false;
                     zealiLoginAuth.emailMessage = "User does not Exist. Please click \"New to Zeali?\" to register";
                     return zealiLoginAuth;
                 }
@@ -167,17 +165,87 @@ namespace zeali_aptitude_test.Services
             {
                 zealiLoginAuth.isLoggedIn = false;
                 zealiLoginAuth.emailError = true;
-                zealiLoginAuth.isPasswordChangedSuccessfully = false;
                 zealiLoginAuth.emailMessage = "Something went wrong. Please try again";
                 return zealiLoginAuth;
             }
-          
+
         }
 
-        public ZealiUsers FindUsers(ZealiUsers zealiUsers)
+        public bool SaveTestDetails(string email, int score)
         {
-            return _zealiUsers.Find(user => user.email.ToLower() == zealiUsers.email.ToLower()).FirstOrDefault();
+            try
+            {
+                UpdateZealiUsers(email, Builders<ZealiUsers>.Update.Set(z => z.latestScore, score));
+                UpdateZealiUsers(email, Builders<ZealiUsers>.Update.Set(z => z.highScore, ValidateAndGetHightScore(score, FindUser(email).highScore)));
+                UpdateZealiUsers(email, Builders<ZealiUsers>.Update.Set(z => z.star, EvaluateStars(score)));
+                LogTest(email, score);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
+        public DashboardDTO GetDashboardData(string email)
+        {
+            DashboardDTO dashboard = new DashboardDTO();
+            ZealiUsers zealiUsers = FindUser(email);
+            dashboard.email = zealiUsers.email;
+            dashboard.username = zealiUsers.username;
+            dashboard.highScore = zealiUsers.highScore;
+            dashboard.latestScore = zealiUsers.latestScore;
+            dashboard.performance = zealiUsers.performance;
+            dashboard.star = zealiUsers.star;
+
+            return dashboard;
+        }
+        public ZealiUsers FindUser(string email)
+        {
+            return _zealiUsers.Find(user => user.email.ToLower() == email.ToLower()).FirstOrDefault();
+        }
+
+        public void LogTest(string email, int score)
+        {
+            Performance performance = new Performance();
+            performance.Test = GenerateTestName(email);
+            performance.Score = score;
+            var filterDefinition = Builders<ZealiUsers>.Filter.And(
+            Builders<ZealiUsers>.Filter.Where(user => user.email.ToLower() == email.ToLower()));
+            var updateDefinition = Builders<ZealiUsers>.Update.Push("performance", performance);
+            var options = new UpdateOptions { IsUpsert = true };
+            _zealiUsers.UpdateOne(filterDefinition, updateDefinition, options);
+        }
+
+        public string GenerateTestName(string email)
+        {
+            int testCount = _zealiUsers.Find(user => user.email.ToLower() == email.ToLower()).FirstOrDefault().performance.Count;
+            return "T" + (testCount + 1);
+        }
+
+        public int ValidateAndGetHightScore(int score, int highscore)
+        {
+            if (score < highscore)
+                return highscore;
+            if (score >= highscore)
+                return score;
+            else
+                return highscore;
+        }
+
+        public double EvaluateStars(int score)
+        {
+            double star = score / 4;
+            return Math.Round(star);
+        }
+
+        public void UpdateZealiUsers(string email, UpdateDefinition<ZealiUsers> updateDefinition)
+        {
+            var filterDefinition = Builders<ZealiUsers>.Filter.And(
+            Builders<ZealiUsers>.Filter.Where(user => user.email.ToLower() == email.ToLower()));
+            var options = new UpdateOptions { IsUpsert = true };
+            _zealiUsers.UpdateOne(filterDefinition, updateDefinition, options);
+
+        }
     }
 }

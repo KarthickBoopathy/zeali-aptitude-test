@@ -15,7 +15,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export default function TopicList() {
+export default function Topics() {
   const classes = useStyles();
 
   const style = {
