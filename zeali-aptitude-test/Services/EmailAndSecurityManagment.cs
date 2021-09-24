@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Text;
 using zeali_aptitude_test.Models;
 
@@ -17,9 +18,11 @@ namespace zeali_aptitude_test.Services
         }
         public string encryptPassword(string password)
         {
-            byte[] encode = new byte[password.Length];
-            encode = Encoding.UTF8.GetBytes(password);
-            return Convert.ToBase64String(encode);
+            using (var sha256 = SHA256.Create())
+            {
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            }
         }
 
         public string createOTP()
@@ -31,7 +34,7 @@ namespace zeali_aptitude_test.Services
             for (int i = 0; i < otp.Length; i++)
             {
                 otp[i] = library[random.Next(library.Length)];
-            }        
+            }
             return new String(otp);
         }
 
