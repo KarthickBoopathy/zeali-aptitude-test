@@ -6,7 +6,14 @@ export const setLocalStorageLoginStatus = (data: any) => {
 
 export const getStorageDataOf = (prop: any) => {
   const storage: any = ls.get("loginStatus", { decrypt: true, secret: 972 });
-  return storage && storage[prop];
+  if(prop!=="isLoggedIn"){
+
+    return storage ? storage[prop]: reloadApplication();
+  }
+  else{
+    return storage && storage[prop];
+  }
+  
 };
 
 export const reloadApplication = () => {

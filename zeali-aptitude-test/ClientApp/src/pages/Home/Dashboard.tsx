@@ -5,12 +5,12 @@ import Ratings from "../../components/Ratings";
 import { useEffect, useState } from "react";
 import { getZealiUserInfo } from "../../service/utils";
 import { ZealiUsers } from "../../types/schema";
-import { getStorageDataOf, reloadApplication } from "../../common/utils";
+import { getStorageDataOf } from "../../common/utils";
 
 export const Dashboard = () => {
   const [userInfo, SetUserInfo] = useState<ZealiUsers>();
   useEffect(() => {
-    const getUserEmail = getStorageDataOf("email")?? reloadApplication();
+    const getUserEmail = getStorageDataOf("email");
     getZealiUserInfo(getUserEmail).then((data) => SetUserInfo(data));
   }, []);
 

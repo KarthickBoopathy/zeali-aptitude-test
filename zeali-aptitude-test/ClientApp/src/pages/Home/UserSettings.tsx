@@ -1,6 +1,6 @@
 import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { getStorageDataOf, reloadApplication } from "../../common/utils";
+import { getStorageDataOf } from "../../common/utils";
 import { Logout } from "../Login/Logout";
 
 const useStyles = makeStyles((theme) => ({
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 const UserSettings = () => {
   const classes = useStyles();
-  const getUsername = getStorageDataOf("username") ?? reloadApplication();
+  const getUsername = getStorageDataOf("username");
 
   return (
     <Paper className={classes.paper} variant="elevation">
