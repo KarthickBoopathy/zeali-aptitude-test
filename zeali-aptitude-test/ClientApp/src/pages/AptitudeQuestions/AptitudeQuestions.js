@@ -6,11 +6,12 @@ import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { exportLocalStorage, getAptitudeQuestions, saveTestResults } from "../../common/utils";
+import { getAptitudeQuestions, saveTestResults } from "../../common/utils";
 import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
 import { evaluateScore } from "../../common/formula";
+import { exportLocalStorage } from "../../common/task";
 
 
 
@@ -42,7 +43,10 @@ export default function AptitudeQuestions({ homeCallback }) {
         setMinutes(minutes - 1);
       }
       else {
-        SetPageLoadText("You're Time's Up!!");
+        const getLocalData = exportLocalStorage();
+        const getScore = evaluateScore(Object.values(aptitudeQuestions));
+        saveTestResults(getLocalData?.email, getScore ).then((data) => {});
+  
         SetStartSound(false);
         SetPageLoad(true);
         setAptitudeQuestions(a => Object.values(a));
@@ -55,9 +59,15 @@ export default function AptitudeQuestions({ homeCallback }) {
     const intervalId = setInterval(() => {
       setSeconds(seconds - 1);
     }, 1000);
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+      setAptitudeQuestions([]);
+      SetStartSound(true);
+      SetPageLoad(true);
+      SetDisableQuiz(false);
+    }
 
-  }, [seconds, minutes]);
+  }, [seconds, minutes, aptitudeQuestions]);
 
 
 
@@ -103,10 +113,8 @@ export default function AptitudeQuestions({ homeCallback }) {
     SetPageLoadText("You're Rocking!!");
     const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
     if (confirmSubmit) {
-
       const getLocalData = exportLocalStorage();
       const getScore = evaluateScore(Object.values(aptitudeQuestions));
- 
       saveTestResults(getLocalData?.email, getScore ).then((data) => {});
 
       SetStartSound(false);

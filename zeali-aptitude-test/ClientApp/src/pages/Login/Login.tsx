@@ -8,10 +8,10 @@ import {
   generateSignUpOTP,
   loginZeali,
   registerNewZealiUsers,
-  setLocalStorageLoginStatus,
   userChangePassword,
 } from "../../common/utils";
 import { ZealiUsers, ErrorMessage } from "../../types/schema";
+import { setLocalStorageLoginStatus } from "../../common/task";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Login = ({ parentCallback }: any) => {
+const Login = ({ loginCallback }: any) => {
   const classes = useStyles();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [enableLogin, setEnableLogin] = useState(true);
@@ -40,37 +40,11 @@ const Login = ({ parentCallback }: any) => {
     enableSignUpPasswordChamber,
     setEnableSignUpPasswordChamber,
   ] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
-    emailError: false,
-    passwordError: false,
-    createPasswordError: false,
-    confirmPasswordError: false,
-    otpError: false,
-    emailMessage: "",
-    passwordMessage: "",
-    createPasswordMessage: "",
-    confirmPasswordMessage: "",
-    otpMessage: "",
-  });
-  const [userDetails, SetUserDetails] = useState<ZealiUsers>({
-    email: "",
-    password: "",
-    username: "",
-  });
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>({});
+  const [userDetails, SetUserDetails] = useState<ZealiUsers>({});
 
   const clearErrorMessages = () => {
-    setErrorMessage({
-      emailError: false,
-      passwordError: false,
-      createPasswordError: false,
-      confirmPasswordError: false,
-      otpError: false,
-      emailMessage: "",
-      passwordMessage: "",
-      createPasswordMessage: "",
-      confirmPasswordMessage: "",
-      otpMessage: "",
-    });
+    setErrorMessage({});
     setEnableSignUpPasswordChamber(false);
   };
 
@@ -95,23 +69,12 @@ const Login = ({ parentCallback }: any) => {
     (event: any) => {
       event.preventDefault();
       loginZeali(userDetails).then((data) => {
-        parentCallback(data?.isLoggedIn ?? false);
+        loginCallback(data?.isLoggedIn ?? false);
         setLocalStorageLoginStatus(data);
-        setErrorMessage({
-          emailError: data?.emailError,
-          passwordError: data?.passwordError,
-          createPasswordError: data?.createPasswordError,
-          confirmPasswordError: data?.confirmPasswordError,
-          otpError: data?.otpError,
-          emailMessage: data?.emailMessage,
-          passwordMessage: data?.passwordMessage,
-          createPasswordMessage: data?.createPasswordMessage,
-          confirmPasswordMessage: data?.confirmPasswordMessage,
-          otpMessage: data?.otpMessage,
-        });
+        setErrorMessage(data);
       });
     },
-    [userDetails, parentCallback]
+    [userDetails, loginCallback]
   );
 
   const handleChangePassword = useCallback(
@@ -125,20 +88,9 @@ const Login = ({ parentCallback }: any) => {
           });
         } else {
           userChangePassword(userDetails).then((data: any) => {
-            parentCallback(data?.isLoggedIn ?? false);  
+            loginCallback(data?.isLoggedIn ?? false);
             setLocalStorageLoginStatus(data);
-            setErrorMessage({
-              emailError: data?.emailError,
-              passwordError: data?.passwordError,
-              createPasswordError: data?.createPasswordError,
-              confirmPasswordError: data?.confirmPasswordError,
-              otpError: data?.otpError,
-              emailMessage: data?.emailMessage,
-              passwordMessage: data?.passwordMessage,
-              createPasswordMessage: data?.createPasswordMessage,
-              confirmPasswordMessage: data?.confirmPasswordMessage,
-              otpMessage: data?.otpMessage,
-            });
+            setErrorMessage(data);
           });
         }
       } else {
@@ -148,7 +100,7 @@ const Login = ({ parentCallback }: any) => {
         });
       }
     },
-    [userDetails, parentCallback, confirmPassword, userOTP, serverOTP]
+    [userDetails, loginCallback, confirmPassword, userOTP, serverOTP]
   );
 
   const handleSignUp = useCallback(
@@ -162,20 +114,9 @@ const Login = ({ parentCallback }: any) => {
           });
         } else {
           registerNewZealiUsers(userDetails).then((data: any) => {
-            parentCallback(data?.isLoggedIn ?? false);
+            loginCallback(data?.isLoggedIn ?? false);
             setLocalStorageLoginStatus(data);
-            setErrorMessage({
-              emailError: data?.emailError,
-              passwordError: data?.passwordError,
-              createPasswordError: data?.createPasswordError,
-              confirmPasswordError: data?.confirmPasswordError,
-              otpError: data?.otpError,
-              emailMessage: data?.emailMessage,
-              passwordMessage: data?.passwordMessage,
-              createPasswordMessage: data?.createPasswordMessage,
-              confirmPasswordMessage: data?.confirmPasswordMessage,
-              otpMessage: data?.otpMessage,
-            });
+            setErrorMessage(data);
           });
         }
       } else {
@@ -185,7 +126,7 @@ const Login = ({ parentCallback }: any) => {
         });
       }
     },
-    [userDetails, parentCallback, confirmPassword, userOTP, serverOTP]
+    [userDetails, loginCallback, confirmPassword, userOTP, serverOTP]
   );
 
   const handleLoginOTP = useCallback(
@@ -194,18 +135,7 @@ const Login = ({ parentCallback }: any) => {
 
       generateForgotPasswordOTP(userDetails).then((data) => {
         setServerOTP(data?.otp);
-        setErrorMessage({
-          emailError: data?.emailError,
-          passwordError: data?.passwordError,
-          createPasswordError: data?.createPasswordError,
-          confirmPasswordError: data?.confirmPasswordError,
-          otpError: data?.otpError,
-          emailMessage: data?.emailMessage,
-          passwordMessage: data?.passwordMessage,
-          createPasswordMessage: data?.createPasswordMessage,
-          confirmPasswordMessage: data?.confirmPasswordMessage,
-          otpMessage: data?.otpMessage,
-        });
+        setErrorMessage(data);
         setEnableSignUpPasswordChamber(!data?.emailError ?? false);
       });
     },
@@ -218,18 +148,7 @@ const Login = ({ parentCallback }: any) => {
 
       generateSignUpOTP(userDetails).then((data) => {
         setServerOTP(data?.otp);
-        setErrorMessage({
-          emailError: data?.emailError,
-          passwordError: data?.passwordError,
-          createPasswordError: data?.createPasswordError,
-          confirmPasswordError: data?.confirmPasswordError,
-          otpError: data?.otpError,
-          emailMessage: data?.emailMessage,
-          passwordMessage: data?.passwordMessage,
-          createPasswordMessage: data?.createPasswordMessage,
-          confirmPasswordMessage: data?.confirmPasswordMessage,
-          otpMessage: data?.otpMessage,
-        });
+        setErrorMessage(data);
 
         setEnableSignUpPasswordChamber(!data?.emailError ?? false);
       });

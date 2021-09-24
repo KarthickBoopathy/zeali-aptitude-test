@@ -35,7 +35,7 @@ export default class Home extends Component {
     this.setState({ isUserSettings: open });
   };
 
-  toggleDashboard= (open) => (event) => {
+  toggleDashboard = (open) => (event) => {
     if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
     }

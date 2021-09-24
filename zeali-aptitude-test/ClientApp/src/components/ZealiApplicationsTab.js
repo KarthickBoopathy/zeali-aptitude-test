@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -8,7 +8,7 @@ import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
-import { exportLocalStorage } from "../common/utils";
+import { getLoginStatus } from "../common/task";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,21 +58,21 @@ export default function ZealiApplicationsTab() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const loginStatus = exportLocalStorage();
-    setIsLoggedIn(loginStatus?.isLoggedIn);
+    const loginStatus = getLoginStatus();
+    setIsLoggedIn(loginStatus);
   }, [setIsLoggedIn]);
 
 
-  const callback = (value) => {
-    setIsLoggedIn(value);
-  };
+  const callback = useCallback((val) => {
+    setIsLoggedIn(val);
+  }, []);
 
 
   const renderContent = () => {
     if (isLoggedIn) {
       return <Home />;
     } else {
-      return <Login parentCallback={callback} />;
+      return <Login loginCallback={callback} />;
     }
   };
 
