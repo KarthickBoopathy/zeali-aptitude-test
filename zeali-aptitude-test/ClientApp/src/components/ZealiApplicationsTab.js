@@ -58,9 +58,9 @@ export default function ZealiApplicationsTab() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const loginStatus = getStorageDataOf("isLoggedIn")?? false;
+    const loginStatus = getStorageDataOf("isLoggedIn") ?? false;
     setIsLoggedIn(loginStatus);
-  }, [setIsLoggedIn]);
+  }, []);
 
 
   const callback = useCallback((val) => {

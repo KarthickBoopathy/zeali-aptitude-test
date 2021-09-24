@@ -1,4 +1,4 @@
-export const post = async (path: string, data: any) => {
+export const post = async (path: string, data: any): Promise<any> => {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },

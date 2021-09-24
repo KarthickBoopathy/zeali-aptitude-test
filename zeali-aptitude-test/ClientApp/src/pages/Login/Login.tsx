@@ -40,11 +40,11 @@ const Login = ({ loginCallback }: any) => {
     enableSignUpPasswordChamber,
     setEnableSignUpPasswordChamber,
   ] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<ErrorMessage>({});
+  const [error, setError] = useState<ErrorMessage>({});
   const [userDetails, SetUserDetails] = useState<ZealiUsers>({});
 
   const clearErrorMessages = () => {
-    setErrorMessage({});
+    setError({});
     setEnableSignUpPasswordChamber(false);
   };
 
@@ -69,10 +69,11 @@ const Login = ({ loginCallback }: any) => {
     (event: any) => {
       event.preventDefault();
       loginZeali(userDetails).then((data) => {
-        loginCallback(data?.isLoggedIn ?? false);
         setLocalStorageLoginStatus(data);
-        setErrorMessage(data);
+        setError(data);
+        loginCallback(data?.isLoggedIn ?? false);
       });
+
     },
     [userDetails, loginCallback]
   );
@@ -82,7 +83,7 @@ const Login = ({ loginCallback }: any) => {
       event.preventDefault();
       if (userOTP && userOTP === serverOTP) {
         if (userDetails?.password !== confirmPassword) {
-          setErrorMessage({
+          setError({
             confirmPasswordError: true,
             confirmPasswordMessage: "Password does not match",
           });
@@ -90,11 +91,11 @@ const Login = ({ loginCallback }: any) => {
           userChangePassword(userDetails).then((data: any) => {
             loginCallback(data?.isLoggedIn ?? false);
             setLocalStorageLoginStatus(data);
-            setErrorMessage(data);
+            setError(data);
           });
         }
       } else {
-        setErrorMessage({
+        setError({
           otpError: true,
           otpMessage: "OTP does not match",
         });
@@ -108,19 +109,19 @@ const Login = ({ loginCallback }: any) => {
       event.preventDefault();
       if (userOTP && userOTP === serverOTP) {
         if (userDetails?.password !== confirmPassword) {
-          setErrorMessage({
+          setError({
             confirmPasswordError: true,
             confirmPasswordMessage: "Password does not match",
           });
         } else {
-          registerNewZealiUsers(userDetails).then((data: any) => {
+          registerNewZealiUsers(userDetails).then((data: ErrorMessage) => {
             loginCallback(data?.isLoggedIn ?? false);
             setLocalStorageLoginStatus(data);
-            setErrorMessage(data);
+            setError(data);
           });
         }
       } else {
-        setErrorMessage({
+        setError({
           otpError: true,
           otpMessage: "OTP does not match",
         });
@@ -135,11 +136,11 @@ const Login = ({ loginCallback }: any) => {
 
       generateForgotPasswordOTP(userDetails).then((data) => {
         setServerOTP(data?.otp);
-        setErrorMessage(data);
+        setError(data);
         setEnableSignUpPasswordChamber(!data?.emailError ?? false);
       });
     },
-    [userDetails, setServerOTP, setErrorMessage]
+    [userDetails, setServerOTP, setError]
   );
 
   const handleSignUpOTP = useCallback(
@@ -148,12 +149,12 @@ const Login = ({ loginCallback }: any) => {
 
       generateSignUpOTP(userDetails).then((data) => {
         setServerOTP(data?.otp);
-        setErrorMessage(data);
+        setError(data);
 
         setEnableSignUpPasswordChamber(!data?.emailError ?? false);
       });
     },
-    [userDetails, setServerOTP, setErrorMessage]
+    [userDetails, setServerOTP, setError]
   );
 
   const renderLogin = () => {
@@ -174,8 +175,8 @@ const Login = ({ loginCallback }: any) => {
               <TextField
                 required
                 fullWidth
-                error={errorMessage.emailError}
-                helperText={errorMessage.emailMessage}
+                error={error.emailError}
+                helperText={error.emailMessage}
                 type="email"
                 id="email"
                 label="Email ID"
@@ -189,8 +190,8 @@ const Login = ({ loginCallback }: any) => {
               <TextField
                 required
                 fullWidth
-                error={errorMessage.passwordError}
-                helperText={errorMessage.passwordMessage}
+                error={error.passwordError}
+                helperText={error.passwordMessage}
                 id="password"
                 type="password"
                 label="Password"
@@ -252,8 +253,8 @@ const Login = ({ loginCallback }: any) => {
               <TextField
                 required
                 fullWidth
-                error={errorMessage.emailError}
-                helperText={errorMessage.emailMessage}
+                error={error.emailError}
+                helperText={error.emailMessage}
                 type="email"
                 id="email"
                 label="Email ID"
@@ -283,8 +284,8 @@ const Login = ({ loginCallback }: any) => {
               <TextField
                 required={enableSignUpPasswordChamber}
                 fullWidth
-                error={errorMessage.otpError}
-                helperText={errorMessage.otpMessage}
+                error={error.otpError}
+                helperText={error.otpMessage}
                 id="otp"
                 type="password"
                 label="Enter OTP"
@@ -295,7 +296,7 @@ const Login = ({ loginCallback }: any) => {
               <Button
                 fullWidth
                 disabled={
-                  enableSignUpPasswordChamber && !errorMessage.emailError
+                  enableSignUpPasswordChamber && !error.emailError
                 }
                 variant="contained"
                 color="secondary"
@@ -310,8 +311,8 @@ const Login = ({ loginCallback }: any) => {
                   <TextField
                     required
                     fullWidth
-                    error={errorMessage.createPasswordError}
-                    helperText={errorMessage.createPasswordMessage}
+                    error={error.createPasswordError}
+                    helperText={error.createPasswordMessage}
                     id="createPassword"
                     type="password"
                     label="Create Password"
@@ -328,8 +329,8 @@ const Login = ({ loginCallback }: any) => {
                   <TextField
                     required
                     fullWidth
-                    error={errorMessage.confirmPasswordError}
-                    helperText={errorMessage.confirmPasswordMessage}
+                    error={error.confirmPasswordError}
+                    helperText={error.confirmPasswordMessage}
                     id="confirmPassword"
                     type="password"
                     label="Confirm Password"
@@ -382,8 +383,8 @@ const Login = ({ loginCallback }: any) => {
               <TextField
                 required
                 fullWidth
-                error={errorMessage.emailError}
-                helperText={errorMessage.emailMessage}
+                error={error.emailError}
+                helperText={error.emailMessage}
                 type="email"
                 id="email"
                 label="Email ID"
@@ -397,8 +398,8 @@ const Login = ({ loginCallback }: any) => {
               <TextField
                 required={enableSignUpPasswordChamber}
                 fullWidth
-                error={errorMessage.otpError}
-                helperText={errorMessage.otpMessage}
+                error={error.otpError}
+                helperText={error.otpMessage}
                 id="otp"
                 type="password"
                 label="Enter OTP"
@@ -410,7 +411,7 @@ const Login = ({ loginCallback }: any) => {
               <Button
                 fullWidth
                 disabled={
-                  enableSignUpPasswordChamber && !errorMessage.emailError
+                  enableSignUpPasswordChamber && !error.emailError
                 }
                 variant="contained"
                 color="secondary"
@@ -425,8 +426,8 @@ const Login = ({ loginCallback }: any) => {
                   <TextField
                     required
                     fullWidth
-                    error={errorMessage.createPasswordError}
-                    helperText={errorMessage.createPasswordMessage}
+                    error={error.createPasswordError}
+                    helperText={error.createPasswordMessage}
                     id="createPassword"
                     type="password"
                     label="Create Password"
@@ -443,8 +444,8 @@ const Login = ({ loginCallback }: any) => {
                   <TextField
                     required
                     fullWidth
-                    error={errorMessage.confirmPasswordError}
-                    helperText={errorMessage.confirmPasswordMessage}
+                    error={error.confirmPasswordError}
+                    helperText={error.confirmPasswordMessage}
                     id="confirmPassword"
                     type="password"
                     label="Confirm Password"
