@@ -71,8 +71,7 @@ export default function ZealiApplicationsTab() {
   const renderContent = () => {
     if (isLoggedIn) {
       return <Home />;
-    }
-    else {
+    } else {
       return <Login parentCallback={callback} />;
     }
   };

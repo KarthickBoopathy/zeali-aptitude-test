@@ -1,13 +1,12 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace zeali_aptitude_test.Models
 {
     public class AptitudeQuestions
     {
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public ObjectId _id { get; set; }
         public string questionID { get; set; }
         public string topic { get; set; }
         public string question { get; set; }

@@ -1,19 +1,26 @@
 import { Button } from "@material-ui/core";
 import { Component } from "react";
 import AptitudeQuestions from "../AptitudeQuestions/AptitudeQuestions";
-import TopicList from "./Landing";
+import Topics from "./Topics";
 import Paper from "@material-ui/core/Paper";
-import Fab from "@material-ui/core/Fab";
+
 import EmojiObjectsIcon from "@material-ui/icons/EmojiObjects";
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+import TimelineIcon from '@mui/icons-material/Timeline';
 import Drawer from "@material-ui/core/Drawer";
 import UserSettings from "./UserSettings";
+
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import Dashboard from "./Dashboard";
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       disableHome: false,
-      top: false,
+      isDashboard: false,
+      isUserSettings: false
     };
   }
 
@@ -21,20 +28,23 @@ export default class Home extends Component {
     this.setState({ disableHome: value });
   };
 
-  toggleDrawer = (open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
+  toggleUserSettings = (open) => (event) => {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
     }
-
-    this.setState({ top: open });
+    this.setState({ isUserSettings: open });
   };
+
+  toggleDashboard= (open) => (event) => {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+      return;
+    }
+    this.setState({ isDashboard: open });
+  };
+
 
   renderTakeTestButton() {
     const { disableHome } = this.state;
-
     if (disableHome) {
       return;
     }
@@ -47,20 +57,14 @@ export default class Home extends Component {
 
     return (
       <div>
-
         <Paper style={style} variant="elevation">
           Practice Makes a Man Perfect. Happy Cracking!!
           <br />
           <br />
-          <Button variant="contained" color="secondary"
-            onClick={() => {
-              this.setState({ disableHome: true });
-            }}
-          >
+          <Button variant="contained" color="secondary" onClick={() => { this.setState({ disableHome: true }); }} >
             Take Test
           </Button>
         </Paper>
-
         <br />
       </div>
     );
@@ -80,11 +84,11 @@ export default class Home extends Component {
     if (disableHome) {
       return;
     }
-    return <TopicList />;
+    return <Topics />;
   }
 
   renderFabButton() {
-    const { disableHome, top } = this.state;
+    const { disableHome, isDashboard, isUserSettings } = this.state;
     if (disableHome) {
       return;
     }
@@ -94,18 +98,38 @@ export default class Home extends Component {
       right: "5%",
     };
 
+    const fabStyle = {
+      background: "#f50057"
+    }
+
     return (
       <>
-        <Fab
-          color="secondary"
-          aria-label="add"
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
           style={style}
-          onClick={this.toggleDrawer(true)}
+          icon={<EmojiObjectsIcon />}
+          FabProps={{ style: fabStyle }}
         >
-          <EmojiObjectsIcon />
-        </Fab>
-        <Drawer anchor="top" open={top} onClose={this.toggleDrawer(false)}>
+          <SpeedDialAction
+            key="dashboard"
+            icon={<TimelineIcon />}
+            tooltipTitle="Dashboard"
+            onClick={this.toggleDashboard(true)}
+          />
+
+          <SpeedDialAction
+            key="profile"
+            icon={<PersonPinIcon />}
+            tooltipTitle="Profile"
+            onClick={this.toggleUserSettings(true)}
+          />
+
+        </SpeedDial>
+        <Drawer anchor="top" open={isUserSettings} onClose={this.toggleUserSettings(false)}>
           <UserSettings />
+        </Drawer>
+        <Drawer anchor="top" open={isDashboard} onClose={this.toggleDashboard(false)}>
+          <Dashboard />
         </Drawer>
       </>
     );

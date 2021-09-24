@@ -46,17 +46,17 @@ namespace zeali_aptitude_test.Controllers
         [EnableCors("ZealiAptitudePolicy")]
         public IActionResult generateSignUpOTP(string mode, ZealiUsers zealiUsers)
         {
-            ZealiUsers zealiUsers_temp = _zealiAptitudeTestServices.FindUsers(zealiUsers);
+            ZealiUsers zealiUsers_temp = _zealiAptitudeTestServices.FindUser(zealiUsers.email);
 
-            if (mode== ZAPT02)
+            if (mode == ZAPT02)
             {
-                if(zealiUsers_temp == null)
+                if (zealiUsers_temp == null)
                 {
                     return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, ZAPT02));
                 }
                 else
                 {
-                    ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+                    ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
                     zealiLoginAuth.emailError = true;
                     zealiLoginAuth.emailMessage = "Already an existing user. Please use different email address";
                     return Ok(zealiLoginAuth);
@@ -67,7 +67,7 @@ namespace zeali_aptitude_test.Controllers
             {
                 if (zealiUsers_temp == null)
                 {
-                    ZealiLoginAuth zealiLoginAuth = new ZealiLoginAuth();
+                    ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
                     zealiLoginAuth.emailError = true;
                     zealiLoginAuth.emailMessage = "User does not Exist. Please click \"New to Zeali?\" to register";
                     return Ok(zealiLoginAuth);
@@ -91,6 +91,20 @@ namespace zeali_aptitude_test.Controllers
         {
             return Ok(_zealiAptitudeTestServices.ChangePassword(zealiUsers));
 
+        }
+
+        [HttpPost("SaveTest")]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult saveTestResults(SaveTestDTO saveTestDTO)
+        {
+            return Ok(_zealiAptitudeTestServices.SaveTestDetails(saveTestDTO.email, saveTestDTO.latestScore));
+        }
+
+        [HttpPost("ZealiUserInfo")]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult getZealiUserInfo([FromBody] string email)
+        {
+            return Ok(_zealiAptitudeTestServices.GetDashboardData(email));
         }
 
     }

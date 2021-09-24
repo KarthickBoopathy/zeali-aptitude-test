@@ -1,8 +1,9 @@
 import { Divider, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { evaluateScore } from "../../common/formula";
 import SimpleAccordion from "../../components/Accordion";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   paper: {
     padding: 10,
     textAlign: "center",
@@ -11,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const WrongAnswers = ({ aptitudeQuestions }: any) => {
+const Summary = ({ aptitudeQuestions }: any) => {
   const score = evaluateScore(aptitudeQuestions);
   const classes = useStyles();
 
@@ -51,7 +52,7 @@ const WrongAnswers = ({ aptitudeQuestions }: any) => {
             children={
               <div>
                 {item?.steps ??
-                  "Sorry !!! Currently, the steps for this problem is not available."}
+                  "Sorry, the solution is not available at this moment."}
               </div>
             }
           />
@@ -64,14 +65,6 @@ const WrongAnswers = ({ aptitudeQuestions }: any) => {
   );
 };
 
-const evaluateScore = (aptitudeQuestions: any[]) => {
-  let userScore = 0;
-  aptitudeQuestions?.forEach((item: any) => {
-    if (item.userAnswer === item.answer) {
-      userScore = userScore + 1;
-    }
-  });
-  return userScore;
-};
 
-export default WrongAnswers;
+
+export default Summary;
