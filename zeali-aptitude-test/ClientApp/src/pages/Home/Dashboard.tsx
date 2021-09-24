@@ -3,9 +3,9 @@ import BarCharts from "../../components/BarCharts";
 import SimpleAccordion from "../../components/Accordion";
 import Ratings from "../../components/Ratings";
 import { useEffect, useState } from "react";
-import { getZealiUserInfo } from "../../common/utils";
+import { getZealiUserInfo } from "../../service/utils";
 import { ZealiUsers } from "../../types/schema";
-import { exportLocalStorage } from "../../common/task";
+import { exportLocalStorage } from "../../common/utils";
 
 export const Dashboard = () => {
   const [userInfo, SetUserInfo] = useState<ZealiUsers>();

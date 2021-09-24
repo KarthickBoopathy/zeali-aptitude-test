@@ -9,9 +9,9 @@ import {
   loginZeali,
   registerNewZealiUsers,
   userChangePassword,
-} from "../../common/utils";
+} from "../../service/utils";
 import { ZealiUsers, ErrorMessage } from "../../types/schema";
-import { setLocalStorageLoginStatus } from "../../common/task";
+import { setLocalStorageLoginStatus } from "../../common/utils";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

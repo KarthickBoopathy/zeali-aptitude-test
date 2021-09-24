@@ -1,6 +1,6 @@
 import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { exportLocalStorage } from "../../common/task";
+import { exportLocalStorage } from "../../common/utils";
 import { Logout } from "../Login/Logout";
 
 const useStyles = makeStyles((theme) => ({

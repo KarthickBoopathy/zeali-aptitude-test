@@ -6,12 +6,12 @@ import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { getAptitudeQuestions, saveTestResults } from "../../common/utils";
+import { getAptitudeQuestions, saveTestResults } from "../../service/utils";
 import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
 import { evaluateScore } from "../../common/formula";
-import { exportLocalStorage } from "../../common/task";
+import { exportLocalStorage } from "../../common/utils";
 
 
 
