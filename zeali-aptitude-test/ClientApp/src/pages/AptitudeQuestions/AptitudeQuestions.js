@@ -17,7 +17,7 @@ import { exportLocalStorage } from "../../common/task";
 
 export default function AptitudeQuestions({ homeCallback }) {
   const [currentIndex, setCurrentIndex] = useState(1);
-  const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
+  const [aptitudeQuestions, setAptitudeQuestions] = useState([]);
   const [disableQuiz, SetDisableQuiz] = useState(false);
   const [disablePage, SetDisablePage] = useState(false);
   const [enableReview, SetEnableReview] = useState(false);
@@ -46,7 +46,6 @@ export default function AptitudeQuestions({ homeCallback }) {
         const getLocalData = exportLocalStorage();
         const getScore = evaluateScore(Object.values(aptitudeQuestions));
         saveTestResults(getLocalData?.email, getScore ).then((data) => {});
-  
         SetStartSound(false);
         SetPageLoad(true);
         setAptitudeQuestions(a => Object.values(a));
@@ -61,10 +60,6 @@ export default function AptitudeQuestions({ homeCallback }) {
     }, 1000);
     return () => {
       clearInterval(intervalId);
-      setAptitudeQuestions([]);
-      SetStartSound(true);
-      SetPageLoad(true);
-      SetDisableQuiz(false);
     }
 
   }, [seconds, minutes, aptitudeQuestions]);
