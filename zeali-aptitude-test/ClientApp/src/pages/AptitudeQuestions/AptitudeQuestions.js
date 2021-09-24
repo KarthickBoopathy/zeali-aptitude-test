@@ -11,7 +11,7 @@ import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
 import { evaluateScore } from "../../common/formula";
-import { exportLocalStorage } from "../../common/utils";
+import { getStorageDataOf, reloadApplication } from "../../common/utils";
 
 
 
@@ -43,9 +43,9 @@ export default function AptitudeQuestions({ homeCallback }) {
         setMinutes(minutes - 1);
       }
       else {
-        const getLocalData = exportLocalStorage();
+        const getUserEmail = getStorageDataOf("email")?? reloadApplication();
         const getScore = evaluateScore(Object.values(aptitudeQuestions));
-        saveTestResults(getLocalData?.email, getScore ).then((data) => {});
+        saveTestResults(getUserEmail, getScore).then((data) => { });
         SetStartSound(false);
         SetPageLoad(true);
         setAptitudeQuestions(a => Object.values(a));
@@ -104,13 +104,13 @@ export default function AptitudeQuestions({ homeCallback }) {
   };
 
 
-  const handleSubmit= useCallback(()=>{
+  const handleSubmit = useCallback(() => {
     SetPageLoadText("You're Rocking!!");
     const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
     if (confirmSubmit) {
-      const getLocalData = exportLocalStorage();
+      const getUserEmail = getStorageDataOf("email")?? reloadApplication();
       const getScore = evaluateScore(Object.values(aptitudeQuestions));
-      saveTestResults(getLocalData?.email, getScore ).then((data) => {});
+      saveTestResults(getUserEmail, getScore).then((data) => { });
 
       SetStartSound(false);
       SetPageLoad(true);
@@ -118,7 +118,7 @@ export default function AptitudeQuestions({ homeCallback }) {
       SetDisableQuiz(true);
       setTimeout(() => { SetPageLoad(false); }, 2800);
     }
-  },[aptitudeQuestions]);
+  }, [aptitudeQuestions]);
 
 
   const renderFooterButtons = () => {

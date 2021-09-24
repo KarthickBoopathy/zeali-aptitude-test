@@ -8,7 +8,7 @@ import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
-import { getLoginStatus } from "../common/utils";
+import { getStorageDataOf } from "../common/utils";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,7 +58,7 @@ export default function ZealiApplicationsTab() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const loginStatus = getLoginStatus();
+    const loginStatus = getStorageDataOf("isLoggedIn")?? false;
     setIsLoggedIn(loginStatus);
   }, [setIsLoggedIn]);
 
