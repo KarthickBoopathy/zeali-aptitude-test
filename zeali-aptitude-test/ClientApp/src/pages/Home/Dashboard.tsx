@@ -3,14 +3,15 @@ import BarCharts from "../../components/BarCharts";
 import SimpleAccordion from "../../components/Accordion";
 import Ratings from "../../components/Ratings";
 import { useEffect, useState } from "react";
-import { exportLocalStorage, getZealiUserInfo } from "../../common/utils";
+import { getZealiUserInfo } from "../../service/utils";
 import { ZealiUsers } from "../../types/schema";
+import { getStorageDataOf } from "../../common/utils";
 
 export const Dashboard = () => {
   const [userInfo, SetUserInfo] = useState<ZealiUsers>();
   useEffect(() => {
-    const getLocalData = exportLocalStorage();
-    getZealiUserInfo(getLocalData?.email).then((data) => SetUserInfo(data));
+    const getUserEmail = getStorageDataOf("email");
+    getZealiUserInfo(getUserEmail).then((data) => SetUserInfo(data));
   }, []);
 
   const bardata = [

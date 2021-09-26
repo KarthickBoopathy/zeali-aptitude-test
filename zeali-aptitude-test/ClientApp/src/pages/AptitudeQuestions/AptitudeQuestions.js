@@ -6,17 +6,18 @@ import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { exportLocalStorage, getAptitudeQuestions, saveTestResults } from "../../common/utils";
+import { getAptitudeQuestions, saveTestResults } from "../../service/utils";
 import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
 import { evaluateScore } from "../../common/formula";
+import { getStorageDataOf } from "../../common/utils";
 
 
 
 export default function AptitudeQuestions({ homeCallback }) {
   const [currentIndex, setCurrentIndex] = useState(1);
-  const [aptitudeQuestions, setAptitudeQuestions] = useState([{}]);
+  const [aptitudeQuestions, setAptitudeQuestions] = useState([]);
   const [disableQuiz, SetDisableQuiz] = useState(false);
   const [disablePage, SetDisablePage] = useState(false);
   const [enableReview, SetEnableReview] = useState(false);
@@ -42,7 +43,9 @@ export default function AptitudeQuestions({ homeCallback }) {
         setMinutes(minutes - 1);
       }
       else {
-        SetPageLoadText("You're Time's Up!!");
+        const getUserEmail = getStorageDataOf("email");
+        const getScore = evaluateScore(Object.values(aptitudeQuestions));
+        saveTestResults(getUserEmail, getScore).then((data) => { });
         SetStartSound(false);
         SetPageLoad(true);
         setAptitudeQuestions(a => Object.values(a));
@@ -55,9 +58,11 @@ export default function AptitudeQuestions({ homeCallback }) {
     const intervalId = setInterval(() => {
       setSeconds(seconds - 1);
     }, 1000);
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+    }
 
-  }, [seconds, minutes]);
+  }, [seconds, minutes, aptitudeQuestions]);
 
 
 
@@ -99,15 +104,13 @@ export default function AptitudeQuestions({ homeCallback }) {
   };
 
 
-  const handleSubmit= useCallback(()=>{
+  const handleSubmit = useCallback(() => {
     SetPageLoadText("You're Rocking!!");
     const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
     if (confirmSubmit) {
-
-      const getLocalData = exportLocalStorage();
+      const getUserEmail = getStorageDataOf("email");
       const getScore = evaluateScore(Object.values(aptitudeQuestions));
- 
-      saveTestResults(getLocalData?.email, getScore ).then((data) => {});
+      saveTestResults(getUserEmail, getScore).then((data) => { });
 
       SetStartSound(false);
       SetPageLoad(true);
@@ -115,7 +118,7 @@ export default function AptitudeQuestions({ homeCallback }) {
       SetDisableQuiz(true);
       setTimeout(() => { SetPageLoad(false); }, 2800);
     }
-  },[aptitudeQuestions]);
+  }, [aptitudeQuestions]);
 
 
   const renderFooterButtons = () => {

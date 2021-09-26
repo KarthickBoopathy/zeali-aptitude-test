@@ -21,7 +21,6 @@ namespace zeali_aptitude_test.Services
             _aptitudeQuestions = dBClient.GetAptitudeQuestionsCollection();
             _zealiUsers = dBClient.GetZealiUsers();
             _emailAndSecurityManagment = emailAndSecurityManagment;
-
         }
 
         public List<AptitudeQuestions> GetAptitudeQuestions()
@@ -42,7 +41,6 @@ namespace zeali_aptitude_test.Services
 
         public ZealiLoginAuthDTO InsertNewZealiUser(ZealiUsers zealiUsers)
         {
-
             ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
             try
             {
@@ -61,7 +59,6 @@ namespace zeali_aptitude_test.Services
                     zealiLoginAuth.emailError = true;
                     zealiLoginAuth.emailMessage = "Already an existing user. Please use different email address";
                 }
-
                 return zealiLoginAuth;
             }
             catch

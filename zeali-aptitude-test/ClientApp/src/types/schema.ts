@@ -12,6 +12,7 @@ export type ZealiUsers = {
 };
 
 export type ErrorMessage = {
+  isLoggedIn?:boolean;
   emailError?: boolean;
   passwordError?: boolean;
   createPasswordError?: boolean;
