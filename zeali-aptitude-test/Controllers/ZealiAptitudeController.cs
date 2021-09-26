@@ -54,8 +54,12 @@ namespace zeali_aptitude_test.Controllers
         {
             if (_zealiAptitudeTestServices.isUserExist(zealiUsers.email))
             {
-                LogUserCookies(zealiUsers.email);
-                return Ok(_errorCode.Error(_zealiAptitudeTestServices.AuthenticateZealiUsers(zealiUsers)));
+                int code = _zealiAptitudeTestServices.AuthenticateZealiUsers(zealiUsers);
+                if (code == 0)
+                {
+                    LogUserCookies(zealiUsers.email);
+                }
+                return Ok(_errorCode.Error(code));
             }
             else
                 return Ok(_errorCode.Error(9001));
