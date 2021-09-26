@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using zeali_aptitude_test.Models;
 
-namespace zeali_aptitude_test.Services
+namespace zeali_aptitude_test.Data
 {
     public interface IDBClient
     {
