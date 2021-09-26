@@ -7,9 +7,6 @@ namespace zeali_aptitude_test.Controllers
 {
     [ApiController]
     [Route("api/zealiAptitudeTest/[controller]")]
-
-
-
     public class ZealiAptitudeController : ControllerBase
     {
         private readonly IZealiAptitudeTestServices _zealiAptitudeTestServices;
