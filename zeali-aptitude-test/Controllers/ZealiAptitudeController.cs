@@ -39,7 +39,13 @@ namespace zeali_aptitude_test.Controllers
         [EnableCors("ZealiAptitudePolicy")]
         public IActionResult registerNewZealiUsers(ZealiUsers zealiUsers)
         {
-            return Ok(_zealiAptitudeTestServices.InsertNewZealiUser(zealiUsers));
+            int code = _zealiAptitudeTestServices.InsertNewZealiUser(zealiUsers);
+            if (code == 0)
+            {
+                _zealiAptitudeTestServices.RemoveNewUser(zealiUsers.email);
+                LogUserCookies(zealiUsers.email);
+            }
+            return Ok(_errorCode.Error(code));
         }
 
         [HttpPost("Login")]
@@ -49,7 +55,7 @@ namespace zeali_aptitude_test.Controllers
             if (_zealiAptitudeTestServices.isUserExist(zealiUsers.email))
             {
                 LogUserCookies(zealiUsers.email);
-                return Ok(_zealiAptitudeTestServices.AuthenticateZealiUsers(zealiUsers));
+                return Ok(_errorCode.Error(_zealiAptitudeTestServices.AuthenticateZealiUsers(zealiUsers)));
             }
             else
                 return Ok(_errorCode.Error(9001));
@@ -57,52 +63,37 @@ namespace zeali_aptitude_test.Controllers
 
         [HttpPost("{mode}/OTP")]
         [EnableCors("ZealiAptitudePolicy")]
-        public IActionResult generateSignUpOTP(string mode, ZealiUsers zealiUsers)
+        public IActionResult generateUserOTP(string mode, ZealiUsers zealiUsers)
         {
 
             if (mode == ZAPT02)
             {
                 if (!_zealiAptitudeTestServices.isUserExist(zealiUsers.email))
-                {
-                    return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, ZAPT02));
-                }
+                    return Ok(_errorCode.Error(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, ZAPT02)));
                 else
-                {
-                    ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
-                    zealiLoginAuth.emailError = true;
-                    zealiLoginAuth.emailMessage = "Already an existing user. Please use different email address";
-                    return Ok(zealiLoginAuth);
-                }
+                    return Ok(_errorCode.Error(9003));
 
             }
             else if (mode == ZAPT01)
             {
                 if (!_zealiAptitudeTestServices.isUserExist(zealiUsers.email))
-                {
-                    ZealiLoginAuthDTO zealiLoginAuth = new ZealiLoginAuthDTO();
-                    zealiLoginAuth.emailError = true;
-                    zealiLoginAuth.emailMessage = "User does not Exist. Please click \"New to Zeali?\" to register";
-                    return Ok(zealiLoginAuth);
-                }
+                    return Ok(_errorCode.Error(9001));
                 else
                 {
                     zealiUsers.username = zealiUsers.username;
-                    return Ok(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, ZAPT01));
+                    return Ok(_errorCode.Error(_zealiAptitudeTestServices.GenerateOTP(zealiUsers, ZAPT01)));
                 }
 
             }
             else
-            {
-                return Ok();
-            }
+                return Ok(_errorCode.Error(9005));
         }
 
         [HttpPost("ChangePassword")]
         [EnableCors("ZealiAptitudePolicy")]
         public IActionResult userChangePassword(ZealiUsers zealiUsers)
         {
-            return Ok(_zealiAptitudeTestServices.ChangePassword(zealiUsers));
-
+            return Ok(_errorCode.Error(_zealiAptitudeTestServices.ChangePassword(zealiUsers)));
         }
 
         [HttpPost("SaveTest")]
@@ -123,6 +114,26 @@ namespace zeali_aptitude_test.Controllers
                 return Ok(_zealiAptitudeTestServices.GetDashboardData(validateUser().email));
             else
                 return Ok();
+        }
+
+        [HttpPost("VerifyOTP")]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult verifyExistingUserOTP(ZealiUsers zealiUsers)
+        {
+            if (_zealiAptitudeTestServices.isUserExist(zealiUsers.email))
+                return Ok(_errorCode.Error(_zealiAptitudeTestServices.VerifyOTP(zealiUsers)));
+            else
+                return Ok(_errorCode.Error(9001));
+        }
+
+        [HttpPost("VerifyNewOTP")]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult verifyNewUserOTP(ZealiUsers zealiUsers)
+        {
+            if (_zealiAptitudeTestServices.isNewUserExist(zealiUsers.email))
+                return Ok(_errorCode.Error(_zealiAptitudeTestServices.VerifyNewUserOTP(zealiUsers)));
+            else
+                return Ok(_errorCode.Error(9001));
         }
 
         private void LogUserCookies(string email)

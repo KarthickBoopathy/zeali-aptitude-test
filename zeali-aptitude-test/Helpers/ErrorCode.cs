@@ -26,6 +26,8 @@ namespace zeali_aptitude_test.Helpers
                 case 9005:
                     error.emailError = "Something went wrong. Please try again";
                     break;
+                default:
+                    break;
             }
 
             return error;

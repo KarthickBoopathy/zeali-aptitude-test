@@ -9,6 +9,8 @@ import { Assignment } from "@material-ui/icons";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import { getStorageDataOf } from "../common/utils";
+import Signup from "../pages/Login/Signup";
+
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -72,7 +74,8 @@ export default function ZealiApplicationsTab() {
     if (isLoggedIn) {
       return <Home />;
     } else {
-      return <Login loginCallback={callback} />;
+      // return <Login loginCallback={callback} />;
+   return <Signup/>
     }
   };
 
