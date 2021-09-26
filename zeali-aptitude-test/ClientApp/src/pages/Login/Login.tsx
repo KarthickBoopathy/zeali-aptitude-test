@@ -8,10 +8,10 @@ import {
   generateSignUpOTP,
   loginZeali,
   registerNewZealiUsers,
-  setLocalStorageLoginStatus,
   userChangePassword,
-} from "../../common/utils";
+} from "../../service/utils";
 import { ZealiUsers, ErrorMessage } from "../../types/schema";
+import { setLocalStorageLoginStatus } from "../../common/utils";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Login = ({ parentCallback }: any) => {
+const Login = ({ loginCallback }: any) => {
   const classes = useStyles();
   const [confirmPassword, setConfirmPassword] = useState("");
   const [enableLogin, setEnableLogin] = useState(true);
@@ -40,37 +40,11 @@ const Login = ({ parentCallback }: any) => {
     enableSignUpPasswordChamber,
     setEnableSignUpPasswordChamber,
   ] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<ErrorMessage>({
-    emailError: false,
-    passwordError: false,
-    createPasswordError: false,
-    confirmPasswordError: false,
-    otpError: false,
-    emailMessage: "",
-    passwordMessage: "",
-    createPasswordMessage: "",
-    confirmPasswordMessage: "",
-    otpMessage: "",
-  });
-  const [userDetails, SetUserDetails] = useState<ZealiUsers>({
-    email: "",
-    password: "",
-    username: "",
-  });
+  const [error, setError] = useState<ErrorMessage>({});
+  const [userDetails, SetUserDetails] = useState<ZealiUsers>({});
 
   const clearErrorMessages = () => {
-    setErrorMessage({
-      emailError: false,
-      passwordError: false,
-      createPasswordError: false,
-      confirmPasswordError: false,
-      otpError: false,
-      emailMessage: "",
-      passwordMessage: "",
-      createPasswordMessage: "",
-      confirmPasswordMessage: "",
-      otpMessage: "",
-    });
+    setError({});
     setEnableSignUpPasswordChamber(false);
   };
 
@@ -95,23 +69,13 @@ const Login = ({ parentCallback }: any) => {
     (event: any) => {
       event.preventDefault();
       loginZeali(userDetails).then((data) => {
-        parentCallback(data?.isLoggedIn ?? false);
         setLocalStorageLoginStatus(data);
-        setErrorMessage({
-          emailError: data?.emailError,
-          passwordError: data?.passwordError,
-          createPasswordError: data?.createPasswordError,
-          confirmPasswordError: data?.confirmPasswordError,
-          otpError: data?.otpError,
-          emailMessage: data?.emailMessage,
-          passwordMessage: data?.passwordMessage,
-          createPasswordMessage: data?.createPasswordMessage,
-          confirmPasswordMessage: data?.confirmPasswordMessage,
-          otpMessage: data?.otpMessage,
-        });
+        setError(data);
+        loginCallback(data?.isLoggedIn ?? false);
       });
+
     },
-    [userDetails, parentCallback]
+    [userDetails, loginCallback]
   );
 
   const handleChangePassword = useCallback(
@@ -119,36 +83,25 @@ const Login = ({ parentCallback }: any) => {
       event.preventDefault();
       if (userOTP && userOTP === serverOTP) {
         if (userDetails?.password !== confirmPassword) {
-          setErrorMessage({
+          setError({
             confirmPasswordError: true,
             confirmPasswordMessage: "Password does not match",
           });
         } else {
           userChangePassword(userDetails).then((data: any) => {
-            parentCallback(data?.isLoggedIn ?? false);  
+            loginCallback(data?.isLoggedIn ?? false);
             setLocalStorageLoginStatus(data);
-            setErrorMessage({
-              emailError: data?.emailError,
-              passwordError: data?.passwordError,
-              createPasswordError: data?.createPasswordError,
-              confirmPasswordError: data?.confirmPasswordError,
-              otpError: data?.otpError,
-              emailMessage: data?.emailMessage,
-              passwordMessage: data?.passwordMessage,
-              createPasswordMessage: data?.createPasswordMessage,
-              confirmPasswordMessage: data?.confirmPasswordMessage,
-              otpMessage: data?.otpMessage,
-            });
+            setError(data);
           });
         }
       } else {
-        setErrorMessage({
+        setError({
           otpError: true,
           otpMessage: "OTP does not match",
         });
       }
     },
-    [userDetails, parentCallback, confirmPassword, userOTP, serverOTP]
+    [userDetails, loginCallback, confirmPassword, userOTP, serverOTP]
   );
 
   const handleSignUp = useCallback(
@@ -156,36 +109,25 @@ const Login = ({ parentCallback }: any) => {
       event.preventDefault();
       if (userOTP && userOTP === serverOTP) {
         if (userDetails?.password !== confirmPassword) {
-          setErrorMessage({
+          setError({
             confirmPasswordError: true,
             confirmPasswordMessage: "Password does not match",
           });
         } else {
-          registerNewZealiUsers(userDetails).then((data: any) => {
-            parentCallback(data?.isLoggedIn ?? false);
+          registerNewZealiUsers(userDetails).then((data: ErrorMessage) => {
+            loginCallback(data?.isLoggedIn ?? false);
             setLocalStorageLoginStatus(data);
-            setErrorMessage({
-              emailError: data?.emailError,
-              passwordError: data?.passwordError,
-              createPasswordError: data?.createPasswordError,
-              confirmPasswordError: data?.confirmPasswordError,
-              otpError: data?.otpError,
-              emailMessage: data?.emailMessage,
-              passwordMessage: data?.passwordMessage,
-              createPasswordMessage: data?.createPasswordMessage,
-              confirmPasswordMessage: data?.confirmPasswordMessage,
-              otpMessage: data?.otpMessage,
-            });
+            setError(data);
           });
         }
       } else {
-        setErrorMessage({
+        setError({
           otpError: true,
           otpMessage: "OTP does not match",
         });
       }
     },
-    [userDetails, parentCallback, confirmPassword, userOTP, serverOTP]
+    [userDetails, loginCallback, confirmPassword, userOTP, serverOTP]
   );
 
   const handleLoginOTP = useCallback(
@@ -194,22 +136,11 @@ const Login = ({ parentCallback }: any) => {
 
       generateForgotPasswordOTP(userDetails).then((data) => {
         setServerOTP(data?.otp);
-        setErrorMessage({
-          emailError: data?.emailError,
-          passwordError: data?.passwordError,
-          createPasswordError: data?.createPasswordError,
-          confirmPasswordError: data?.confirmPasswordError,
-          otpError: data?.otpError,
-          emailMessage: data?.emailMessage,
-          passwordMessage: data?.passwordMessage,
-          createPasswordMessage: data?.createPasswordMessage,
-          confirmPasswordMessage: data?.confirmPasswordMessage,
-          otpMessage: data?.otpMessage,
-        });
+        setError(data);
         setEnableSignUpPasswordChamber(!data?.emailError ?? false);
       });
     },
-    [userDetails, setServerOTP, setErrorMessage]
+    [userDetails, setServerOTP, setError]
   );
 
   const handleSignUpOTP = useCallback(
@@ -218,23 +149,12 @@ const Login = ({ parentCallback }: any) => {
 
       generateSignUpOTP(userDetails).then((data) => {
         setServerOTP(data?.otp);
-        setErrorMessage({
-          emailError: data?.emailError,
-          passwordError: data?.passwordError,
-          createPasswordError: data?.createPasswordError,
-          confirmPasswordError: data?.confirmPasswordError,
-          otpError: data?.otpError,
-          emailMessage: data?.emailMessage,
-          passwordMessage: data?.passwordMessage,
-          createPasswordMessage: data?.createPasswordMessage,
-          confirmPasswordMessage: data?.confirmPasswordMessage,
-          otpMessage: data?.otpMessage,
-        });
+        setError(data);
 
         setEnableSignUpPasswordChamber(!data?.emailError ?? false);
       });
     },
-    [userDetails, setServerOTP, setErrorMessage]
+    [userDetails, setServerOTP, setError]
   );
 
   const renderLogin = () => {
@@ -255,8 +175,8 @@ const Login = ({ parentCallback }: any) => {
               <TextField
                 required
                 fullWidth
-                error={errorMessage.emailError}
-                helperText={errorMessage.emailMessage}
+                error={error.emailError}
+                helperText={error.emailMessage}
                 type="email"
                 id="email"
                 label="Email ID"
@@ -270,8 +190,8 @@ const Login = ({ parentCallback }: any) => {
               <TextField
                 required
                 fullWidth
-                error={errorMessage.passwordError}
-                helperText={errorMessage.passwordMessage}
+                error={error.passwordError}
+                helperText={error.passwordMessage}
                 id="password"
                 type="password"
                 label="Password"
@@ -333,8 +253,8 @@ const Login = ({ parentCallback }: any) => {
               <TextField
                 required
                 fullWidth
-                error={errorMessage.emailError}
-                helperText={errorMessage.emailMessage}
+                error={error.emailError}
+                helperText={error.emailMessage}
                 type="email"
                 id="email"
                 label="Email ID"
@@ -364,8 +284,8 @@ const Login = ({ parentCallback }: any) => {
               <TextField
                 required={enableSignUpPasswordChamber}
                 fullWidth
-                error={errorMessage.otpError}
-                helperText={errorMessage.otpMessage}
+                error={error.otpError}
+                helperText={error.otpMessage}
                 id="otp"
                 type="password"
                 label="Enter OTP"
@@ -376,7 +296,7 @@ const Login = ({ parentCallback }: any) => {
               <Button
                 fullWidth
                 disabled={
-                  enableSignUpPasswordChamber && !errorMessage.emailError
+                  enableSignUpPasswordChamber && !error.emailError
                 }
                 variant="contained"
                 color="secondary"
@@ -391,8 +311,8 @@ const Login = ({ parentCallback }: any) => {
                   <TextField
                     required
                     fullWidth
-                    error={errorMessage.createPasswordError}
-                    helperText={errorMessage.createPasswordMessage}
+                    error={error.createPasswordError}
+                    helperText={error.createPasswordMessage}
                     id="createPassword"
                     type="password"
                     label="Create Password"
@@ -409,8 +329,8 @@ const Login = ({ parentCallback }: any) => {
                   <TextField
                     required
                     fullWidth
-                    error={errorMessage.confirmPasswordError}
-                    helperText={errorMessage.confirmPasswordMessage}
+                    error={error.confirmPasswordError}
+                    helperText={error.confirmPasswordMessage}
                     id="confirmPassword"
                     type="password"
                     label="Confirm Password"
@@ -463,8 +383,8 @@ const Login = ({ parentCallback }: any) => {
               <TextField
                 required
                 fullWidth
-                error={errorMessage.emailError}
-                helperText={errorMessage.emailMessage}
+                error={error.emailError}
+                helperText={error.emailMessage}
                 type="email"
                 id="email"
                 label="Email ID"
@@ -478,8 +398,8 @@ const Login = ({ parentCallback }: any) => {
               <TextField
                 required={enableSignUpPasswordChamber}
                 fullWidth
-                error={errorMessage.otpError}
-                helperText={errorMessage.otpMessage}
+                error={error.otpError}
+                helperText={error.otpMessage}
                 id="otp"
                 type="password"
                 label="Enter OTP"
@@ -491,7 +411,7 @@ const Login = ({ parentCallback }: any) => {
               <Button
                 fullWidth
                 disabled={
-                  enableSignUpPasswordChamber && !errorMessage.emailError
+                  enableSignUpPasswordChamber && !error.emailError
                 }
                 variant="contained"
                 color="secondary"
@@ -506,8 +426,8 @@ const Login = ({ parentCallback }: any) => {
                   <TextField
                     required
                     fullWidth
-                    error={errorMessage.createPasswordError}
-                    helperText={errorMessage.createPasswordMessage}
+                    error={error.createPasswordError}
+                    helperText={error.createPasswordMessage}
                     id="createPassword"
                     type="password"
                     label="Create Password"
@@ -524,8 +444,8 @@ const Login = ({ parentCallback }: any) => {
                   <TextField
                     required
                     fullWidth
-                    error={errorMessage.confirmPasswordError}
-                    helperText={errorMessage.confirmPasswordMessage}
+                    error={error.confirmPasswordError}
+                    helperText={error.confirmPasswordMessage}
                     id="confirmPassword"
                     type="password"
                     label="Confirm Password"

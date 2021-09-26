@@ -1,6 +1,6 @@
 import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { exportLocalStorage } from "../../common/utils";
+import { getStorageDataOf } from "../../common/utils";
 import { Logout } from "../Login/Logout";
 
 const useStyles = makeStyles((theme) => ({
@@ -13,13 +13,13 @@ const useStyles = makeStyles((theme) => ({
 
 const UserSettings = () => {
   const classes = useStyles();
-  const userDetails = exportLocalStorage();
+  const getUsername = getStorageDataOf("username");
 
   return (
     <Paper className={classes.paper} variant="elevation">
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          Hello {userDetails?.username ?? ""}, Welcome to Zeali !!
+          Hello {getUsername ?? ""}, Welcome to Zeali !!
         </Grid>
 
         <Grid item xs={12}>
