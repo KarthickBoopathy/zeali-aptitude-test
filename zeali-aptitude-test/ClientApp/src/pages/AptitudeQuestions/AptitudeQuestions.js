@@ -11,7 +11,6 @@ import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
 import { evaluateScore } from "../../common/formula";
-import { getStorageDataOf } from "../../common/utils";
 
 
 
@@ -43,9 +42,8 @@ export default function AptitudeQuestions({ homeCallback }) {
         setMinutes(minutes - 1);
       }
       else {
-        const getUserEmail = getStorageDataOf("email");
         const getScore = evaluateScore(Object.values(aptitudeQuestions));
-        saveTestResults(getUserEmail, getScore).then((data) => { });
+        saveTestResults(getScore).then((data) => { });
         SetStartSound(false);
         SetPageLoad(true);
         setAptitudeQuestions(a => Object.values(a));
@@ -108,9 +106,8 @@ export default function AptitudeQuestions({ homeCallback }) {
     SetPageLoadText("You're Rocking!!");
     const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
     if (confirmSubmit) {
-      const getUserEmail = getStorageDataOf("email");
       const getScore = evaluateScore(Object.values(aptitudeQuestions));
-      saveTestResults(getUserEmail, getScore).then((data) => { });
+      saveTestResults(getScore).then((data) => { });
 
       SetStartSound(false);
       SetPageLoad(true);

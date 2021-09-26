@@ -22,21 +22,13 @@ export const generateSignUpOTP = async (userDetails: ZealiUsers) => {
 };
 
 export const userChangePassword = (userDetails: ZealiUsers) => {
-  return post(
-    "/api/zealiAptitudeTest/ZealiAptitude/ChangePassword",
-    userDetails
-  );
+  return post("/api/zealiAptitudeTest/ZealiAptitude/ChangePassword", userDetails);
 };
 
-export const getZealiUserInfo = (email: string) => {
-  return post("/api/zealiAptitudeTest/ZealiAptitude/ZealiUserInfo", email);
+export const getZealiUserInfo = () => {
+  return get("/api/zealiAptitudeTest/ZealiAptitude/ZealiUserInfo");
 };
 
-export const saveTestResults = (email: string, latestScore: number) => {
-  return post("/api/zealiAptitudeTest/ZealiAptitude/SaveTest", {
-    email,
-    latestScore,
-  });
+export const saveTestResults = (latestScore: number) => {
+  return post("/api/zealiAptitudeTest/ZealiAptitude/SaveTest", latestScore);
 };
-
-

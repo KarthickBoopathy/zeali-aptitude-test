@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using zeali_aptitude_test.Data;
+using zeali_aptitude_test.Helpers;
 using zeali_aptitude_test.Models;
 
 namespace zeali_aptitude_test.Services
@@ -15,12 +16,14 @@ namespace zeali_aptitude_test.Services
 
         private readonly IEmailAndSecurityManagment _emailAndSecurityManagment;
 
+        private readonly IJwtService _jwtService;
 
-        public ZealiAptitudeTestServices(IDBClient dBClient, IEmailAndSecurityManagment emailAndSecurityManagment)
+        public ZealiAptitudeTestServices(IDBClient dBClient, IEmailAndSecurityManagment emailAndSecurityManagment, IJwtService jwtService)
         {
             _aptitudeQuestions = dBClient.GetAptitudeQuestionsCollection();
             _zealiUsers = dBClient.GetZealiUsers();
             _emailAndSecurityManagment = emailAndSecurityManagment;
+            _jwtService = jwtService;
         }
 
         public List<AptitudeQuestions> GetAptitudeQuestions()
@@ -197,9 +200,36 @@ namespace zeali_aptitude_test.Services
 
             return dashboard;
         }
+
         public ZealiUsers FindUser(string email)
         {
             return _zealiUsers.Find(user => user.email.ToLower() == email.ToLower()).FirstOrDefault();
+        }
+
+        public bool isUserExist(string email)
+        {
+            try
+            {
+                ZealiUsers zealiUsers = FindUser(email);
+                if (zealiUsers != null)
+                    return true;
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public string GenerateJWT(string email)
+        {
+            return _jwtService.Generate(email);
+        }
+
+        public string GetIssuer(string jwt)
+        {
+            return _jwtService.Verify(jwt).Issuer;
         }
 
         public void LogTest(string email, int score)
@@ -244,5 +274,7 @@ namespace zeali_aptitude_test.Services
             _zealiUsers.UpdateOne(filterDefinition, updateDefinition, options);
 
         }
+
+
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using zeali_aptitude_test.Data;
+using zeali_aptitude_test.Helpers;
 using zeali_aptitude_test.Models;
 using zeali_aptitude_test.Services;
 
@@ -50,6 +51,10 @@ namespace zeali_aptitude_test
             services.AddTransient<IZealiAptitudeTestServices, ZealiAptitudeTestServices>();
 
             services.AddTransient<IEmailAndSecurityManagment, EmailAndSecurityManagment>();
+
+            services.AddTransient<IJwtService, JwtService>();
+
+            services.AddTransient<IErrorCode, ErrorCode>();
 
             services.AddControllersWithViews();
 

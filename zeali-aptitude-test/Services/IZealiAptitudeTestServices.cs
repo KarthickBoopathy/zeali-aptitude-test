@@ -9,9 +9,12 @@ namespace zeali_aptitude_test.Services
         ZealiLoginAuthDTO InsertNewZealiUser(ZealiUsers zealiUsers);
         ZealiLoginAuthDTO AuthenticateZealiUsers (ZealiUsers zealiUsers);
         ZealiLoginAuthDTO GenerateOTP(ZealiUsers zealiUsers, string mode);
-        ZealiUsers FindUser(string email);
         ZealiLoginAuthDTO ChangePassword(ZealiUsers zealiUsers);
         bool SaveTestDetails(string email, int score);
         DashboardDTO GetDashboardData(string email);
+        ZealiUsers FindUser(string email);
+        bool isUserExist(string email);
+        string GenerateJWT(string email);
+        string GetIssuer(string jwt);
     }
 }
