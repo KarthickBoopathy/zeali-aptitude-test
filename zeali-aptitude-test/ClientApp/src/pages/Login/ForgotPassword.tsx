@@ -1,6 +1,7 @@
 import { Button, Grid, Link, Paper, TextField } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { useCallback, useState } from "react";
+import { useHistory } from "react-router";
 import {
   generateForgotPasswordOTP,
   userChangePassword,
@@ -27,6 +28,9 @@ const ForgotPassword = () => {
   const [verify, SetVerify] = useState(false);
   const [enablePassword, SetEnablePassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const history = useHistory();
+  const NavigateTo = (path: string) => history.push(path);
 
   const handleSendOTP = useCallback(
     (event: any) => {
@@ -187,7 +191,7 @@ const ForgotPassword = () => {
       {changePassword()}
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Link href="#">Back to Login page</Link>
+          <Link onClick={() => NavigateTo("/")}>Back to Login page</Link>
         </Grid>
       </Grid>
     </>

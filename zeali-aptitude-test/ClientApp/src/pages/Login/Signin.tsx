@@ -1,8 +1,9 @@
-import { Button, Grid, Link, Paper, TextField } from "@material-ui/core";
+import { Button, Grid, Paper, TextField, Link } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { useCallback, useState } from "react";
 import { loginZeali } from "../../service/utils";
 import { Error, ZealiUsers } from "../../types/schema";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -19,6 +20,9 @@ const Signin = () => {
   const classes = useStyles();
   const [error, setError] = useState<Error>({});
   const [zealiUsers, SetZealiUsers] = useState<ZealiUsers>({});
+
+  const history = useHistory();
+  const NavigateTo = (path: string) => history.push(path);
 
   const handleLogin = useCallback(
     (event: any) => {
@@ -78,10 +82,12 @@ const Signin = () => {
             </Button>
           </Grid>
           <Grid item xs={6}>
-            <Link href="#">New to Zeali?</Link>
+            <Link onClick={() => NavigateTo("/Signup")}>New to Zeali?</Link>
           </Grid>
           <Grid item xs={6}>
-            <Link href="#">Forgot password?</Link>
+            <Link onClick={() => NavigateTo("/ForgotPassword")}>
+              Forgot password?
+            </Link>
           </Grid>
         </Grid>
       </form>
