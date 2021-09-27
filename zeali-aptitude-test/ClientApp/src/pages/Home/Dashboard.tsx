@@ -2,15 +2,27 @@ import AreaCharts from "../../components/AreaCharts";
 import BarCharts from "../../components/BarCharts";
 import SimpleAccordion from "../../components/Accordion";
 import Ratings from "../../components/Ratings";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getZealiUserInfo } from "../../service/utils";
 import { ZealiUsers } from "../../types/schema";
+import { useHistory } from "react-router";
 
 export const Dashboard = () => {
   const [userInfo, SetUserInfo] = useState<ZealiUsers>();
+  const history = useHistory();
+  const NavigateTo = useCallback((path) => history.push(path), [
+    history,
+  ]);
   useEffect(() => {
-    getZealiUserInfo().then((data) => SetUserInfo(data));
-  }, []);
+    getZealiUserInfo().then((data) => {
+      if(data){
+        if(data.errorCode)
+          NavigateTo("/Signin");  
+        else
+          SetUserInfo(data)
+      }
+    });
+  }, [NavigateTo]);
 
   const bardata = [
     {
