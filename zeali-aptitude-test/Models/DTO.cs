@@ -2,6 +2,15 @@
 
 namespace zeali_aptitude_test.Models
 {
+
+
+    public class UserValidationDTO
+    {
+        public string email { get; set; }
+        public bool isValid { get; set; }
+    }
+
+
     public class DashboardDTO
     {
         public string username { get; set; }
@@ -16,6 +25,14 @@ namespace zeali_aptitude_test.Models
     {
         public string email { get; set; }
         public int latestScore { get; set; }
+    }
+
+    public class ErrorDTO
+    {
+        public int errorCode { get; set; }
+        public string emailError { get; set; }
+        public string passwordError { get; set; }
+        public string otpError { get; set; }
     }
 
     public class ZealiLoginAuthDTO

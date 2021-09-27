@@ -7,6 +7,7 @@ namespace zeali_aptitude_test.Data
     {
         private readonly IMongoCollection<AptitudeQuestions> _aptitudeQuestions;
         private readonly IMongoCollection<ZealiUsers> _zealiUsers;
+        private readonly IMongoCollection<NewUsers> _newUsers;
 
         public DBClient(ZealiAptitudeTestDBConfig zealiAptitudeTestDBConfig)
         {
@@ -15,6 +16,7 @@ namespace zeali_aptitude_test.Data
 
             _aptitudeQuestions = database.GetCollection<AptitudeQuestions>(zealiAptitudeTestDBConfig.Aptitude_Questions_Collection_Name);
             _zealiUsers = database.GetCollection<ZealiUsers>(zealiAptitudeTestDBConfig.Zeali_Users_Collection_Name);
+            _newUsers = database.GetCollection<NewUsers>(zealiAptitudeTestDBConfig.New_Users_Collection_Name);
         }
 
         public IMongoCollection<AptitudeQuestions> GetAptitudeQuestionsCollection()
@@ -25,6 +27,11 @@ namespace zeali_aptitude_test.Data
         public IMongoCollection<ZealiUsers> GetZealiUsers()
         {
             return _zealiUsers;
+        }
+
+        public IMongoCollection<NewUsers> GetNewUsers()
+        {
+            return _newUsers;
         }
 
 
