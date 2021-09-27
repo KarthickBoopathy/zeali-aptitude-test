@@ -6,35 +6,55 @@ import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { getAptitudeQuestions, saveTestResults } from "../../service/utils";
+import { authorize, getAptitudeQuestions, saveTestResults } from "../../service/utils";
 import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
 import { evaluateScore } from "../../common/formula";
-import { getStorageDataOf } from "../../common/utils";
+import { useHistory } from "react-router";
 
 
-
-export default function AptitudeQuestions({ homeCallback }) {
+export default function AptitudeQuestions() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([]);
   const [disableQuiz, SetDisableQuiz] = useState(false);
-  const [disablePage, SetDisablePage] = useState(false);
   const [enableReview, SetEnableReview] = useState(false);
   const [pageLoad, SetPageLoad] = useState(true);
-  const [pageLoadText, SetPageLoadText] = useState("Happy Cracking!!");
-  const [startSound, SetStartSound] = useState(true);
   const [minutes, setMinutes] = useState(59);
   const [seconds, setSeconds] = useState(60);
 
+  const history = useHistory();
+  const NavigateTo = useCallback((path) => history.push(path), [
+    history,
+  ]);
+
   useEffect(() => {
-    getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
-    setTimeout(() => { SetPageLoad(false); }, 2800);
+    authorize().then((data) => {
+      if (data) {
+        if (data.errorCode !== 0) {
+          NavigateTo("/Signin");
+        }
+      } else {
+        NavigateTo("/Signin");
+      }
+    });
+  }, [NavigateTo]);
+
+  useEffect(() => {
+    getAptitudeQuestions().then((data) => {
+      if (data) {
+        if (data.errorCode)
+          NavigateTo("/Signin");
+        else {
+          setAptitudeQuestions(data);
+          setTimeout(() => { SetPageLoad(false); }, 2000);
+        }
+      }
+    });
     return () => {
       setAptitudeQuestions([]);
     };
-  }, []);
-
+  }, [NavigateTo]);
 
   useEffect(() => {
     if (!seconds) {
@@ -43,14 +63,16 @@ export default function AptitudeQuestions({ homeCallback }) {
         setMinutes(minutes - 1);
       }
       else {
-        const getUserEmail = getStorageDataOf("email");
         const getScore = evaluateScore(Object.values(aptitudeQuestions));
-        saveTestResults(getUserEmail, getScore).then((data) => { });
-        SetStartSound(false);
-        SetPageLoad(true);
+
+        saveTestResults(getScore).then((data) => {
+          if (data) {
+            if (data.errorCode!==0)
+              NavigateTo("/Signin");
+          }
+         });
         setAptitudeQuestions(a => Object.values(a));
         SetDisableQuiz(true);
-        setTimeout(() => { SetPageLoad(false); }, 2800);
         return;
       }
 
@@ -62,19 +84,33 @@ export default function AptitudeQuestions({ homeCallback }) {
       clearInterval(intervalId);
     }
 
-  }, [seconds, minutes, aptitudeQuestions]);
+  }, [seconds, minutes, aptitudeQuestions, NavigateTo]);
 
+  const handleSubmit = useCallback(() => {
 
+    const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
+    if (confirmSubmit) {
+      const getScore = evaluateScore(Object.values(aptitudeQuestions));
+      saveTestResults(getScore).then((data) => {
+        if (data) {
+          if (data.errorCode!==0)
+            NavigateTo("/Signin");
+        }
+      });
+      setAptitudeQuestions(a => Object.values(a));
+      SetDisableQuiz(true);
+    }
+  }, [aptitudeQuestions, NavigateTo]);
 
   const renderPageLoader = () => {
     return (
-      <PageLoader label={pageLoadText} start={startSound} />
+      <PageLoader label="Happy Cracking!!" />
     );
   };
 
 
   const renderHeader = () => {
-    if (disableQuiz || disablePage || enableReview) {
+    if (disableQuiz || enableReview) {
       return;
     }
 
@@ -104,25 +140,11 @@ export default function AptitudeQuestions({ homeCallback }) {
   };
 
 
-  const handleSubmit = useCallback(() => {
-    SetPageLoadText("You're Rocking!!");
-    const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
-    if (confirmSubmit) {
-      const getUserEmail = getStorageDataOf("email");
-      const getScore = evaluateScore(Object.values(aptitudeQuestions));
-      saveTestResults(getUserEmail, getScore).then((data) => { });
 
-      SetStartSound(false);
-      SetPageLoad(true);
-      setAptitudeQuestions(a => Object.values(a));
-      SetDisableQuiz(true);
-      setTimeout(() => { SetPageLoad(false); }, 2800);
-    }
-  }, [aptitudeQuestions]);
 
 
   const renderFooterButtons = () => {
-    if (disableQuiz || disablePage || enableReview) {
+    if (disableQuiz || enableReview) {
       return;
     }
 
@@ -196,7 +218,7 @@ export default function AptitudeQuestions({ homeCallback }) {
   };
 
   const renderAptitudeTest = () => {
-    if (disableQuiz || disablePage || enableReview) {
+    if (disableQuiz || enableReview) {
       return;
     }
 
@@ -256,10 +278,7 @@ export default function AptitudeQuestions({ homeCallback }) {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Button variant="contained" color="secondary" fullWidth
-            onClick={() => {
-              SetDisablePage(true);
-              homeCallback(false);
-            }}
+            onClick={() => { NavigateTo('/Home') }}
           >
             Exit Test
           </Button>
@@ -269,13 +288,12 @@ export default function AptitudeQuestions({ homeCallback }) {
   }
 
   const renderSummary = () => {
-    if (!disableQuiz || disablePage || enableReview) {
+    if (!disableQuiz || enableReview) {
       return;
     }
 
     return (
       <>
-
         {renderExitTestButton()}
         <br />
         <Summary aptitudeQuestions={aptitudeQuestions} />
@@ -291,7 +309,7 @@ export default function AptitudeQuestions({ homeCallback }) {
   }, []);
 
   const renderReviewAnswers = () => {
-    if (!disableQuiz || disablePage || !enableReview) {
+    if (!disableQuiz || !enableReview) {
       return;
     }
 
