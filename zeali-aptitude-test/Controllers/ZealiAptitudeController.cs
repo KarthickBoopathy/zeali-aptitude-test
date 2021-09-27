@@ -105,7 +105,11 @@ namespace zeali_aptitude_test.Controllers
         [EnableCors("ZealiAptitudePolicy")]
         public IActionResult userChangePassword(ZealiUsers zealiUsers)
         {
-            return Ok(_errorCode.Error(_zealiAptitudeTestServices.ChangePassword(zealiUsers)));
+            int code = _zealiAptitudeTestServices.ChangePassword(zealiUsers);
+            if (code == 0)
+                LogUserCookies(zealiUsers.email);
+
+            return Ok(_errorCode.Error(code));
         }
 
         [HttpPost("SaveTest")]
