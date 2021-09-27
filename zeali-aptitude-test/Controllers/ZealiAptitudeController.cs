@@ -125,7 +125,7 @@ namespace zeali_aptitude_test.Controllers
             if (validateUser().isValid)
                 return Ok(_zealiAptitudeTestServices.GetDashboardData(validateUser().email));
             else
-                return Ok();
+                return Ok(_errorCode.Error(9005));
         }
 
         [HttpPost("VerifyOTP")]
