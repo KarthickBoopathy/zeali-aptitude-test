@@ -30,7 +30,9 @@ const ForgotPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const history = useHistory();
-  const NavigateTo = (path: string) => history.push(path);
+  const NavigateTo = useCallback((path: string) => history.push(path), [
+    history,
+  ]);
 
   const handleSendOTP = useCallback(
     (event: any) => {
@@ -61,12 +63,15 @@ const ForgotPassword = () => {
       userChangePassword(zealiUsers).then((data) => {
         if (data) {
           setError(data);
+          if (data.errorCode === 0) {
+            NavigateTo("/Home");
+          }
         }
       });
     } else {
       setError({ passwordError: "Password does not match" });
     }
-  }, [confirmPassword, zealiUsers]);
+  }, [confirmPassword, zealiUsers, NavigateTo]);
 
   const verifyOTP = () => {
     if (enablePassword) {
@@ -191,7 +196,7 @@ const ForgotPassword = () => {
       {changePassword()}
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Link onClick={() => NavigateTo("/")}>Back to Login page</Link>
+          <Link onClick={() => NavigateTo("/Signin")}>Back to Login page</Link>
         </Grid>
       </Grid>
     </>

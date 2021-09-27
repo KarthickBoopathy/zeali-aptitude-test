@@ -11,28 +11,34 @@ import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
 import { evaluateScore } from "../../common/formula";
+import { useHistory } from "react-router";
 
 
-
-export default function AptitudeQuestions({ homeCallback }) {
+export default function AptitudeQuestions() {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [aptitudeQuestions, setAptitudeQuestions] = useState([]);
   const [disableQuiz, SetDisableQuiz] = useState(false);
-  const [disablePage, SetDisablePage] = useState(false);
   const [enableReview, SetEnableReview] = useState(false);
   const [pageLoad, SetPageLoad] = useState(true);
-  const [pageLoadText, SetPageLoadText] = useState("Happy Cracking!!");
-  const [startSound, SetStartSound] = useState(true);
   const [minutes, setMinutes] = useState(59);
   const [seconds, setSeconds] = useState(60);
 
   useEffect(() => {
-    getAptitudeQuestions().then((data) => setAptitudeQuestions(data));
-    setTimeout(() => { SetPageLoad(false); }, 2800);
+    getAptitudeQuestions().then((data) => {
+      if (data) {
+        setAptitudeQuestions(data)
+        setTimeout(() => { SetPageLoad(false); }, 2000);
+      }
+    });
     return () => {
       setAptitudeQuestions([]);
     };
   }, []);
+
+  const history = useHistory();
+  const NavigateTo = useCallback((path) => history.push(path), [
+    history,
+  ]);
 
 
   useEffect(() => {
@@ -43,12 +49,10 @@ export default function AptitudeQuestions({ homeCallback }) {
       }
       else {
         const getScore = evaluateScore(Object.values(aptitudeQuestions));
+
         saveTestResults(getScore).then((data) => { });
-        SetStartSound(false);
-        SetPageLoad(true);
         setAptitudeQuestions(a => Object.values(a));
         SetDisableQuiz(true);
-        setTimeout(() => { SetPageLoad(false); }, 2800);
         return;
       }
 
@@ -66,13 +70,13 @@ export default function AptitudeQuestions({ homeCallback }) {
 
   const renderPageLoader = () => {
     return (
-      <PageLoader label={pageLoadText} start={startSound} />
+      <PageLoader label="Happy Cracking!!" />
     );
   };
 
 
   const renderHeader = () => {
-    if (disableQuiz || disablePage || enableReview) {
+    if (disableQuiz || enableReview) {
       return;
     }
 
@@ -103,23 +107,19 @@ export default function AptitudeQuestions({ homeCallback }) {
 
 
   const handleSubmit = useCallback(() => {
-    SetPageLoadText("You're Rocking!!");
+
     const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
     if (confirmSubmit) {
       const getScore = evaluateScore(Object.values(aptitudeQuestions));
       saveTestResults(getScore).then((data) => { });
-
-      SetStartSound(false);
-      SetPageLoad(true);
       setAptitudeQuestions(a => Object.values(a));
       SetDisableQuiz(true);
-      setTimeout(() => { SetPageLoad(false); }, 2800);
     }
   }, [aptitudeQuestions]);
 
 
   const renderFooterButtons = () => {
-    if (disableQuiz || disablePage || enableReview) {
+    if (disableQuiz || enableReview) {
       return;
     }
 
@@ -193,7 +193,7 @@ export default function AptitudeQuestions({ homeCallback }) {
   };
 
   const renderAptitudeTest = () => {
-    if (disableQuiz || disablePage || enableReview) {
+    if (disableQuiz || enableReview) {
       return;
     }
 
@@ -253,10 +253,7 @@ export default function AptitudeQuestions({ homeCallback }) {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Button variant="contained" color="secondary" fullWidth
-            onClick={() => {
-              SetDisablePage(true);
-              homeCallback(false);
-            }}
+            onClick={() => { NavigateTo('/Home') }}
           >
             Exit Test
           </Button>
@@ -266,7 +263,7 @@ export default function AptitudeQuestions({ homeCallback }) {
   }
 
   const renderSummary = () => {
-    if (!disableQuiz || disablePage || enableReview) {
+    if (!disableQuiz || enableReview) {
       return;
     }
 
@@ -288,7 +285,7 @@ export default function AptitudeQuestions({ homeCallback }) {
   }, []);
 
   const renderReviewAnswers = () => {
-    if (!disableQuiz || disablePage || !enableReview) {
+    if (!disableQuiz || !enableReview) {
       return;
     }
 

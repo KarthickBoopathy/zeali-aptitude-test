@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -7,7 +6,6 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import { Assignment } from "@material-ui/icons";
 import Home from "../pages/Home/Home";
-import { getStorageDataOf } from "../common/utils";
 import Signin from "../pages/Login/Signin";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Signup from "../pages/Login/Signup";
@@ -59,10 +57,6 @@ const useStyles = makeStyles(() => ({
 export default function ZealiApplicationsTab() {
   const classes = useStyles();
   const value = 0;
-
-
-
-
 
   return (
     <div className={classes.root}>

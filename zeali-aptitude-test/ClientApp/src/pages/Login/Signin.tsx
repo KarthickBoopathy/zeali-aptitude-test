@@ -22,7 +22,9 @@ const Signin = () => {
   const [zealiUsers, SetZealiUsers] = useState<ZealiUsers>({});
 
   const history = useHistory();
-  const NavigateTo = (path: string) => history.push(path);
+  const NavigateTo = useCallback((path: string) => history.push(path), [
+    history,
+  ]);
 
   const handleLogin = useCallback(
     (event: any) => {
@@ -30,10 +32,13 @@ const Signin = () => {
       loginZeali(zealiUsers).then((data) => {
         if (data) {
           setError(data);
+          if (data.errorCode === 0) {
+            NavigateTo("/Home");
+          }
         }
       });
     },
-    [zealiUsers]
+    [zealiUsers, NavigateTo]
   );
 
   return (

@@ -30,7 +30,9 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const history = useHistory();
-  const NavigateTo = (path: string) => history.push(path);
+  const NavigateTo = useCallback((path: string) => history.push(path), [
+    history,
+  ]);
 
   const handleSendOTP = useCallback(
     (event: any) => {
@@ -65,13 +67,16 @@ const Signup = () => {
         registerNewZealiUsers(zealiUsers).then((data) => {
           if (data) {
             setError(data);
+            if (data.errorCode === 0) {
+              NavigateTo("/Home");
+            }
           }
         });
       } else {
         setError({ passwordError: "Password does not match" });
       }
     },
-    [confirmPassword, zealiUsers]
+    [confirmPassword, zealiUsers, NavigateTo]
   );
 
   const verifyOTP = () => {
