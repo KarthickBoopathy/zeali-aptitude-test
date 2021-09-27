@@ -7,5 +7,6 @@ namespace zeali_aptitude_test.Data
     {
         IMongoCollection<AptitudeQuestions> GetAptitudeQuestionsCollection();
         IMongoCollection<ZealiUsers> GetZealiUsers();
+        IMongoCollection<NewUsers> GetNewUsers();
     }
 }

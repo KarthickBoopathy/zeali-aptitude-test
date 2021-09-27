@@ -1,42 +1,50 @@
 import { get, post } from "./api";
 import { ZealiUsers } from "../types/schema";
 
+export const authorize = (): Promise<any> => {
+  return get("/api/zealiAptitudeTest/ZealiAptitude/Authorize");
+};
+
 export const getAptitudeQuestions = (): Promise<any> => {
   return get("/api/zealiAptitudeTest/ZealiAptitude");
 };
 
-export const loginZeali = async (userDetails: ZealiUsers) => {
-  return post("/api/zealiAptitudeTest/ZealiAptitude/Login", userDetails);
+export const loginZeali = async (data: ZealiUsers) => {
+  return post("/api/zealiAptitudeTest/ZealiAptitude/Login", data);
 };
 
-export const registerNewZealiUsers = async (userDetails: ZealiUsers) => {
-  return post("/api/zealiAptitudeTest/ZealiAptitude", userDetails);
+export const registerNewZealiUsers = async (data: ZealiUsers) => {
+  return post("/api/zealiAptitudeTest/ZealiAptitude", data);
 };
 
-export const generateForgotPasswordOTP = async (userDetails: ZealiUsers) => {
-  return post("/api/zealiAptitudeTest/ZealiAptitude/Login/OTP", userDetails);
+export const generateForgotPasswordOTP = async (data: ZealiUsers) => {
+  return post("/api/zealiAptitudeTest/ZealiAptitude/Login/OTP", data);
 };
 
-export const generateSignUpOTP = async (userDetails: ZealiUsers) => {
-  return post("/api/zealiAptitudeTest/ZealiAptitude/SignUp/OTP", userDetails);
+export const generateSignUpOTP = async (data: ZealiUsers) => {
+  return post("/api/zealiAptitudeTest/ZealiAptitude/SignUp/OTP", data);
 };
 
-export const userChangePassword = (userDetails: ZealiUsers) => {
-  return post(
-    "/api/zealiAptitudeTest/ZealiAptitude/ChangePassword",
-    userDetails
-  );
+export const verifyExistingUserOTP = async (data: ZealiUsers) => {
+  return post("/api/zealiAptitudeTest/ZealiAptitude/VerifyOTP", data);
 };
 
-export const getZealiUserInfo = (email: string) => {
-  return post("/api/zealiAptitudeTest/ZealiAptitude/ZealiUserInfo", email);
+export const verifyNewUserOTP = async (data: ZealiUsers) => {
+  return post("/api/zealiAptitudeTest/ZealiAptitude/VerifyNewOTP", data);
 };
 
-export const saveTestResults = (email: string, latestScore: number) => {
-  return post("/api/zealiAptitudeTest/ZealiAptitude/SaveTest", {
-    email,
-    latestScore,
-  });
+export const userChangePassword = (data: ZealiUsers) => {
+  return post("/api/zealiAptitudeTest/ZealiAptitude/ChangePassword", data);
 };
 
+export const getZealiUserInfo = () => {
+  return get("/api/zealiAptitudeTest/ZealiAptitude/ZealiUserInfo");
+};
 
+export const saveTestResults = (latestScore: number) => {
+  return post("/api/zealiAptitudeTest/ZealiAptitude/SaveTest", latestScore);
+};
+
+export const logout = (): Promise<any> => {
+  return get("/api/zealiAptitudeTest/ZealiAptitude/Logout");
+};
