@@ -1,5 +1,5 @@
 import { Button } from "@material-ui/core";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Topics from "./Topics";
 import Paper from "@material-ui/core/Paper";
@@ -14,6 +14,7 @@ import SpeedDial from "@mui/material/SpeedDial";
 import SpeedDialAction from "@mui/material/SpeedDialAction";
 import Dashboard from "./Dashboard";
 import { useHistory } from "react-router";
+import { authorize } from "../../service/utils";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -39,8 +40,21 @@ const Home = () => {
   const NavigateTo = useCallback((path: string) => history.push(path), [
     history,
   ]);
+
   const [dashboard, SetDashboard] = useState(false);
   const [userSettings, SetUserSettings] = useState(false);
+
+  useEffect(() => {
+    authorize().then((data) => {
+      if (data) {
+        if (data.errorCode !== 0) {
+          NavigateTo("/Signin");
+        }
+      } else {
+        NavigateTo("/Signin");
+      }
+    });
+  }, [NavigateTo]);
 
   const toggleUserSettings = (open: boolean) => {
     SetUserSettings(open);
@@ -51,7 +65,6 @@ const Home = () => {
   };
 
   const renderTakeTestButton = () => {
-
     return (
       <div>
         <Paper className={classes.paper} variant="elevation">
@@ -71,15 +84,11 @@ const Home = () => {
     );
   };
 
-
-
   const renderTopicsDivider = () => {
     return <Topics />;
   };
 
   const renderFabButton = () => {
-
-
     const fabStyle = {
       background: "#f50057",
     };

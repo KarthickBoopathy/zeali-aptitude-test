@@ -155,7 +155,7 @@ namespace zeali_aptitude_test.Services
 
         }
 
-        public bool SaveTestDetails(string email, int score)
+        public int SaveTestDetails(string email, int score)
         {
             try
             {
@@ -163,11 +163,11 @@ namespace zeali_aptitude_test.Services
                 UpdateZealiUsers(email, Builders<ZealiUsers>.Update.Set(z => z.highScore, ValidateAndGetHightScore(score, FindUser(email).highScore)));
                 UpdateZealiUsers(email, Builders<ZealiUsers>.Update.Set(z => z.star, EvaluateStars(score)));
                 LogTest(email, score);
-                return true;
+                return 0;
             }
             catch
             {
-                return false;
+                return 9005;
             }
         }
 

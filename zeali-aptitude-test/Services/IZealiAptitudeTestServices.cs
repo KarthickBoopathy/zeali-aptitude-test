@@ -12,7 +12,7 @@ namespace zeali_aptitude_test.Services
         int VerifyOTP(ZealiUsers zealiUsers);
         int VerifyNewUserOTP(ZealiUsers zealiUsers);
         int ChangePassword(ZealiUsers zealiUsers);
-        bool SaveTestDetails(string email, int score);
+        int SaveTestDetails(string email, int score);
         DashboardDTO GetDashboardData(string email);
         ZealiUsers FindUser(string email);
         NewUsers FindNewUser(string email);

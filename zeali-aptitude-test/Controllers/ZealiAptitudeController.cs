@@ -24,6 +24,15 @@ namespace zeali_aptitude_test.Controllers
             _errorCode = errorCode;
         }
 
+        [HttpGet("Authorize")]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult authorize()
+        {
+            if (validateUser().isValid)
+                return Ok(_errorCode.Error(0));
+            else
+                return Ok(_errorCode.Error(9005));
+        }
 
         [HttpGet]
         [EnableCors("ZealiAptitudePolicy")]
@@ -32,7 +41,7 @@ namespace zeali_aptitude_test.Controllers
             if (validateUser().isValid)
                 return Ok(_zealiAptitudeTestServices.GetAptitudeQuestions());
             else
-                return Unauthorized(_errorCode.Error(9005));
+                return Ok(_errorCode.Error(9005));
         }
 
         [HttpPost]
@@ -56,9 +65,8 @@ namespace zeali_aptitude_test.Controllers
             {
                 int code = _zealiAptitudeTestServices.AuthenticateZealiUsers(zealiUsers);
                 if (code == 0)
-                {
                     LogUserCookies(zealiUsers.email);
-                }
+
                 return Ok(_errorCode.Error(code));
             }
             else
@@ -105,9 +113,9 @@ namespace zeali_aptitude_test.Controllers
         public IActionResult saveTestResults([FromBody] int score)
         {
             if (validateUser().isValid)
-                return Ok(_zealiAptitudeTestServices.SaveTestDetails(validateUser().email, score));
+                return Ok(_errorCode.Error(_zealiAptitudeTestServices.SaveTestDetails(validateUser().email, score)));
             else
-                return Ok();
+                return Ok(_errorCode.Error(9005));
         }
 
         [HttpGet("ZealiUserInfo")]
@@ -140,6 +148,14 @@ namespace zeali_aptitude_test.Controllers
                 return Ok(_errorCode.Error(9001));
         }
 
+        [HttpGet("Logout")]
+        [EnableCors("ZealiAptitudePolicy")]
+        public IActionResult logout()
+        {
+            RemoveCookies();
+            return Ok(_errorCode.Error(0));
+        }
+
         private void LogUserCookies(string email)
         {
             var jwt = _zealiAptitudeTestServices.GenerateJWT(email);
@@ -156,14 +172,22 @@ namespace zeali_aptitude_test.Controllers
                 var email = _zealiAptitudeTestServices.GetIssuer(jwt);
                 userValidation.email = email;
                 userValidation.isValid = _zealiAptitudeTestServices.isUserExist(email);
+                if (!userValidation.isValid)
+                    RemoveCookies();
                 return userValidation;
             }
             catch
             {
                 userValidation.email = string.Empty;
                 userValidation.isValid = false;
+                RemoveCookies();
                 return userValidation;
             }
+        }
+
+        private void RemoveCookies()
+        {
+            Response.Cookies.Delete("zeali");
         }
 
 

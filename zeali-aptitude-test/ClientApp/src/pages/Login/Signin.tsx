@@ -1,7 +1,7 @@
 import { Button, Grid, Paper, TextField, Link } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { useCallback, useState } from "react";
-import { loginZeali } from "../../service/utils";
+import { useCallback, useEffect, useState } from "react";
+import { authorize, loginZeali } from "../../service/utils";
 import { Error, ZealiUsers } from "../../types/schema";
 import { useHistory } from "react-router";
 
@@ -25,6 +25,17 @@ const Signin = () => {
   const NavigateTo = useCallback((path: string) => history.push(path), [
     history,
   ]);
+  useEffect(() => {
+    authorize().then((data) => {
+      if (data) {
+        if (data.errorCode === 0) {
+          NavigateTo("/Home");
+        }
+      } else {
+        NavigateTo("/Signin");
+      }
+    });
+  }, [NavigateTo]);
 
   const handleLogin = useCallback(
     (event: any) => {

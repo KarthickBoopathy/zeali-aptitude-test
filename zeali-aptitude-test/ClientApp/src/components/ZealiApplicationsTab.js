@@ -77,7 +77,7 @@ export default function ZealiApplicationsTab() {
       <TabPanel value={value} index={0}>
         <BrowserRouter>
           <Switch>
-            <Route exact path="/" component={Signin} />
+            <Route exact path="/" component={Home} />
             <Route path="/Signin" component={Signin} />
             <Route path="/Signup" component={Signup} />
             <Route path="/ForgotPassword" component={ForgotPassword} />

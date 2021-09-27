@@ -1,8 +1,10 @@
 import { Button, Grid, Link, Paper, TextField } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
+
 import {
+  authorize,
   generateForgotPasswordOTP,
   userChangePassword,
   verifyExistingUserOTP,
@@ -33,6 +35,19 @@ const ForgotPassword = () => {
   const NavigateTo = useCallback((path: string) => history.push(path), [
     history,
   ]);
+
+  useEffect(() => {
+    authorize().then((data) => {
+      if (data) {
+        if (data.errorCode === 0) {
+          NavigateTo("/Home");
+        }
+      } else {
+        NavigateTo("/Signin");
+      }
+    });
+  }, [NavigateTo]);
+
 
   const handleSendOTP = useCallback(
     (event: any) => {

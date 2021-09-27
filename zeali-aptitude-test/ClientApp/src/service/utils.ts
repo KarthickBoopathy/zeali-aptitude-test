@@ -1,6 +1,10 @@
 import { get, post } from "./api";
 import { ZealiUsers } from "../types/schema";
 
+export const authorize = (): Promise<any> => {
+  return get("/api/zealiAptitudeTest/ZealiAptitude/Authorize");
+};
+
 export const getAptitudeQuestions = (): Promise<any> => {
   return get("/api/zealiAptitudeTest/ZealiAptitude");
 };
@@ -39,4 +43,8 @@ export const getZealiUserInfo = () => {
 
 export const saveTestResults = (latestScore: number) => {
   return post("/api/zealiAptitudeTest/ZealiAptitude/SaveTest", latestScore);
+};
+
+export const logout = (): Promise<any> => {
+  return get("/api/zealiAptitudeTest/ZealiAptitude/Logout");
 };

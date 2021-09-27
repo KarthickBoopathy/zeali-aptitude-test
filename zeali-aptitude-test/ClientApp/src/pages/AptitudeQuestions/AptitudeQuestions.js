@@ -6,7 +6,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { getAptitudeQuestions, saveTestResults } from "../../service/utils";
+import { authorize, getAptitudeQuestions, saveTestResults } from "../../service/utils";
 import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
@@ -23,23 +23,38 @@ export default function AptitudeQuestions() {
   const [minutes, setMinutes] = useState(59);
   const [seconds, setSeconds] = useState(60);
 
-  useEffect(() => {
-    getAptitudeQuestions().then((data) => {
-      if (data) {
-        setAptitudeQuestions(data)
-        setTimeout(() => { SetPageLoad(false); }, 2000);
-      }
-    });
-    return () => {
-      setAptitudeQuestions([]);
-    };
-  }, []);
-
   const history = useHistory();
   const NavigateTo = useCallback((path) => history.push(path), [
     history,
   ]);
 
+  useEffect(() => {
+    authorize().then((data) => {
+      if (data) {
+        if (data.errorCode !== 0) {
+          NavigateTo("/Signin");
+        }
+      } else {
+        NavigateTo("/Signin");
+      }
+    });
+  }, [NavigateTo]);
+
+  useEffect(() => {
+    getAptitudeQuestions().then((data) => {
+      if (data) {
+        if (data.errorCode)
+          NavigateTo("/Signin");
+        else {
+          setAptitudeQuestions(data);
+          setTimeout(() => { SetPageLoad(false); }, 2000);
+        }
+      }
+    });
+    return () => {
+      setAptitudeQuestions([]);
+    };
+  }, [NavigateTo]);
 
   useEffect(() => {
     if (!seconds) {
@@ -50,7 +65,12 @@ export default function AptitudeQuestions() {
       else {
         const getScore = evaluateScore(Object.values(aptitudeQuestions));
 
-        saveTestResults(getScore).then((data) => { });
+        saveTestResults(getScore).then((data) => {
+          if (data) {
+            if (data.errorCode!==0)
+              NavigateTo("/Signin");
+          }
+         });
         setAptitudeQuestions(a => Object.values(a));
         SetDisableQuiz(true);
         return;
@@ -64,9 +84,23 @@ export default function AptitudeQuestions() {
       clearInterval(intervalId);
     }
 
-  }, [seconds, minutes, aptitudeQuestions]);
+  }, [seconds, minutes, aptitudeQuestions, NavigateTo]);
 
+  const handleSubmit = useCallback(() => {
 
+    const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
+    if (confirmSubmit) {
+      const getScore = evaluateScore(Object.values(aptitudeQuestions));
+      saveTestResults(getScore).then((data) => {
+        if (data) {
+          if (data.errorCode!==0)
+            NavigateTo("/Signin");
+        }
+      });
+      setAptitudeQuestions(a => Object.values(a));
+      SetDisableQuiz(true);
+    }
+  }, [aptitudeQuestions, NavigateTo]);
 
   const renderPageLoader = () => {
     return (
@@ -106,16 +140,7 @@ export default function AptitudeQuestions() {
   };
 
 
-  const handleSubmit = useCallback(() => {
 
-    const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
-    if (confirmSubmit) {
-      const getScore = evaluateScore(Object.values(aptitudeQuestions));
-      saveTestResults(getScore).then((data) => { });
-      setAptitudeQuestions(a => Object.values(a));
-      SetDisableQuiz(true);
-    }
-  }, [aptitudeQuestions]);
 
 
   const renderFooterButtons = () => {
@@ -269,7 +294,6 @@ export default function AptitudeQuestions() {
 
     return (
       <>
-
         {renderExitTestButton()}
         <br />
         <Summary aptitudeQuestions={aptitudeQuestions} />
