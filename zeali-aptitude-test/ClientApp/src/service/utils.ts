@@ -38,7 +38,7 @@ export const generateForgotPasswordOTP = async (data: ZealiUsers) => {
 };
 
 export const generateSignUpOTP = async (data: ZealiUsers) => {
-  return post("/Signup/SignUp/OTP", data);
+  return post("/Signup/Signup/OTP", data);
 };
 
 export const verifyNewUserOTP = async (data: ZealiUsers) => {

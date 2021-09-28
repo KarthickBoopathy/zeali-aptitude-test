@@ -47,7 +47,7 @@ namespace zeali_aptitude_test.Services
                     otp = _emailAndSecurityManagment.encryptPassword(otp);
                     if (mode == "Login")
                         _helper.UpdateZealiUsers(zealiUsers.email, Builders<ZealiUsers>.Update.Set(z => z.otp, otp));
-                    if (mode == "SignUp")
+                    if (mode == "Signup")
                     {
                         if (_helper.isNewUserExist(zealiUsers.email))
                         {

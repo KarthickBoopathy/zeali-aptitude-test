@@ -16,7 +16,7 @@ namespace zeali_aptitude_test.Controllers
 
 
         public static string ZAPT01 = "Login";
-        public static string ZAPT02 = "SignUp";
+        public static string ZAPT02 = "Signup";
         public SignupController(IErrorCode errorCode, IHelper helper, ISignupService signupService)
         {
             _errorCode = errorCode;
