@@ -13,10 +13,9 @@ namespace zeali_aptitude_test.Controllers
         private readonly ISignupService _signupService;
         private readonly IHelper _helper;
         private readonly IErrorCode _errorCode;
+        Mode _mode = new Mode();
 
 
-        public static string ZAPT01 = "Login";
-        public static string ZAPT02 = "Signup";
         public SignupController(IErrorCode errorCode, IHelper helper, ISignupService signupService)
         {
             _errorCode = errorCode;
@@ -42,22 +41,22 @@ namespace zeali_aptitude_test.Controllers
         public IActionResult generateUserOTP(string mode, ZealiUsers zealiUsers)
         {
 
-            if (mode == ZAPT02)
+            if (mode == _mode.ZAPT02)
             {
                 if (!_helper.isUserExist(zealiUsers.email))
-                    return Ok(_errorCode.Error(_signupService.GenerateOTP(zealiUsers, ZAPT02)));
+                    return Ok(_errorCode.Error(_signupService.GenerateOTP(zealiUsers, _mode.ZAPT02)));
                 else
                     return Ok(_errorCode.Error(9003));
 
             }
-            else if (mode == ZAPT01)
+            else if (mode == _mode.ZAPT01)
             {
                 if (!_helper.isUserExist(zealiUsers.email))
                     return Ok(_errorCode.Error(9001));
                 else
                 {
                     zealiUsers.username = zealiUsers.username;
-                    return Ok(_errorCode.Error(_signupService.GenerateOTP(zealiUsers, ZAPT01)));
+                    return Ok(_errorCode.Error(_signupService.GenerateOTP(zealiUsers, _mode.ZAPT01)));
                 }
 
             }
