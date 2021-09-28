@@ -8,45 +8,26 @@ namespace zeali_aptitude_test.Controllers
 {
     [ApiController]
     [Route("api/zealiAptitudeTest/[controller]")]
-    public class ZealiAptitudeController : ControllerBase
+    public class DashboardController : Controller
     {
-        private readonly IZealiAptitudeTestServices _zealiAptitudeTestServices;
+        private readonly IDashboardService _dashboardService;
         private readonly IHelper _helper;
         private readonly IErrorCode _errorCode;
 
-        public ZealiAptitudeController(IZealiAptitudeTestServices zealiAptitudeTestServices, IErrorCode errorCode, IHelper helper)
+        public DashboardController(IErrorCode errorCode, IHelper helper, IDashboardService dashboardService)
         {
-            _zealiAptitudeTestServices = zealiAptitudeTestServices;
             _errorCode = errorCode;
             _helper = helper;
+            _dashboardService = dashboardService;
         }
 
-        [HttpGet("Authorize")]
-        [EnableCors("ZealiAptitudePolicy")]
-        public IActionResult authorize()
-        {
-            if (validateUser().isValid)
-                return Ok(_errorCode.Error(0));
-            else
-                return Ok(_errorCode.Error(9005));
-        }
 
-        [HttpGet]
+        [HttpGet("ZealiUserInfo")]
         [EnableCors("ZealiAptitudePolicy")]
-        public IActionResult getAptitudeQuestions()
+        public IActionResult getZealiUserInfo()
         {
             if (validateUser().isValid)
-                return Ok(_zealiAptitudeTestServices.GetAptitudeQuestions());
-            else
-                return Ok(_errorCode.Error(9005));
-        }
-
-        [HttpPost("SaveTest")]
-        [EnableCors("ZealiAptitudePolicy")]
-        public IActionResult saveTestResults([FromBody] int score)
-        {
-            if (validateUser().isValid)
-                return Ok(_errorCode.Error(_zealiAptitudeTestServices.SaveTestDetails(validateUser().email, score)));
+                return Ok(_dashboardService.GetDashboardData(validateUser().email));
             else
                 return Ok(_errorCode.Error(9005));
         }
@@ -79,7 +60,5 @@ namespace zeali_aptitude_test.Controllers
         {
             Response.Cookies.Delete("zeali");
         }
-
-
     }
 }
