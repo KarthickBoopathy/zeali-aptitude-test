@@ -49,7 +49,7 @@ namespace zeali_aptitude_test.Controllers
                 return Ok(_errorCode.Error(_zealiAptitudeTestServices.SaveTestDetails(validateUser().email, score)));
             else
                 return Ok(_errorCode.Error(9005));
-        }
+        }   
 
 
         private UserValidationDTO validateUser()

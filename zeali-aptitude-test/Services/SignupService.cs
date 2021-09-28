@@ -12,7 +12,7 @@ namespace zeali_aptitude_test.Services
         private readonly IMongoCollection<NewUsers> _newUsers;
         private readonly IEmailAndSecurityManagment _emailAndSecurityManagment;
         private readonly IHelper _helper;
-
+        Mode _mode = new Mode();
         public SignupService(IDBClient dBClient, IEmailAndSecurityManagment emailAndSecurityManagment, IHelper helper)
         {
             _zealiUsers = dBClient.GetZealiUsers();
@@ -45,9 +45,9 @@ namespace zeali_aptitude_test.Services
                 if (result)
                 {
                     otp = _emailAndSecurityManagment.encryptPassword(otp);
-                    if (mode == "Login")
+                    if (mode == _mode.ZAPT01)
                         _helper.UpdateZealiUsers(zealiUsers.email, Builders<ZealiUsers>.Update.Set(z => z.otp, otp));
-                    if (mode == "SignUp")
+                    if (mode == _mode.ZAPT02)
                     {
                         if (_helper.isNewUserExist(zealiUsers.email))
                         {

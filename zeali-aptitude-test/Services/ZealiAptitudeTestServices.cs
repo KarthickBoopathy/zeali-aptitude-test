@@ -62,7 +62,7 @@ namespace zeali_aptitude_test.Services
             performance.Score = score;
             var filterDefinition = Builders<ZealiUsers>.Filter.And(
             Builders<ZealiUsers>.Filter.Where(user => user.email.ToLower() == email.ToLower()));
-            var updateDefinition = Builders<ZealiUsers>.Update.Push("performance", performance);
+            var updateDefinition = Builders<ZealiUsers>.Update.Push(z => z.performance, performance);
             var options = new UpdateOptions { IsUpsert = true };
             _zealiUsers.UpdateOne(filterDefinition, updateDefinition, options);
         }
