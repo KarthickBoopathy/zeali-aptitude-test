@@ -1,4 +1,4 @@
-﻿namespace zeali_aptitude_test.Services
+﻿namespace zeali_aptitude_test.Services.Interfaces
 {
     public interface IEmailAndSecurityManagment
     {

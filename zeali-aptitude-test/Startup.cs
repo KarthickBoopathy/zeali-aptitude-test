@@ -10,6 +10,7 @@ using zeali_aptitude_test.Data;
 using zeali_aptitude_test.Helpers;
 using zeali_aptitude_test.Models;
 using zeali_aptitude_test.Services;
+using zeali_aptitude_test.Services.Interfaces;
 
 namespace zeali_aptitude_test
 {
@@ -48,12 +49,14 @@ namespace zeali_aptitude_test
             services.AddSingleton<OTPConfiguration>(sp =>
                 sp.GetRequiredService<IOptions<OTPConfiguration>>().Value);
 
+            services.AddTransient<IDashboardService, DashboardService>();
+            services.AddTransient<IEmailAndSecurityManagment, EmailAndSecurityManagment>();
+            services.AddTransient<IHelper, Helper>();
+            services.AddTransient<ISigninService, SigninService>();
+            services.AddTransient<ISignupService, SignupService>();
             services.AddTransient<IZealiAptitudeTestServices, ZealiAptitudeTestServices>();
 
-            services.AddTransient<IEmailAndSecurityManagment, EmailAndSecurityManagment>();
-
             services.AddTransient<IJwtService, JwtService>();
-
             services.AddTransient<IErrorCode, ErrorCode>();
 
             services.AddControllersWithViews();
