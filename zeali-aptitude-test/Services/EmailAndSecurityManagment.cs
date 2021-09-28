@@ -4,6 +4,7 @@ using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using zeali_aptitude_test.Models;
+using zeali_aptitude_test.Services.Interfaces;
 
 namespace zeali_aptitude_test.Services
 {
@@ -35,6 +36,7 @@ namespace zeali_aptitude_test.Services
             {
                 otp[i] = library[random.Next(library.Length)];
             }
+             
             return new String(otp);
         }
 
@@ -42,6 +44,9 @@ namespace zeali_aptitude_test.Services
         {
             try
             {
+                if (userName == null)
+                    userName = "Zeali";
+
                 SmtpClient Client = new SmtpClient()
                 {
                     Host = _otpConfiguration.Host,
