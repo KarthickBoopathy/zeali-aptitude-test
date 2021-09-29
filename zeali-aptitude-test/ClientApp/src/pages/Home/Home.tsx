@@ -1,6 +1,5 @@
 import { Button } from "@material-ui/core";
 import { useCallback, useEffect, useState } from "react";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
 import Topics from "./Topics";
 import Paper from "@material-ui/core/Paper";
 
@@ -15,27 +14,12 @@ import SpeedDialAction from "@mui/material/SpeedDialAction";
 import Dashboard from "./Dashboard";
 import { useHistory } from "react-router";
 import { authorize } from "../../service/utils";
+import { useStyles } from "../../common/style";
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    paper: {
-      padding: 15,
-      textAlign: "center",
-      fontSize: 16,
-    },
-    fab: {
-      position: "fixed",
-      bottom: "5%",
-      right: "5%",
-    },
-    fabprops: {
-      background: "#f50057",
-    },
-  })
-);
 
 const Home = () => {
   const classes = useStyles();
+
   const history = useHistory();
   const NavigateTo = useCallback((path: string) => history.push(path), [
     history,

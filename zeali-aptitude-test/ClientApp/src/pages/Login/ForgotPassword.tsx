@@ -1,7 +1,7 @@
 import { Button, Grid, Link, Paper, TextField } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import { useStyles } from "../../common/style";
 
 import {
   authorize,
@@ -10,17 +10,6 @@ import {
   verifyExistingUserOTP,
 } from "../../service/utils";
 import { Error, ZealiUsers } from "../../types/schema";
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    paper: {
-      padding: 10,
-      textAlign: "center",
-      backgroundColor: "#69924a",
-      color: "white",
-    },
-  })
-);
 
 const ForgotPassword = () => {
   const classes = useStyles();
@@ -204,7 +193,7 @@ const ForgotPassword = () => {
     <>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Paper className={classes.paper}>CREATE YOUR NEW PASSWORD</Paper>
+          <Paper className={classes.paperbutton}>CREATE YOUR NEW PASSWORD</Paper>
         </Grid>
       </Grid>
       {verifyOTP()}

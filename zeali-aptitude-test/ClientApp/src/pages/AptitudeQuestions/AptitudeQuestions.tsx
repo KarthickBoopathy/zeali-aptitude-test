@@ -17,16 +17,9 @@ import PageLoader from "../../components/PageLoader";
 import { evaluateScore } from "../../common/formula";
 import { useHistory } from "react-router";
 import { AptitudeQuestion } from "../../types/schema";
-import { makeStyles } from "@material-ui/core/styles";
+import { useStyles } from "../../common/style";
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    padding: 10,
-    textAlign: "center",
-    backgroundColor: "#f50057",
-    color: "white",
-  },
-}));
+
 
 const AptitudeQuestions = () => {
   const classes = useStyles();
@@ -44,12 +37,10 @@ const AptitudeQuestions = () => {
   useEffect(() => {
     authorize().then((data) => {
       if (data) {
-        if (data.errorCode !== 0) {
+        if (data.errorCode !== 0)
           NavigateTo("/Signin");
-        }
-      } else {
+      } else
         NavigateTo("/Signin");
-      }
     });
   }, [NavigateTo]);
 
@@ -127,10 +118,10 @@ const AptitudeQuestions = () => {
       <div>
         <Grid container spacing={3}>
           <Grid item xs={6}>
-            <Paper className={classes.paper}>Question : {currentIndex}</Paper>
+            <Paper className={classes.questionnumber}>Question : {currentIndex}</Paper>
           </Grid>
           <Grid item xs={6}>
-            <Paper className={classes.paper}>
+            <Paper className={classes.questionnumber}>
               Time :{" "}
               {minutes === 60 ? "00" : minutes < 10 ? "0" + minutes : minutes}:
               {seconds === 60 ? "00" : seconds < 10 ? "0" + seconds : seconds}

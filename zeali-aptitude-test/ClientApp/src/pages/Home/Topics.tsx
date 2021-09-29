@@ -1,23 +1,10 @@
-import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { Grid } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
+import { useStyles } from "../../common/style";
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      width: "100%",
-      maxWidth: "95%",
-      backgroundColor: "white",
-    },
-    paper:{
-      padding: 15,
-      textAlign: "center",
-    }
-  })
-);
 
 const Topics = () => {
   const classes = useStyles();
@@ -54,10 +41,10 @@ const Topics = () => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <Paper  className={classes.paper} variant="elevation">
+        <Paper className={classes.topicspaper} variant="elevation">
           <List
             component="nav"
-            className={classes.root}
+            className={classes.topicslist}
             aria-label="mailbox folders"
           >
             {data.map((item, i) => (

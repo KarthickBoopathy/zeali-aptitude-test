@@ -13,12 +13,8 @@ export const post = async (path: string, data: any): Promise<any> => {
 
 export const get = async (path: string): Promise<any> => {
   const headers = { "Content-Type": "application/json" };
-
+  
   return await fetch(`${BASE_API}${path}`, {
     headers,
-  }).then((response) => {
-    if (response) {
-      return response.json();
-    }
-  });
+  }).then((response) => response.json());
 };

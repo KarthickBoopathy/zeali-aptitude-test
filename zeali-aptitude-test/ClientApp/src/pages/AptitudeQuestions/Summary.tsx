@@ -1,17 +1,9 @@
 import { Divider, Paper, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import { evaluateScore } from "../../common/formula";
+import { useStyles } from "../../common/style";
 import SimpleAccordion from "../../components/Accordion";
 import { AptitudeQuestion } from "../../types/schema";
 
-const useStyles = makeStyles(() => ({
-  paper: {
-    padding: 10,
-    textAlign: "center",
-    backgroundColor: "#69924a",
-    color: "white",
-  },
-}));
 
 type SummaryProps = {
   aptitudeQuestions: AptitudeQuestion[]
@@ -23,7 +15,7 @@ const Summary = ({ aptitudeQuestions }: SummaryProps) => {
 
   return (
     <>
-      <Paper className={classes.paper}>Your Score : {score}</Paper>
+      <Paper className={classes.paperbutton}>Your Score : {score}</Paper>
       <br />
       <Divider variant="fullWidth" />
       <br />

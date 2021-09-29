@@ -1,18 +1,11 @@
 import { Grid, Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { useStyles } from "../../common/style";
+
 import { Logout } from "../Login/Logout";
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    padding: 15,
-    fontSize: 16,
-    textAlign: "center",
-  },
-}));
 
 const UserSettings = () => {
   const classes = useStyles();
-
 
   return (
     <Paper className={classes.paper} variant="elevation">

@@ -1,50 +1,33 @@
 import { get, post } from "./api";
 import { ZealiUsers } from "../types/schema";
 
-export const authorize = (): Promise<any> => {
-  return get("/ZealiAptitude/Authorize");
-};
+export const authorize = () => get("/ZealiAptitude/Authorize");
 
-export const getAptitudeQuestions = (): Promise<any> => {
-  return get("/ZealiAptitude");
-};
+export const getAptitudeQuestions = () => get("/ZealiAptitude");
 
-export const saveTestResults = (latestScore: number) => {
-  return post("/ZealiAptitude/SaveTest", latestScore);
-};
+export const saveTestResults = (latestScore: number) =>
+  post("/ZealiAptitude/SaveTest", latestScore);
 
-export const loginZeali = async (data: ZealiUsers) => {
-  return post("/Signin", data);
-};
+export const loginZeali = (data: ZealiUsers) => post("/Signin", data);
 
-export const verifyExistingUserOTP = async (data: ZealiUsers) => {
-  return post("/Signin/VerifyOTP", data);
-};
+export const verifyExistingUserOTP = (data: ZealiUsers) =>
+  post("/Signin/VerifyOTP", data);
 
-export const userChangePassword = (data: ZealiUsers) => {
-  return post("/Signin/ChangePassword", data);
-};
+export const userChangePassword = (data: ZealiUsers) =>
+  post("/Signin/ChangePassword", data);
 
-export const logout = (): Promise<any> => {
-  return get("/Signin/Logout");
-};
+export const logout = () => get("/Signin/Logout");
 
-export const registerNewZealiUsers = async (data: ZealiUsers) => {
-  return post("/Signup", data);
-};
+export const registerNewZealiUsers = (data: ZealiUsers) =>
+  post("/Signup", data);
 
-export const generateForgotPasswordOTP = async (data: ZealiUsers) => {
-  return post("/Signup/Login/OTP", data);
-};
+export const generateForgotPasswordOTP = (data: ZealiUsers) =>
+  post("/Signup/Login/OTP", data);
 
-export const generateSignUpOTP = async (data: ZealiUsers) => {
-  return post("/Signup/Signup/OTP", data);
-};
+export const generateSignUpOTP = (data: ZealiUsers) =>
+  post("/Signup/Signup/OTP", data);
 
-export const verifyNewUserOTP = async (data: ZealiUsers) => {
-  return post("/Signup/VerifyNewOTP", data);
-};
+export const verifyNewUserOTP = (data: ZealiUsers) =>
+  post("/Signup/VerifyNewOTP", data);
 
-export const getZealiUserInfo = () => {
-  return get("/Dashboard/ZealiUserInfo");
-};
+export const getZealiUserInfo = () => get("/Dashboard/ZealiUserInfo");

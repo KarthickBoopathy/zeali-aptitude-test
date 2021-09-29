@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -11,19 +10,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Signup from "../pages/Login/Signup";
 import ForgotPassword from "../pages/Login/ForgotPassword";
 import AptitudeQuestions from "../pages/AptitudeQuestions/AptitudeQuestions";
+import { useStyles } from "../common/style";
 
 
-const useStyles = makeStyles(() => ({
-  root: {
-    backgroundColor: "#fcfcfc",
-    maxWidth: "500px",
-    height: "100vh",
-    margin: "auto"
-  },
-  tab: {
-    fontSize: "large",
-  },
-}));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -60,7 +49,7 @@ const ZealiApplicationsTab = () => {
   const value = 0;
 
   return (
-    <div className={classes.root}>
+    <div className={classes.tabroot}>
       <AppBar position="static" style={{ background: "#3b5998" }}>
         <Tabs
           value={value}
@@ -68,7 +57,7 @@ const ZealiApplicationsTab = () => {
           aria-label="full width tabs example"
         >
           <Tab
-            className={classes.tab}
+            className={classes.tabtab}
             label="Zeali - Aptitude Test"
             icon={<Assignment />}
             {...a11yProps(0)}

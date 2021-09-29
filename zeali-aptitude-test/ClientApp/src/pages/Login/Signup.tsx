@@ -1,7 +1,7 @@
 import { Button, Grid, Link, Paper, TextField } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { useCallback, useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import { useStyles } from "../../common/style";
 
 import {
   authorize,
@@ -11,16 +11,6 @@ import {
 } from "../../service/utils";
 import { Error, ZealiUsers } from "../../types/schema";
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    paper: {
-      padding: 10,
-      textAlign: "center",
-      backgroundColor: "#69924a",
-      color: "white",
-    },
-  })
-);
 
 const Signup = () => {
   const classes = useStyles();
@@ -222,7 +212,7 @@ const Signup = () => {
     <>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Paper className={classes.paper}>REGISTER WITH YOUR DETAILS</Paper>
+          <Paper className={classes.paperbutton}>REGISTER WITH YOUR DETAILS</Paper>
         </Grid>
       </Grid>
       {verifyOTP()}

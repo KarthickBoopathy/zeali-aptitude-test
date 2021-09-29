@@ -1,20 +1,10 @@
 import { Button, Grid, Paper, TextField, Link } from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { useCallback, useEffect, useState } from "react";
 import { authorize, loginZeali } from "../../service/utils";
 import { Error, ZealiUsers } from "../../types/schema";
 import { useHistory } from "react-router";
+import { useStyles } from "../../common/style";
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    paper: {
-      padding: 10,
-      textAlign: "center",
-      backgroundColor: "#69924a",
-      color: "white",
-    },
-  })
-);
 
 const Signin = () => {
   const classes = useStyles();
@@ -25,7 +15,7 @@ const Signin = () => {
   const NavigateTo = useCallback((path: string) => history.push(path), [
     history,
   ]);
-  
+
   useEffect(() => {
     authorize().then((data) => {
       if (data) {
@@ -58,7 +48,7 @@ const Signin = () => {
       <form onSubmit={handleLogin}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>LOGIN WITH YOUR DETAILS</Paper>
+            <Paper className={classes.paperbutton}>LOGIN WITH YOUR DETAILS</Paper>
           </Grid>
           <Grid item xs={12}>
             <TextField
