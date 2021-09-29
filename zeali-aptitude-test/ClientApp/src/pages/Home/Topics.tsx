@@ -12,16 +12,16 @@ const useStyles = makeStyles(() =>
       maxWidth: "95%",
       backgroundColor: "white",
     },
+    paper:{
+      padding: 15,
+      textAlign: "center",
+    }
   })
 );
 
-export default function Topics() {
+const Topics = () => {
   const classes = useStyles();
 
-  const style = {
-    padding: 15,
-    textAlign: "center",
-  };
   const data = [
     "Time and Distance",
     "Trains",
@@ -54,7 +54,7 @@ export default function Topics() {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <Paper style={style} variant="elevation">
+        <Paper  className={classes.paper} variant="elevation">
           <List
             component="nav"
             className={classes.root}
@@ -71,3 +71,5 @@ export default function Topics() {
     </Grid>
   );
 }
+
+export default Topics;

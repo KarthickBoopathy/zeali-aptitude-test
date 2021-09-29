@@ -25,6 +25,7 @@ const Signin = () => {
   const NavigateTo = useCallback((path: string) => history.push(path), [
     history,
   ]);
+  
   useEffect(() => {
     authorize().then((data) => {
       if (data) {

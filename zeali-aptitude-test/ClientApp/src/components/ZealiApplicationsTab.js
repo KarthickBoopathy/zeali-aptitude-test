@@ -13,6 +13,18 @@ import ForgotPassword from "../pages/Login/ForgotPassword";
 import AptitudeQuestions from "../pages/AptitudeQuestions/AptitudeQuestions";
 
 
+const useStyles = makeStyles(() => ({
+  root: {
+    backgroundColor: "#fcfcfc",
+    maxWidth: "500px",
+    height: "100vh",
+    margin: "auto"
+  },
+  tab: {
+    fontSize: "large",
+  },
+}));
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -42,19 +54,8 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles(() => ({
-  root: {
-    backgroundColor: "#fcfcfc",
-    maxWidth: "500px",
-    height: "100vh",
-    margin: "auto"
-  },
-  tab: {
-    fontSize: "large",
-  },
-}));
 
-export default function ZealiApplicationsTab() {
+const ZealiApplicationsTab = () => {
   const classes = useStyles();
   const value = 0;
 
@@ -91,3 +92,6 @@ export default function ZealiApplicationsTab() {
     </div>
   );
 }
+
+
+export default ZealiApplicationsTab;

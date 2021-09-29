@@ -8,8 +8,13 @@ export const Logout = () => {
   const NavigateTo = useCallback((path) => history.push(path), [history]);
 
   const handleSubmit = useCallback(() => {
-    logout().then((data) => {});
-    NavigateTo("/Signin");
+    logout().then((data) => {
+      if (data)
+        NavigateTo("/Signin")
+      else
+        NavigateTo("/Signin")
+    });
+    ;
   }, [NavigateTo]);
 
   return (

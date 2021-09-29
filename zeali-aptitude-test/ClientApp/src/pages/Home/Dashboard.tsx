@@ -15,9 +15,9 @@ export const Dashboard = () => {
   ]);
   useEffect(() => {
     getZealiUserInfo().then((data) => {
-      if(data){
-        if(data.errorCode)
-          NavigateTo("/Signin");  
+      if (data) {
+        if (data.errorCode)
+          NavigateTo("/Signin");
         else
           SetUserInfo(data)
       }

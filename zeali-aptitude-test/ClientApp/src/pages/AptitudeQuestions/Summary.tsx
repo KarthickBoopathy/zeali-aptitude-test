@@ -2,6 +2,7 @@ import { Divider, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { evaluateScore } from "../../common/formula";
 import SimpleAccordion from "../../components/Accordion";
+import { AptitudeQuestion } from "../../types/schema";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -12,7 +13,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Summary = ({ aptitudeQuestions }: any) => {
+type SummaryProps = {
+  aptitudeQuestions: AptitudeQuestion[]
+}
+
+const Summary = ({ aptitudeQuestions }: SummaryProps) => {
   const score = evaluateScore(aptitudeQuestions);
   const classes = useStyles();
 

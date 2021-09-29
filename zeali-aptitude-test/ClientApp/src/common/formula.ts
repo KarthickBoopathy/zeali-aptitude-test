@@ -1,4 +1,6 @@
-export const evaluateScore = (aptitudeQuestions: any[]) => {
+import { AptitudeQuestion } from "../types/schema";
+
+export const evaluateScore = (aptitudeQuestions: AptitudeQuestion[]) => {
   let userScore = 0;
   aptitudeQuestions?.forEach((item: any) => {
     if (item.userAnswer === item.answer) {

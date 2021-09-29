@@ -6,17 +6,32 @@ import FormControl from "@material-ui/core/FormControl";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import { authorize, getAptitudeQuestions, saveTestResults } from "../../service/utils";
+import {
+  authorize,
+  getAptitudeQuestions,
+  saveTestResults,
+} from "../../service/utils";
 import Summary from "./Summary";
 import { Typography } from "@material-ui/core";
 import PageLoader from "../../components/PageLoader";
 import { evaluateScore } from "../../common/formula";
 import { useHistory } from "react-router";
+import { AptitudeQuestion } from "../../types/schema";
+import { makeStyles } from "@material-ui/core/styles";
 
+const useStyles = makeStyles(() => ({
+  paper: {
+    padding: 10,
+    textAlign: "center",
+    backgroundColor: "#f50057",
+    color: "white",
+  },
+}));
 
-export default function AptitudeQuestions() {
+const AptitudeQuestions = () => {
+  const classes = useStyles();
   const [currentIndex, setCurrentIndex] = useState(1);
-  const [aptitudeQuestions, setAptitudeQuestions] = useState([]);
+  const [aptitudeQuestions, setAptitudeQuestions] = useState<AptitudeQuestion[]>([]);
   const [disableQuiz, SetDisableQuiz] = useState(false);
   const [enableReview, SetEnableReview] = useState(false);
   const [pageLoad, SetPageLoad] = useState(true);
@@ -24,9 +39,7 @@ export default function AptitudeQuestions() {
   const [seconds, setSeconds] = useState(60);
 
   const history = useHistory();
-  const NavigateTo = useCallback((path) => history.push(path), [
-    history,
-  ]);
+  const NavigateTo = useCallback((path) => history.push(path), [history]);
 
   useEffect(() => {
     authorize().then((data) => {
@@ -43,11 +56,12 @@ export default function AptitudeQuestions() {
   useEffect(() => {
     getAptitudeQuestions().then((data) => {
       if (data) {
-        if (data.errorCode)
-          NavigateTo("/Signin");
+        if (data.errorCode) NavigateTo("/Signin");
         else {
           setAptitudeQuestions(data);
-          setTimeout(() => { SetPageLoad(false); }, 2000);
+          setTimeout(() => {
+            SetPageLoad(false);
+          }, 2000);
         }
       }
     });
@@ -61,75 +75,65 @@ export default function AptitudeQuestions() {
       if (minutes) {
         setSeconds(60);
         setMinutes(minutes - 1);
-      }
-      else {
-        const getScore = evaluateScore(Object.values(aptitudeQuestions));
+      } else {
+        const getScore = evaluateScore(aptitudeQuestions);
 
         saveTestResults(getScore).then((data) => {
           if (data) {
-            if (data.errorCode!==0)
-              NavigateTo("/Signin");
+            if (data.errorCode !== 0) NavigateTo("/Signin");
           }
-         });
-        setAptitudeQuestions(a => Object.values(a));
+        });
+        setAptitudeQuestions(Object.values(aptitudeQuestions));
         SetDisableQuiz(true);
         return;
       }
-
     }
     const intervalId = setInterval(() => {
       setSeconds(seconds - 1);
     }, 1000);
     return () => {
       clearInterval(intervalId);
-    }
-
+    };
   }, [seconds, minutes, aptitudeQuestions, NavigateTo]);
 
   const handleSubmit = useCallback(() => {
+    const confirmSubmit = window.confirm(
+      "Do you want to submit your Aptitude Test?"
+    );
 
-    const confirmSubmit = window.confirm("Do you want to submit your Aptitude Test?");
     if (confirmSubmit) {
       const getScore = evaluateScore(Object.values(aptitudeQuestions));
       saveTestResults(getScore).then((data) => {
         if (data) {
-          if (data.errorCode!==0)
-            NavigateTo("/Signin");
+          if (data.errorCode !== 0) NavigateTo("/Signin");
         }
       });
-      setAptitudeQuestions(a => Object.values(a));
+
+      setAptitudeQuestions(Object.values(aptitudeQuestions));
       SetDisableQuiz(true);
     }
   }, [aptitudeQuestions, NavigateTo]);
 
   const renderPageLoader = () => {
-    return (
-      <PageLoader label="Happy Cracking!!" />
-    );
+    return <PageLoader label="Happy Cracking!!" />;
   };
-
 
   const renderHeader = () => {
     if (disableQuiz || enableReview) {
       return;
     }
 
-    const styles = {
-      padding: 10,
-      textAlign: "center",
-      backgroundColor: "#f50057",
-      color: "white",
-    };
-
     return (
       <div>
         <Grid container spacing={3}>
           <Grid item xs={6}>
-            <Paper style={styles}>Question : {currentIndex}</Paper>
+            <Paper className={classes.paper}>Question : {currentIndex}</Paper>
           </Grid>
           <Grid item xs={6}>
-            <Paper style={styles}>
-              Time : {minutes === 60 ? "00" : minutes < 10 ? "0" + minutes : minutes}:{seconds === 60 ? "00" : seconds < 10 ? "0" + seconds : seconds}
+            <Paper className={classes.paper}>
+              Time :{" "}
+              {minutes === 60 ? "00" : minutes < 10 ? "0" + minutes : minutes}:
+              {seconds === 60 ? "00" : seconds < 10 ? "0" + seconds : seconds}
             </Paper>
           </Grid>
           <Grid item xs={12}></Grid>
@@ -138,10 +142,6 @@ export default function AptitudeQuestions() {
       </div>
     );
   };
-
-
-
-
 
   const renderFooterButtons = () => {
     if (disableQuiz || enableReview) {
@@ -172,8 +172,7 @@ export default function AptitudeQuestions() {
     const handleReview = () => {
       SetDisableQuiz(true);
       SetEnableReview(true);
-
-    }
+    };
 
     return (
       <div>
@@ -203,12 +202,22 @@ export default function AptitudeQuestions() {
           <br />
           <br />
           <Grid item xs={6}>
-            <Button fullWidth variant="contained" style={styles} onClick={handleReview}>
+            <Button
+              fullWidth
+              variant="contained"
+              style={styles}
+              onClick={handleReview}
+            >
               Review
             </Button>
           </Grid>
           <Grid item xs={6}>
-            <Button fullWidth variant="contained" color="secondary" onClick={handleSubmit}>
+            <Button
+              fullWidth
+              variant="contained"
+              color="secondary"
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
           </Grid>
@@ -222,7 +231,7 @@ export default function AptitudeQuestions() {
       return;
     }
 
-    const handleChange = (event) => {
+    const handleChange = (event: any) => {
       setAptitudeQuestions({
         ...aptitudeQuestions,
         [currentIndex - 1]: {
@@ -272,20 +281,24 @@ export default function AptitudeQuestions() {
     );
   };
 
-
   const renderExitTestButton = () => {
     return (
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Button variant="contained" color="secondary" fullWidth
-            onClick={() => { NavigateTo('/Home') }}
+          <Button
+            variant="contained"
+            color="secondary"
+            fullWidth
+            onClick={() => {
+              NavigateTo("/Home");
+            }}
           >
             Exit Test
           </Button>
         </Grid>
       </Grid>
     );
-  }
+  };
 
   const renderSummary = () => {
     if (!disableQuiz || enableReview) {
@@ -316,22 +329,26 @@ export default function AptitudeQuestions() {
     const answeredButtonStyle = {
       backgroundColor: "#6a8656",
       color: "white",
-    }
+    };
 
     const unAnsweredButtonStyle = {
       backgroundColor: "#f50057",
       color: "white",
-    }
+    };
 
     return (
       <>
         <Grid container spacing={3}>
-          {Object.values(aptitudeQuestions)?.map((item, index) => (
+          {Object.values(aptitudeQuestions)?.map((item: any, index: number) => (
             <Grid item xs={6} key={index}>
               <Button
                 fullWidth
                 variant="contained"
-                style={item?.userAnswer === "Not Answered" ? unAnsweredButtonStyle : answeredButtonStyle}
+                style={
+                  item?.userAnswer === "Not Answered"
+                    ? unAnsweredButtonStyle
+                    : answeredButtonStyle
+                }
                 key={index}
                 onClick={() => reviewAnswersCallBack(index)}
               >
@@ -342,7 +359,7 @@ export default function AptitudeQuestions() {
         </Grid>
       </>
     );
-  }
+  };
 
   return (
     <div>
@@ -354,4 +371,6 @@ export default function AptitudeQuestions() {
       {aptitudeQuestions && renderFooterButtons()}
     </div>
   );
-}
+};
+
+export default AptitudeQuestions;
